@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARTO — Map Interactive Paris</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --noir:#0d0d0d;
+  --blanc:#f5f2ed;
+  --accent:#e8401c;
+  --accent2:#f4b942;
+  --gris:#888;
+  --gris-light:#e8e4de;
+  --sidebar:320px;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--noir);
+  color:var(--blanc);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* HEADER */
+.header{
+  background:var(--noir);
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  z-index:1000;
+  flex-shrink:0;
+}
+.logo{
+  font-family:'Syne',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-1px;
+  color:var(--blanc);
+}
+.logo span{color:var(--accent)}
+.header-sep{width:1px;height:24px;background:rgba(255,255,255,0.12)}
+.header-count{
+  font-family:'Syne',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
+}
+.header-count strong{color:var(--accent);font-size:14px}
+.search-wrap{
+  flex:1;
+  max-width:380px;
+  position:relative;
+}
+.search-icon{
+  position:absolute;
+  left:12px;top:50%;transform:translateY(-50%);
+  font-size:13px;color:rgba(255,255,255,0.3);
+  pointer-events:none;
+}
+#global-search{
+  width:100%;
+  padding:9px 12px 9px 34px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;
+  color:var(--blanc);
+  outline:none;
+  transition:border-color 0.2s,background 0.2s;
+}
+#global-search::placeholder{color:rgba(255,255,255,0.3)}
+#global-search:focus{border-color:var(--accent);background:rgba(255,255,255,0.1)}
+
+/* LAYOUT */
+.app-body{
+  display:flex;
+  flex:1;
+  overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar);
+  background:#111;
+  border-right:1px solid rgba(255,255,255,0.07);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.sidebar-filters{
+  padding:14px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  flex-shrink:0;
+}
+.filter-label{
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  margin-bottom:10px;
+  display:block;
+}
+.filters-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.f-btn{
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.3px;
+  padding:5px 10px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:transparent;
+  color:rgba(255,255,255,0.5);
+  cursor:pointer;
+  transition:all 0.15s;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.f-btn:hover{border-color:rgba(255,255,255,0.3);color:var(--blanc)}
+.f-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+.arr-filter{
+  padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  flex-shrink:0;
+}
+.arr-select{
+  width:100%;
+  padding:8px 10px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:6px;
+  color:var(--blanc);
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  outline:none;
+  cursor:pointer;
+}
+.arr-select option{background:#222;color:var(--blanc)}
+
+.results-header{
+  padding:10px 14px 6px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+}
+.results-count{
+  font-family:'Syne',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  color:rgba(255,255,255,0.4);
+}
+.results-count strong{color:var(--blanc)}
+.sort-btn{
+  font-size:10px;
+  font-family:'Syne',sans-serif;
+  font-weight:600;
+  color:rgba(255,255,255,0.3);
+  background:none;
+  border:none;
+  cursor:pointer;
+  letter-spacing:0.5px;
+}
+.sort-btn:hover{color:var(--blanc)}
+
+.places-list{
+  overflow-y:auto;
+  flex:1;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,0.1) transparent;
+}
+.places-list::-webkit-scrollbar{width:3px}
+.places-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+
+.place-item{
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;
+  transition:background 0.15s;
+}
+.place-item:hover,.place-item.active{background:rgba(255,255,255,0.06)}
+.place-item.active{border-left:2px solid var(--accent)}
+.place-item h4{
+  font-family:'Syne',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  color:var(--blanc);
+  margin-bottom:3px;
+  line-height:1.2;
+}
+.place-item .p-addr{
+  font-size:11px;
+  color:rgba(255,255,255,0.35);
+  margin-bottom:5px;
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+.place-item .p-games{
+  display:flex;
+  flex-wrap:wrap;
+  gap:3px;
+}
+.p-tag{
+  font-size:10px;
+  font-weight:500;
+  padding:2px 6px;
+  border-radius:3px;
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.6);
+}
+.p-tag.highlight{background:rgba(232,64,28,0.2);color:var(--accent)}
+.place-item .p-rating{
+  float:right;
+  font-size:10px;
+  color:var(--accent2);
+  font-weight:600;
+  font-family:'Syne',sans-serif;
+}
+
+/* MAP */
+#map{
+  flex:1;
+  background:#1a1a1a;
+}
+
+/* CUSTOM MARKERS */
+.custom-marker{
+  width:28px;height:28px;
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  transition:transform 0.2s;
+}
+.custom-marker .icon{
+  transform:rotate(45deg);
+  font-size:11px;
+}
+.cm-société{background:#e8401c}
+.cm-billard{background:#2563eb}
+.cm-fléchettes{background:#16a34a}
+.cm-baby-foot{background:#d97706}
+.cm-ping-pong{background:#7c3aed}
+.cm-karaoké{background:#db2777}
+.cm-bowling{background:#0891b2}
+.cm-arcade{background:#4f46e5}
+.cm-échecs{background:#374151}
+.cm-pétanque{background:#65a30d}
+.cm-default{background:#6b7280}
+.cm-active{transform:rotate(-45deg) scale(1.3)!important;z-index:1000!important}
+
+/* POPUP */
+.leaflet-popup-content-wrapper{
+  background:#1a1a1a!important;
+  border:1px solid rgba(255,255,255,0.12)!important;
+  border-radius:12px!important;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5)!important;
+  padding:0!important;
+}
+.leaflet-popup-content{margin:0!important;min-width:220px}
+.leaflet-popup-tip{background:#1a1a1a!important}
+.leaflet-popup-close-button{color:rgba(255,255,255,0.4)!important;top:8px!important;right:10px!important}
+.popup-inner{padding:16px}
+.popup-tag{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;display:block;
+}
+.popup-name{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  color:#f5f2ed;line-height:1.2;margin-bottom:4px;
+}
+.popup-addr{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:10px;display:flex;align-items:center;gap:4px}
+.popup-games{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.popup-game{
+  font-size:10px;padding:3px 8px;border-radius:4px;
+  font-weight:500;font-family:'Syne',sans-serif;
+}
+.popup-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);
+}
+.popup-rating{font-size:12px;color:var(--accent2);font-weight:700;font-family:'Syne',sans-serif}
+.popup-arr{
+  font-size:10px;font-weight:700;font-family:'Syne',sans-serif;
+  background:rgba(255,255,255,0.08);padding:3px 8px;border-radius:4px;color:rgba(255,255,255,0.6);
+}
+
+/* NO RESULTS */
+.no-results{
+  padding:40px 20px;text-align:center;
+  color:rgba(255,255,255,0.2);
+  font-size:13px;
+}
+.no-results div{font-size:28px;margin-bottom:10px}
+
+/* LEGEND */
+.legend{
+  position:absolute;bottom:20px;right:20px;
+  background:rgba(17,17,17,0.92);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;
+  padding:12px;
+  z-index:500;
+  min-width:150px;
+}
+.legend-title{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);
+  margin-bottom:8px;
+}
+.legend-item{
+  display:flex;align-items:center;gap:7px;
+  margin-bottom:5px;font-size:11px;color:rgba(255,255,255,0.6);
+}
+.legend-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+}
+
+/* Leaflet override for dark map */
+.leaflet-tile{filter:brightness(0.85) contrast(1.1) saturate(0.7)}
+.leaflet-control-zoom a{
+  background:rgba(17,17,17,0.9)!important;
+  color:rgba(255,255,255,0.7)!important;
+  border-color:rgba(255,255,255,0.1)!important;
+}
+.leaflet-control-zoom a:hover{background:rgba(40,40,40,0.95)!important}
+
+@media(max-width:700px){
+  .sidebar{width:100%;height:45vh;border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)}
+  .app-body{flex-direction:column}
+  #map{min-height:55vh}
+  .header-sep,.header-count{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">CARTO<span>.</span></div>
+  <div class="header-sep"></div>
+  <div class="header-count"><strong id="hdr-count">85</strong> lieux de jeux à Paris</div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input id="global-search" type="text" placeholder="Chercher un lieu, un jeu, une rue..." oninput="applyFilters()">
+  </div>
+</div>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-filters">
+      <span class="filter-label">Type de jeu</span>
+      <div class="filters-grid">
+        <button class="f-btn active" data-filter="all" onclick="toggleFilter('all',this)">🎮 Tous</button>
+        <button class="f-btn" data-filter="jeux-société" onclick="toggleFilter('jeux-société',this)">🎲 Jeux de société</button>
+        <button class="f-btn" data-filter="billard" onclick="toggleFilter('billard',this)">🎱 Billard</button>
+        <button class="f-btn" data-filter="fléchettes" onclick="toggleFilter('fléchettes',this)">🎯 Fléchettes</button>
+        <button class="f-btn" data-filter="baby-foot" onclick="toggleFilter('baby-foot',this)">⚽ Baby-foot</button>
+        <button class="f-btn" data-filter="ping-pong" onclick="toggleFilter('ping-pong',this)">🏓 Ping-Pong</button>
+        <button class="f-btn" data-filter="karaoké" onclick="toggleFilter('karaoké',this)">🎤 Karaoké</button>
+        <button class="f-btn" data-filter="bowling" onclick="toggleFilter('bowling',this)">🎳 Bowling</button>
+        <button class="f-btn" data-filter="arcade" onclick="toggleFilter('arcade',this)">🕹️ Arcade</button>
+        <button class="f-btn" data-filter="échecs" onclick="toggleFilter('échecs',this)">♟️ Échecs</button>
+        <button class="f-btn" data-filter="pétanque" onclick="toggleFilter('pétanque',this)">🥏 Pétanque</button>
+      </div>
+    </div>
+    <div class="arr-filter">
+      <select class="arr-select" id="arr-select" onchange="applyFilters()">
+        <option value="">Tous les arrondissements</option>
+        <option value="01e">1er arrondissement</option>
+        <option value="02e">2ème arrondissement</option>
+        <option value="03e">3ème arrondissement</option>
+        <option value="04e">4ème arrondissement</option>
+        <option value="05e">5ème arrondissement</option>
+        <option value="06e">6ème arrondissement</option>
+        <option value="07e">7ème arrondissement</option>
+        <option value="08e">8ème arrondissement</option>
+        <option value="09e">9ème arrondissement</option>
+        <option value="10e">10ème arrondissement</option>
+        <option value="11e">11ème arrondissement</option>
+        <option value="12e">12ème arrondissement</option>
+        <option value="13e">13ème arrondissement</option>
+        <option value="14e">14ème arrondissement</option>
+        <option value="15e">15ème arrondissement</option>
+        <option value="16e">16ème arrondissement</option>
+        <option value="17e">17ème arrondissement</option>
+        <option value="18e">18ème arrondissement</option>
+        <option value="19e">19ème arrondissement</option>
+        <option value="20e">20ème arrondissement</option>
+      </select>
+    </div>
+    <div class="results-header">
+      <div class="results-count"><strong id="result-count">85</strong> résultats</div>
+      <button class="sort-btn" onclick="toggleSort()">↕ <span id="sort-label">Note ↓</span></button>
+    </div>
+    <div class="places-list" id="places-list"></div>
+  </div>
+
+  <!-- MAP -->
+  <div style="position:relative;flex:1">
+    <div id="map"></div>
+    <div class="legend">
+      <div class="legend-title">Légende</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e8401c"></div>Jeux de société</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>Billard</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Fléchettes</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div>Baby-foot</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>Ping-Pong</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#db2777"></div>Karaoké</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0891b2"></div>Bowling</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4f46e5"></div>Arcade</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#374151"></div>Échecs</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#65a30d"></div>Pétanque</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — Coordonnées approximatives par adresse Paris
+// ============================================================
+const allPlaces = [
+  // ===== LIEUX ORIGINAUX =====
+  {name:"Le Nid – Cocon Ludique",address:"227 Rue Saint-Martin, 75003",arr:"03e",games:["jeux-société","jeux de plateau"],rating:4.6,lat:48.8644,lng:2.3531},
+  {name:"Les Grands Gamins",address:"19 Rue de Cléry, 75002",arr:"02e",games:["jeux-société","jeux de plateau"],rating:4.8,lat:48.8680,lng:2.3461},
+  {name:"La Cabane",address:"76 Rue Notre Dame de Nazareth, 75003",arr:"03e",games:["jeux-société"],rating:4.9,lat:48.8679,lng:2.3554},
+  {name:"Le 3Bis – Bar à jeux",address:"41 Rue des Pirogues de Bercy, 75012",arr:"12e",games:["karaoké","jeux-société","jeux vidéo"],rating:4.8,lat:48.8332,lng:2.3873},
+  {name:"Les Mauvais Joueurs Bastille",address:"46 Rue Sedaine, 75011",arr:"11e",games:["jeux-société"],rating:4.7,lat:48.8572,lng:2.3756},
+  {name:"The Good Game",address:"78 Rue de Cléry, 75002",arr:"02e",games:["jeux-société","jeux vidéo"],rating:4.7,lat:48.8690,lng:2.3501},
+  {name:"Le Chauve qui Rit",address:"29 Rue de Maubeuge, 75009",arr:"09e",games:["jeux-société"],rating:5.0,lat:48.8782,lng:2.3444},
+  {name:"Loufoque Paris 5",address:"57 Rue Galande, 75005",arr:"05e",games:["jeux-société","quiz night"],rating:4.7,lat:48.8516,lng:2.3469},
+  {name:"Le BAP",address:"111 Rue Saint-Maur, 75011",arr:"11e",games:["billard","baby-foot"],rating:3.8,lat:48.8658,lng:2.3770},
+  {name:"Billard Nation Shoot Again",address:"9 Cité Debergue, 75012",arr:"12e",games:["billard"],rating:4.5,lat:48.8460,lng:2.4043},
+  {name:"Les Petites Flèches Strasbourg",address:"7 Rue d'Enghien, 75010",arr:"10e",games:["fléchettes"],rating:4.8,lat:48.8716,lng:2.3528},
+  {name:"Les Petites Flèches Pigalle",address:"49 Bd de Clichy, 75009",arr:"09e",games:["fléchettes"],rating:4.9,lat:48.8831,lng:2.3339},
+  {name:"Les Petites Flèches Parmentier",address:"49 Rue Jean-Pierre Timbaud, 75011",arr:"11e",games:["fléchettes"],rating:4.8,lat:48.8669,lng:2.3739},
+  {name:"L'AlbaR bar à fléchettes",address:"2 Rue Poissonnière, 75002",arr:"02e",games:["fléchettes"],rating:4.7,lat:48.8687,lng:2.3478},
+  {name:"Le Split",address:"83 Rue de la Roquette, 75011",arr:"11e",games:["fléchettes","flipper"],rating:4.7,lat:48.8570,lng:2.3782},
+  {name:"Gossima Ping Pong Bar",address:"4 Rue Victor Gelez, 75011",arr:"11e",games:["ping-pong"],rating:4.0,lat:48.8649,lng:2.3827},
+  {name:"L'Exode",address:"39 Bd de Strasbourg, 75010",arr:"10e",games:["ping-pong","billard","baby-foot"],rating:4.8,lat:48.8719,lng:2.3554},
+  {name:"LES MAH BOULES – Barbès",address:"14 Rue de Jessaint, 75018",arr:"18e",games:["baby-foot","pétanque"],rating:4.7,lat:48.8851,lng:2.3564},
+  {name:"LES MAH BOULES – Chapelle",address:"8 Rue des Cheminots, 75018",arr:"18e",games:["baby-foot","pétanque"],rating:4.9,lat:48.8953,lng:2.3575},
+  {name:"KaraFun Paris",address:"3 Imp. Bonne Nouvelle, 75010",arr:"10e",games:["karaoké"],rating:5.0,lat:48.8707,lng:2.3505},
+  {name:"BAM Karaoke Box Parmentier",address:"40 Av. de la République, 75011",arr:"11e",games:["karaoké"],rating:4.7,lat:48.8654,lng:2.3731},
+  {name:"Concerto Karaoke Saint-Michel",address:"4 Rue Suger, 75006",arr:"06e",games:["karaoké"],rating:4.8,lat:48.8531,lng:2.3425},
+  {name:"Singing Studio Paris",address:"6 Bd du Bois le Prêtre, 75017",arr:"17e",games:["karaoké"],rating:4.8,lat:48.8991,lng:2.3218},
+  {name:"Blitz Society",address:"4 Rue du Sabot, 75006",arr:"06e",games:["échecs"],rating:4.6,lat:48.8529,lng:2.3314},
+  {name:"Extra Life Café",address:"9 Pass. des Patriarches, 75005",arr:"05e",games:["arcade","jeux vidéo","jeux-société"],rating:4.8,lat:48.8411,lng:2.3501},
+  {name:"Reset",address:"17 Rue du Cygne, 75001",arr:"01e",games:["arcade","baby-foot","karaoké","jeux vidéo"],rating:4.5,lat:48.8634,lng:2.3484},
+  {name:"La Tête dans les Nuages",address:"5 Bd des Italiens, 75002",arr:"02e",games:["arcade","bowling"],rating:4.2,lat:48.8716,lng:2.3392},
+  {name:"Seven Squares – Boom Boom Villette",address:"30 Av. Corentin Cariou, 75019",arr:"19e",games:["bowling","arcade","jeux VR"],rating:4.9,lat:48.8960,lng:2.3894},
+  {name:"Bowling Mouffetard",address:"73 Rue Mouffetard, 75005",arr:"05e",games:["bowling"],rating:3.6,lat:48.8422,lng:2.3500},
+  {name:"BarOurcq",address:"68 Quai de la Loire, 75019",arr:"19e",games:["pétanque"],rating:4.1,lat:48.8865,lng:2.3773},
+  {name:"Au Bonheur des Jeux",address:"21 Bd de Charonne, 75011",arr:"11e",games:["jeux-société","jeux de plateau"],rating:4.8,lat:48.8499,lng:2.3985},
+  {name:"Au Dé 12",address:"126 Av. de la République, 75011",arr:"11e",games:["jeux-société","jeux de rôle"],rating:4.9,lat:48.8629,lng:2.3859},
+  {name:"Smile World Gaîté Montparnasse",address:"80 Av. du Maine, 75014",arr:"14e",games:["bowling","karaoké","arcade"],rating:4.7,lat:48.8388,lng:2.3219},
+  {name:"Little Big Bear",address:"45 Rue Monsieur le Prince, 75006",arr:"06e",games:["baby-foot"],rating:4.5,lat:48.8495,lng:2.3403},
+  {name:"Le Multiplex Bar",address:"27 Rue L.-E. de la Tour d'Auvergne, 75009",arr:"09e",games:["baby-foot"],rating:4.2,lat:48.8792,lng:2.3431},
+
+  // ===== NOUVEAUX LIEUX =====
+  {name:"The Bombardier",address:"2 Place du Panthéon, 75005",arr:"05e",games:["fléchettes","quiz night"],rating:4.4,lat:48.8462,lng:2.3461},
+  {name:"The Frog & Rosbif",address:"116 Rue Saint-Denis, 75002",arr:"02e",games:["fléchettes","beer pong"],rating:4.1,lat:48.8627,lng:2.3508},
+  {name:"O'Sullivans FDR",address:"63 Av. Franklin D. Roosevelt, 75008",arr:"08e",games:["billard","fléchettes"],rating:4.0,lat:48.8665,lng:2.3080},
+  {name:"Social Bar",address:"25 Rue Vée, 75003",arr:"03e",games:["jeux-société","karaoké"],rating:4.5,lat:48.8608,lng:2.3602},
+  {name:"The Cambridge Public House",address:"8 Rue des Filles du Calvaire, 75003",arr:"03e",games:["fléchettes"],rating:4.7,lat:48.8621,lng:2.3618},
+  {name:"The Auld Alliance",address:"80 Rue François Miron, 75004",arr:"04e",games:["fléchettes"],rating:4.5,lat:48.8546,lng:2.3558},
+  {name:"L'Écurie",address:"2 Rue de la Montagne Ste Geneviève, 75005",arr:"05e",games:["baby-foot"],rating:4.2,lat:48.8500,lng:2.3479},
+  {name:"The Long Hop",address:"25 Rue Frédéric Sauton, 75005",arr:"05e",games:["billard","baby-foot","fléchettes"],rating:4.1,lat:48.8505,lng:2.3490},
+  {name:"Connolly's Corner",address:"12 Rue de Mirbel, 75005",arr:"05e",games:["fléchettes"],rating:4.6,lat:48.8492,lng:2.3520},
+  {name:"Mayflower Pub",address:"49 Rue Descartes, 75005",arr:"05e",games:["billard","fléchettes"],rating:4.3,lat:48.8470,lng:2.3503},
+  {name:"Académie de Billard de Paris",address:"47 Rue de Berri, 75008",arr:"08e",games:["billard"],rating:4.6,lat:48.8740,lng:2.3108},
+  {name:"The Highlander",address:"8 Rue de Nevers, 75006",arr:"06e",games:["fléchettes","billard"],rating:4.4,lat:48.8570,lng:2.3432},
+  {name:"The Bowler",address:"13 Rue d'Artois, 75008",arr:"08e",games:["fléchettes","billard"],rating:4.2,lat:48.8725,lng:2.3113},
+  {name:"Le Mansart",address:"1 Rue Mansart, 75009",arr:"09e",games:["baby-foot"],rating:3.9,lat:48.8815,lng:2.3349},
+  {name:"L'Embuscade",address:"47 Rue de la Rochefoucauld, 75009",arr:"09e",games:["baby-foot"],rating:4.0,lat:48.8795,lng:2.3360},
+  {name:"Les Petites Gouttes",address:"12 Esp. Nathalie Sarraute, 75018",arr:"18e",games:["billard","ping-pong"],rating:4.1,lat:48.8897,lng:2.3539},
+  {name:"L'Ours",address:"7 Rue de Paradis, 75010",arr:"10e",games:["jeux-société"],rating:4.5,lat:48.8755,lng:2.3544},
+  {name:"Le Mauri 7",address:"46 Rue du Fbg Saint-Denis, 75010",arr:"10e",games:["baby-foot","flipper"],rating:3.8,lat:48.8709,lng:2.3575},
+  {name:"Le 114 b",address:"114 Rue Oberkampf, 75011",arr:"11e",games:["billard","baby-foot"],rating:4.2,lat:48.8662,lng:2.3756},
+  {name:"The Red Tree",address:"13 Rue de Lappe, 75011",arr:"11e",games:["fléchettes"],rating:4.1,lat:48.8534,lng:2.3701},
+  {name:"Blue Note",address:"21 Rue de Lappe, 75011",arr:"11e",games:["billard"],rating:3.9,lat:48.8533,lng:2.3703},
+  {name:"La Mercerie",address:"98 Rue Oberkampf, 75011",arr:"11e",games:["baby-foot"],rating:4.3,lat:48.8650,lng:2.3743},
+  {name:"Pili Pili",address:"299 Rue du Fbg Saint-Antoine, 75011",arr:"11e",games:["jeux-société"],rating:4.6,lat:48.8494,lng:2.3989},
+  {name:"Kizoku Paris",address:"13 Rue Grange aux Belles, 75010",arr:"10e",games:["jeux-société"],rating:4.8,lat:48.8730,lng:2.3660},
+  {name:"Le Zero Zero",address:"56 Rue de la Fontaine au Roi, 75011",arr:"11e",games:["baby-foot"],rating:4.4,lat:48.8673,lng:2.3715},
+  {name:"Bar de la Marine",address:"55 Quai de la Loire, 75019",arr:"19e",games:["baby-foot","pétanque"],rating:4.0,lat:48.8857,lng:2.3748},
+  {name:"Ground Control",address:"81 Rue du Charolais, 75012",arr:"12e",games:["baby-foot","arcade"],rating:4.3,lat:48.8405,lng:2.3791},
+  {name:"Indiana Club Tolbiac",address:"74 Avenue de France, 75013",arr:"13e",games:["billard"],rating:4.0,lat:48.8310,lng:2.3741},
+  {name:"Le Perchoir Versailles",address:"2 Av. de la Porte de Plaisance, 75015",arr:"15e",games:["pétanque","baby-foot"],rating:4.2,lat:48.8295,lng:2.2820},
+  {name:"EP7",address:"133 Avenue de France, 75013",arr:"13e",games:["jeux vidéo","arcade"],rating:4.1,lat:48.8303,lng:2.3757},
+  {name:"Le Daguerre",address:"4 Avenue du Maine, 75014",arr:"14e",games:["billard"],rating:3.7,lat:48.8386,lng:2.3236},
+  {name:"The Financier",address:"15 Rue du Départ, 75014",arr:"14e",games:["billard"],rating:4.2,lat:48.8427,lng:2.3223},
+  {name:"Le Bull's Eye",address:"15 Rue Lecourbe, 75015",arr:"15e",games:["fléchettes"],rating:4.8,lat:48.8489,lng:2.3120},
+  {name:"Wallace Station",address:"70 Av. de la Motte-Picquet, 75015",arr:"15e",games:["fléchettes"],rating:4.3,lat:48.8493,lng:2.3050},
+  {name:"L'Ambre",address:"2 Rue de l'Étoile, 75017",arr:"17e",games:["billard"],rating:4.1,lat:48.8793,lng:2.2979},
+  {name:"Le Purgatoire",address:"34 Rue de Châteaudun, 75009",arr:"09e",games:["jeux-société"],rating:4.5,lat:48.8773,lng:2.3395},
+  {name:"Le Hasard Ludique",address:"128 Av. de Saint-Ouen, 75018",arr:"18e",games:["pétanque","jeux-société"],rating:4.4,lat:48.8925,lng:2.3302},
+  {name:"La Recyclerie",address:"83 Bd Ornano, 75018",arr:"18e",games:["jeux-société"],rating:4.2,lat:48.8971,lng:2.3451},
+  {name:"O'Sullivans by the Mill",address:"92 Bd de Clichy, 75018",arr:"18e",games:["baby-foot","billard"],rating:4.0,lat:48.8844,lng:2.3324},
+  {name:"Pavillon des Canaux",address:"39 Quai de la Loire, 75019",arr:"19e",games:["jeux-société"],rating:4.3,lat:48.8860,lng:2.3754},
+  {name:"Le 25 Degrés Est",address:"10 Pl. de la Bataille de Stalingrad, 75010",arr:"10e",games:["baby-foot"],rating:3.6,lat:48.8839,lng:2.3680},
+  {name:"Les Triplettes",address:"102 Bd de Belleville, 75020",arr:"20e",games:["baby-foot"],rating:4.0,lat:48.8677,lng:2.3871},
+  {name:"Le Saint-Fargeau",address:"10 Avenue Gambetta, 75020",arr:"20e",games:["billard"],rating:4.1,lat:48.8665,lng:2.3951},
+  {name:"L'Avancée",address:"18 Rue de l'Ermitage, 75020",arr:"20e",games:["baby-foot"],rating:4.7,lat:48.8673,lng:2.3937},
+  {name:"Corcoran's Bastille",address:"53 Rue du Fbg Saint-Antoine, 75011",arr:"11e",games:["fléchettes","billard"],rating:3.9,lat:48.8528,lng:2.3704},
+  {name:"Le Meltdown",address:"6 Passage Thiéré, 75011",arr:"11e",games:["jeux vidéo","e-sport"],rating:4.4,lat:48.8561,lng:2.3695},
+  {name:"Player One",address:"224 Rue Saint-Denis, 75002",arr:"02e",games:["retrogaming","jeux-société"],rating:4.6,lat:48.8635,lng:2.3525},
+  {name:"Le Dernier Bar",address:"19 Av. Victoria, 75001",arr:"01e",games:["jeux-société","culture geek"],rating:4.3,lat:48.8595,lng:2.3471},
+  {name:"L'Oya",address:"25 Rue de la Reine Blanche, 75013",arr:"13e",games:["jeux-société"],rating:4.8,lat:48.8376,lng:2.3542},
+  {name:"La Pétanque",address:"40 Rue Etienne Dolet, 75020",arr:"20e",games:["pétanque"],rating:4.6,lat:48.8682,lng:2.3862},
+];
+
+// ============================================================
+// MAP INIT
+// ============================================================
+const map = L.map('map', {
+  center: [48.8566, 2.3522],
+  zoom: 13,
+  zoomControl: true,
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap',
+  maxZoom: 19,
+}).addTo(map);
+
+// ============================================================
+// GAME → COLOR MAPPING
+// ============================================================
+const gameColors = {
+  'jeux-société': '#e8401c',
+  'billard': '#2563eb',
+  'fléchettes': '#16a34a',
+  'baby-foot': '#d97706',
+  'ping-pong': '#7c3aed',
+  'karaoké': '#db2777',
+  'bowling': '#0891b2',
+  'arcade': '#4f46e5',
+  'échecs': '#374151',
+  'pétanque': '#65a30d',
+};
+
+const gameEmoji = {
+  'jeux-société': '🎲',
+  'billard': '🎱',
+  'fléchettes': '🎯',
+  'baby-foot': '⚽',
+  'ping-pong': '🏓',
+  'karaoké': '🎤',
+  'bowling': '🎳',
+  'arcade': '🕹️',
+  'échecs': '♟️',
+  'pétanque': '🥏',
+};
+
+function getMainGame(games) {
+  const order = ['jeux-société','billard','fléchettes','baby-foot','ping-pong','karaoké','bowling','arcade','échecs','pétanque'];
+  for (const g of order) {
+    if (games.some(x => x.toLowerCase().includes(g))) return g;
+  }
+  return null;
+}
+
+function getColor(games) {
+  const main = getMainGame(games);
+  return main ? gameColors[main] : '#6b7280';
+}
+
+function getEmoji(games) {
+  const main = getMainGame(games);
+  return main ? gameEmoji[main] : '📍';
+}
+
+// ============================================================
+// MARKERS
+// ============================================================
+let markers = [];
+let activeFilter = 'all';
+let activeArr = '';
+let sortMode = 'rating'; // 'rating' or 'name'
+let activeMarkerIdx = null;
+
+function createMarkerIcon(place, isActive) {
+  const color = getColor(place.games);
+  const emoji = getEmoji(place.games);
+  const scale = isActive ? 'scale(1.4)' : 'scale(1)';
+  const zIdx = isActive ? 'z-index:999' : '';
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg) ${scale};background:${color};border:2px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;${zIdx}">
+      <span style="transform:rotate(45deg);font-size:11px;line-height:1">${emoji}</span>
+    </div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -30],
+  });
+}
+
+function buildPopup(place, activeGameFilter) {
+  const gamesHtml = place.games.map(g => {
+    const isHighlight = activeGameFilter !== 'all' && g.toLowerCase().includes(activeGameFilter);
+    return `<span class="popup-game ${isHighlight ? 'p-tag highlight' : 'p-tag'}">${g}</span>`;
+  }).join('');
+  const stars = '★'.repeat(Math.round(place.rating)) + '☆'.repeat(5 - Math.round(place.rating));
+  return `<div class="popup-inner">
+    <span class="popup-tag">${place.arr} arrondissement</span>
+    <div class="popup-name">${place.name}</div>
+    <div class="popup-addr">◎ ${place.address}</div>
+    <div class="popup-games">${gamesHtml}</div>
+    <div class="popup-footer">
+      <span class="popup-rating">${stars} ${place.rating}</span>
+      <span class="popup-arr">${place.arr}</span>
+    </div>
+  </div>`;
+}
+
+function initMarkers() {
+  allPlaces.forEach((place, i) => {
+    const marker = L.marker([place.lat, place.lng], {
+      icon: createMarkerIcon(place, false),
+    });
+    marker.bindPopup(buildPopup(place, activeFilter), {maxWidth: 260});
+    marker.on('click', () => selectPlace(i));
+    markers.push({ marker, visible: true });
+  });
+}
+
+function selectPlace(i) {
+  if (activeMarkerIdx !== null && markers[activeMarkerIdx]) {
+    markers[activeMarkerIdx].marker.setIcon(createMarkerIcon(allPlaces[activeMarkerIdx], false));
+  }
+  activeMarkerIdx = i;
+  markers[i].marker.setIcon(createMarkerIcon(allPlaces[i], true));
+  map.setView([allPlaces[i].lat, allPlaces[i].lng], Math.max(map.getZoom(), 15));
+  markers[i].marker.openPopup();
+  // highlight sidebar
+  document.querySelectorAll('.place-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('item-' + i);
+  if (el) { el.classList.add('active'); el.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+}
+
+// ============================================================
+// FILTER + RENDER
+// ============================================================
+function matchesFilter(place) {
+  const q = document.getElementById('global-search').value.trim().toLowerCase();
+  const arr = document.getElementById('arr-select').value;
+
+  const gameMatch = activeFilter === 'all' || place.games.some(g => g.toLowerCase().includes(activeFilter));
+  const arrMatch = !arr || place.arr === arr;
+  const searchMatch = !q ||
+    place.name.toLowerCase().includes(q) ||
+    place.address.toLowerCase().includes(q) ||
+    place.games.some(g => g.toLowerCase().includes(q)) ||
+    place.arr.includes(q);
+
+  return gameMatch && arrMatch && searchMatch;
+}
+
+function applyFilters() {
+  const visible = [];
+  allPlaces.forEach((place, i) => {
+    const show = matchesFilter(place);
+    markers[i].visible = show;
+    if (show) {
+      if (!map.hasLayer(markers[i].marker)) markers[i].marker.addTo(map);
+      markers[i].marker.setPopupContent(buildPopup(place, activeFilter));
+      visible.push(i);
+    } else {
+      if (map.hasLayer(markers[i].marker)) map.removeLayer(markers[i].marker);
+    }
+  });
+
+  renderList(visible);
+  document.getElementById('result-count').textContent = visible.length;
+  document.getElementById('hdr-count').textContent = visible.length;
+}
+
+function renderList(indices) {
+  const list = document.getElementById('places-list');
+  if (!indices.length) {
+    list.innerHTML = '<div class="no-results"><div>🔍</div>Aucun lieu trouvé.<br>Essayez un autre filtre.</div>';
+    return;
+  }
+
+  // sort
+  const sorted = [...indices].sort((a, b) => {
+    if (sortMode === 'rating') return allPlaces[b].rating - allPlaces[a].rating;
+    return allPlaces[a].name.localeCompare(allPlaces[b].name, 'fr');
+  });
+
+  const q = document.getElementById('global-search').value.trim().toLowerCase();
+  list.innerHTML = sorted.map(i => {
+    const p = allPlaces[i];
+    const tagsHtml = p.games.map(g => {
+      const isHL = (activeFilter !== 'all' && g.toLowerCase().includes(activeFilter)) ||
+                   (q && g.toLowerCase().includes(q));
+      return `<span class="p-tag${isHL ? ' highlight' : ''}">${g}</span>`;
+    }).join('');
+    return `<div class="place-item" id="item-${i}" onclick="selectPlace(${i})">
+      <span class="p-rating">★ ${p.rating}</span>
+      <h4>${p.name}</h4>
+      <div class="p-addr">◎ ${p.address}</div>
+      <div class="p-games">${tagsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleFilter(f, btn) {
+  if (activeFilter === f && f !== 'all') {
+    activeFilter = 'all';
+    document.querySelector('.f-btn[data-filter="all"]').classList.add('active');
+    btn.classList.remove('active');
+  } else {
+    activeFilter = f;
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  applyFilters();
+}
+
+let sortAsc = false;
+function toggleSort() {
+  if (sortMode === 'rating') {
+    sortMode = 'name';
+    document.getElementById('sort-label').textContent = 'Nom A→Z';
+  } else {
+    sortMode = 'rating';
+    document.getElementById('sort-label').textContent = 'Note ↓';
+  }
+  applyFilters();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initMarkers();
+applyFilters();
+</script>
+</body>
+</html>
