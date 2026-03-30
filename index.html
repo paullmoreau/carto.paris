@@ -2,161 +2,372 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CARTO — Live Status Paris</title>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap');
 
 :root {
-  --noir: #0d0d0d; --blanc: #f5f2ed; --accent: #e8401c;
-  --green: #2ecc71; --grey: #7f8c8d; --sidebar: 340px;
+  --noir: #0d0d0d;
+  --blanc: #f5f2ed;
+  --accent: #e8401c;
+  --green: #2ecc71;
+  --grey: #7f8c8d;
+  --sidebar-width: 360px;
+  --header-height: 60px;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-body{ font-family:'DM Sans',sans-serif; background:var(--noir); color:var(--blanc); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-/* HEADER */
-.header{ background:var(--noir); padding:15px 20px; display:flex; align-items:center; gap:20px; border-bottom:1px solid rgba(255,255,255,0.1); z-index:1000; }
-.logo{ font-family:'Syne'; font-size:22px; font-weight:800; }
-.logo span{ color:var(--accent); }
-.search-wrap{ flex:1; max-width:450px; }
-#global-search{ width:100%; padding:10px 15px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff; outline:none; }
+html, body {
+  height: 100%;
+  overflow: hidden; /* Empêche le scroll de la page globale */
+  font-family: 'DM Sans', sans-serif;
+  background: var(--noir);
+  color: var(--blanc);
+}
 
-/* APP BODY */
-.app-body{ display:flex; flex:1; overflow:hidden; }
-.sidebar{ width:var(--sidebar); background:#111; border-right:1px solid rgba(255,255,255,0.1); display:flex; flex-direction:column; }
+body {
+  display: flex;
+  flex-direction: column;
+}
 
-/* LISTING */
-.places-list{ overflow-y:auto; flex:1; }
-.place-item{ padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:0.2s; position:relative; }
-.place-item:hover{ background:rgba(255,255,255,0.03); }
-.place-item.inactive { opacity: 0.5; filter: grayscale(1); }
+/* HEADER - Hauteur Fixe */
+.header {
+  height: var(--header-height);
+  background: var(--noir);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 1000;
+  flex-shrink: 0; /* Ne rétrécit pas */
+}
+
+.logo { font-family: 'Syne'; font-size: 22px; font-weight: 800; letter-spacing: -1px; }
+.logo span { color: var(--accent); }
+
+.search-wrap { flex: 1; max-width: 400px; margin-left: 20px; }
+#global-search {
+  width: 100%;
+  padding: 10px 15px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+}
+#global-search:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+
+/* LAYOUT PRINCIPAL - Occupe tout l'espace restant */
+.app-body {
+  display: flex;
+  flex: 1;
+  height: calc(100% - var(--header-height));
+  overflow: hidden;
+}
+
+/* SIDEBAR - Desktop Full Height */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100%;
+  background: #111;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 900;
+  flex-shrink: 0;
+}
+
+/* LISTING - Scroll Interne Uniquement */
+.places-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+.places-list::-webkit-scrollbar { width: 4px; }
+.places-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+.place-item {
+  padding: 18px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.place-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
+.place-item.active { border-color: var(--accent); background: rgba(232, 64, 28, 0.05); }
+.place-item.inactive { opacity: 0.5; filter: grayscale(0.8); }
 
 .status-badge {
-  display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; text-transform: uppercase;
-  padding: 2px 8px; border-radius: 10px; margin-bottom: 8px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 20px; margin-bottom: 10px;
 }
-.status-actif { background: rgba(46, 204, 113, 0.2); color: var(--green); }
-.status-inactif { background: rgba(127, 140, 141, 0.2); color: var(--grey); }
+.status-actif { background: rgba(46, 204, 113, 0.15); color: var(--green); }
+.status-inactif { background: rgba(127, 140, 141, 0.15); color: var(--grey); }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-.place-item h4{ font-family:'Syne'; font-size:15px; margin-bottom:4px; }
-.place-item .p-addr{ font-size:12px; color:rgba(255,255,255,0.4); }
+.place-item h4 { font-family: 'Syne'; font-size: 16px; margin-bottom: 5px; color: var(--blanc); }
+.place-item .p-addr { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
 
-/* MAP */
-#map{ flex:1; background:#1a1a1a; position: relative; }
-.leaflet-popup-content-wrapper { background: #1a1a1a!important; color: #fff!important; border-radius: 12px!important; }
+/* Bouton Itinéraire (Mobile UX) */
+.direction-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.06); color: var(--blanc);
+  padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+  font-size: 11px; font-weight: 600; text-decoration: none;
+  transition: 0.2s;
+}
+.direction-btn:hover { background: var(--accent); border-color: var(--accent); color: white; }
 
-/* GEOLOC */
-.geoloc-btn {
-  position: absolute; bottom: 30px; right: 20px; z-index: 1000;
-  width: 45px; height: 45px; background: var(--accent); border: none; border-radius: 50%;
-  color: white; cursor: pointer; font-size: 22px; box-shadow: 0 4px 15px rgba(232,64,28,0.4);
-  display: flex; align-items: center; justify-content: center;
+/* MAP - Desktop Full Page */
+#map {
+  flex: 1;
+  height: 100%;
+  background: #1a1a1a;
+  position: relative;
 }
 
-@media(max-width:750px){ .app-body{flex-direction:column-reverse} .sidebar{width:100%; height:45vh;} }
+/* POPUP CUSTOM */
+.leaflet-popup-content-wrapper {
+  background: #1a1a1a !important; color: #fff !important;
+  border-radius: 12px !important; padding: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+.leaflet-popup-tip { background: #1a1a1a !important; }
+.popup-name { font-family: 'Syne'; font-weight: 800; font-size: 14px; color: var(--accent); margin-bottom: 4px; }
+.popup-status { font-size: 11px; margin-bottom: 8px; }
+
+/* GEOLOC & ZOOM CONTROLS */
+.geoloc-btn {
+  position: absolute; bottom: 30px; right: 20px; z-index: 1000;
+  width: 50px; height: 50px; background: var(--accent); border: none; border-radius: 50%;
+  color: white; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(232, 64, 28, 0.5); transition: 0.2s;
+}
+.geoloc-btn:hover { transform: scale(1.05); }
+
+/* Placement des contrôles Leaflet */
+.leaflet-control-zoom { border: none !important; margin-right: 20px !important; margin-bottom: 90px !important; }
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+  background-color: rgba(30,30,30,0.9) !important; color: white !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* ============================================================
+   RESPONSIVE - Optimisation Mobile
+   ============================================================ */
+@media (max-width: 768px) {
+  .header { padding: 0 15px; }
+  .logo { font-size: 19px; }
+  .search-wrap { margin-left: 10px; }
+
+  /* Inversion carte/liste */
+  .app-body { flex-direction: column-reverse; height: calc(100% - var(--header-height)); }
+  
+  /* Sidebar devient panneau du bas */
+  .sidebar {
+    width: 100%;
+    height: 45vh; /* Occupe 45% de la hauteur */
+    border-right: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+  }
+  
+  /* Carte occupe le reste */
+  #map { flex: 1; height: 55vh; }
+  
+  /* Ajustement Geoloc pour ne pas être caché */
+  .geoloc-btn { bottom: calc(45vh + 20px); width: 45px; height: 45px; font-size: 20px; }
+  .leaflet-control-zoom { margin-bottom: calc(45vh + 80px) !important; margin-right: 15px !important; transform: scale(0.8); }
+  
+  /* Optimisation liste mobile */
+  .places-list { padding: 12px; }
+  .place-item { padding: 15px; margin-bottom: 10px; }
+  .place-item h4 { font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  #global-search { font-size: 12px; padding: 8px 12px; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
+<header class="header">
   <div class="logo">CARTO<span>.</span></div>
   <div class="search-wrap">
-    <input id="global-search" type="text" placeholder="Rechercher un lieu actif..." oninput="renderApp()">
+    <input id="global-search" type="text" placeholder="Rechercher un lieu..." oninput="renderApp()">
   </div>
-</div>
+</header>
 
-<div class="app-body">
-  <div class="sidebar">
+<main class="app-body">
+  <section class="sidebar">
     <div class="places-list" id="places-list"></div>
-  </div>
-  <div id="map">
-    <button class="geoloc-btn" onclick="locateUser()">⌖</button>
-  </div>
-</div>
+  </section>
+  
+  <section id="map">
+    <button class="geoloc-btn" onclick="locateUser()" title="Ma position">⌖</button>
+  </section>
+</main>
 
 <script>
-// BASE DE DONNÉES NETTOYÉE ET VÉRIFIÉE
+// Base de données vérifiée
 const allPlaces = [
-  {name:"The Player One", address:"224 Rue Saint-Denis, 75002", status:"actif", games:["Arcade","Rétrogaming"], lat:48.8685, lng:2.3505},
-  {name:"La Revanche", address:"38 Av. Daumesnil, 75012", status:"actif", games:["Jeux de société"], lat:48.8485, lng:2.3755},
-  {name:"Le 3Bis", address:"41 Rue des Pirogues de Bercy, 75012", status:"actif", games:["Jeux de société","Karaoké"], lat:48.8332, lng:2.3873},
-  {name:"Les Petites Flèches", address:"49 Rue Jean-Pierre Timbaud, 75011", status:"actif", games:["Fléchettes"], lat:48.8669, lng:2.3739},
-  {name:"Lucky Folks", address:"Bercy Village, 75012", status:"actif", games:["Jeux de société","Pétanque"], lat:48.8330, lng:2.3870},
-  {name:"Gossima Ping Pong", address:"4 Rue Victor Gelez, 75011", status:"actif", games:["Ping-pong"], lat:48.8649, lng:2.3827},
-  {name:"Le Nid (Fermé)", address:"227 Rue Saint-Martin, 75003", status:"inactif", games:["Jeux de société"], lat:48.8644, lng:2.3531},
-  {name:"Reset Bar", address:"17 Rue du Cygne, 75001", status:"actif", games:["Arcade"], lat:48.8634, lng:2.3484}
+  {name:"The Player One", address:"224 Rue Saint-Denis, 75002", status:"actif", lat:48.8685, lng:2.3505},
+  {name:"La Revanche", address:"38 Av. Daumesnil, 75012", status:"actif", lat:48.8485, lng:2.3755},
+  {name:"Le 3Bis", address:"41 Rue des Pirogues de Bercy, 75012", status:"actif", lat:48.8332, lng:2.3873},
+  {name:"Les Petites Flèches", address:"49 Rue Jean-Pierre Timbaud, 75011", status:"actif", lat:48.8669, lng:2.3739},
+  {name:"Lucky Folks", address:"Bercy Village, 75012", status:"actif", lat:48.8330, lng:2.3870},
+  {name:"Gossima Ping Pong", address:"4 Rue Victor Gelez, 75011", status:"actif", lat:48.8649, lng:2.3827},
+  {name:"Reset Bar", address:"17 Rue du Cygne, 75001", status:"actif", lat:48.8634, lng:2.3484},
+  {name:"Le Nid (Fermé)", address:"227 Rue Saint-Martin, 75003", status:"inactif", lat:48.8644, lng:2.3531}
 ];
 
-const map = L.map('map', { center: [48.8566, 2.3522], zoom: 13, zoomControl: false });
+// Setup Map (CartoDB Dark Matter)
+const map = L.map('map', { center: [48.8566, 2.3522], zoom: 13, zoomControl: true });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
   attribution: '&copy; <a href="https://carto.com/">CARTO</a>' 
 }).addTo(map);
 
+// Déplacer les contrôles de zoom en bas à droite
+map.zoomControl.setPosition('bottomright');
+
 let markers = [];
+let currentActiveIdx = null;
+
+// Génère le lien GPS universel (Google Maps/Apple Maps)
+function getMapsLink(lat, lng, name) {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const encodedName = encodeURIComponent(name);
+  if (isIOS) {
+    return `maps://?q=${encodedName}&ll=${lat},${lng}`;
+  } else {
+    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  }
+}
 
 function renderApp() {
-  const q = document.getElementById('global-search').value.toLowerCase();
+  const query = document.getElementById('global-search').value.toLowerCase();
   const list = document.getElementById('places-list');
   list.innerHTML = '';
   
-  // Supprimer les anciens marqueurs
+  // Clean markers
   markers.forEach(m => map.removeLayer(m));
   markers = [];
 
   allPlaces.forEach((p, i) => {
-    if(!p.name.toLowerCase().includes(q)) return;
+    if(!p.name.toLowerCase().includes(query) && !p.address.toLowerCase().includes(query)) return;
 
-    // Configuration du Marqueur
+    // Map Marker Custom
     const color = p.status === 'actif' ? '#e8401c' : '#7f8c8d';
     const m = L.marker([p.lat, p.lng], {
       icon: L.divIcon({
         className: '',
-        html: `<div style="background:${color}; width:12px; height:12px; border-radius:50%; border:2px solid #fff; opacity:${p.status === 'actif' ? 1 : 0.5}; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`
+        html: `<div style="background:${color}; width:16px; height:16px; border-radius:50%; border:2px solid #fff; box-shadow: 0 0 10px ${color}AA;"></div>`
       })
     }).addTo(map);
     
-    m.bindPopup(`<b>${p.name}</b><br>${p.status === 'actif' ? '✅ Ouvert' : '❌ Fermé'}`);
+    // Popup content
+    const popupHtml = `
+      <div class="popup-name">${p.name}</div>
+      <div class="popup-status">${p.status === 'actif' ? '✅ Ouvert' : '❌ Fermé'}</div>
+      <a href="${getMapsLink(p.lat, p.lng, p.name)}" target="_blank" class="direction-btn">🚗 Itinéraire</a>
+    `;
+    m.bindPopup(popupHtml);
+    m.on('click', () => highlightPlace(i, false)); // false = ne pas scroller la liste
     markers.push(m);
 
-    // Ajout à la Liste latérale
+    // Sidebar Item
     list.innerHTML += `
-      <div class="place-item ${p.status === 'inactif' ? 'inactive' : ''}" onclick="focusPlace(${i})">
+      <div class="place-item ${p.status === 'inactif' ? 'inactive' : ''}" id="item-${i}" onclick="highlightPlace(${i}, true)">
         <div class="status-badge ${p.status === 'actif' ? 'status-actif' : 'status-inactif'}">
           <div class="dot"></div>${p.status}
         </div>
         <h4>${p.name}</h4>
-        <div class="p-addr">${p.address}</div>
+        <div class="p-addr">📍 ${p.address}</div>
+        <a href="${getMapsLink(p.lat, p.lng, p.name)}" target="_blank" class="direction-btn" onclick="event.stopPropagation()">
+          🗺️ Itinéraire
+        </a>
       </div>`;
   });
 }
 
-function focusPlace(i) {
+function highlightPlace(i, shouldScroll) {
   const p = allPlaces[i];
+  
+  // Gérer l'état actif dans la liste
+  if(currentActiveIdx !== null) {
+    const prevItem = document.getElementById(`item-${currentActiveIdx}`);
+    if(prevItem) prevItem.classList.remove('active');
+  }
+  
+  currentActiveIdx = i;
+  const currentItem = document.getElementById(`item-${i}`);
+  if(currentItem) {
+    currentItem.classList.add('active');
+    // Scroller la liste si nécessaire (desktop UX)
+    if(shouldScroll) {
+      currentItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // Mettre à jour la carte
   map.setView([p.lat, p.lng], 16);
   markers[i].openPopup();
+  
+  // Sur mobile, on ferme le panneau du bas pour voir la carte
+  if(window.innerWidth < 768 && shouldScroll) {
+     // Optionnel : Vous pourriez réduire la hauteur de la sidebar ici en JS
+  }
 }
 
+// Géolocalisation
+let userMarker = null;
 function locateUser() {
+  const btn = document.querySelector('.geoloc-btn');
+  btn.innerText = '⏳';
   map.locate({setView: true, maxZoom: 15});
 }
 
 map.on('locationfound', (e) => {
-  L.circle(e.latlng, {radius: 100, color: '#e8401c', fillOpacity: 0.1}).addTo(map);
-  L.marker(e.latlng, {
+  document.querySelector('.geoloc-btn').innerText = '⌖';
+  if (userMarker) map.removeLayer(userMarker);
+  
+  userMarker = L.marker(e.latlng, {
     icon: L.divIcon({
         className: '',
-        html: `<div style="background:#2563eb; width:12px; height:12px; border-radius:50%; border:2px solid #fff;"></div>`
+        html: `<div style="background:#2563eb; width:14px; height:14px; border-radius:50%; border:2px solid #fff; box-shadow: 0 0 15px #2563eb;"></div>`
     })
   }).addTo(map).bindPopup("Vous êtes ici").openPopup();
 });
 
+map.on('locationerror', () => {
+  document.querySelector('.geoloc-btn').innerText = '⌖';
+  alert("Impossible d'accéder à votre position. Vérifiez les autorisations.");
+});
+
 // Initialisation
 renderApp();
-setTimeout(() => map.invalidateSize(), 500);
+// Forcer le rendu correct de la map au chargement
+setTimeout(() => map.invalidateSize(), 300);
 
 </script>
 </body>
