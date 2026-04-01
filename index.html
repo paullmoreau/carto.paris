@@ -3,68 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARTO - Paris Jeux</title>
+    <title>CARTO - Dark Edition</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
+        /* --- VARIABLES THEME SOMBRE --- */
         :root {
-            --color-border-tertiary: #e5e7eb;
-            --color-border-secondary: #d1d5db;
-            --color-background-primary: #ffffff;
-            --color-background-secondary: #f9fafb;
-            --color-text-primary: #111827;
-            --color-text-secondary: #4b5563;
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --bg-page: #1a1d21;
+            --bg-panel: #22262b;
+            --bg-input: #2a2e35;
+            --border-color: #3a3f47;
+            --text-main: #ffffff;
+            --text-muted: #a1a7b3;
+            --accent-red: #e8401c;
+            --accent-blue: #3b82f6;
+            --font-family: 'Inter', sans-serif;
         }
 
-        body, html { margin: 0; padding: 0; height: 100%; font-family: var(--font-sans); overflow: hidden; }
+        /* --- RESET & LAYOUT --- */
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            font-family: var(--font-family); 
+            background-color: var(--bg-page); 
+            color: var(--text-main);
+            overflow: hidden; /* Empêche le scroll de la page entière */
+        }
 
         #root { display: flex; flex-direction: column; height: 100vh; width: 100%; }
 
+        /* --- TOPBAR (Responsive) --- */
         #topbar {
-            display: flex; align-items: center; gap: 12px; padding: 10px 15px;
-            background: white; border-bottom: 1px solid var(--color-border-tertiary); z-index: 1000;
+            display: flex; align-items: center; gap: 15px; padding: 10px 20px;
+            background: var(--bg-panel); border-bottom: 1px solid var(--border-color); z-index: 1000;
         }
 
-        #logo { font-size: 18px; font-weight: bold; }
-        #logo b { color: #e8401c; }
+        #logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; flex-shrink: 0; }
+        #logo b { color: var(--accent-red); }
         
         #srch {
-            flex: 1; height: 35px; padding: 0 15px; border-radius: 8px;
-            border: 1px solid var(--color-border-secondary); background: var(--color-background-secondary);
+            flex: 1; height: 40px; padding: 0 15px; border-radius: 8px;
+            border: 1px solid var(--border-color); background: var(--bg-input);
+            color: var(--text-main); font-family: var(--font-family); font-size: 14px;
+        }
+        #srch::placeholder { color: var(--text-muted); }
+
+        #add-btn {
+            padding: 10px 20px; border-radius: 8px; border: none;
+            background: rgba(255,255,255,0.1); color: var(--text-main);
+            font-weight: 600; font-size: 14px; cursor: pointer; flex-shrink: 0;
         }
 
-        #chips {
-            display: flex; gap: 8px; padding: 10px 15px; background: white;
-            border-bottom: 1px solid var(--color-border-tertiary); overflow-x: auto;
+        #cnt { font-size: 14px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+
+        /* --- FILTRES (CHIPS) --- */
+        #chips-container {
+            background: var(--bg-panel); border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
         }
+        #chips {
+            display: flex; gap: 10px; overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        #chips::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
 
         .chip {
-            padding: 6px 15px; border-radius: 20px; border: 1px solid var(--color-border-secondary);
-            background: white; font-size: 12px; cursor: pointer; white-space: nowrap;
+            padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border-color);
+            background: var(--bg-input); color: var(--text-main);
+            font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;
+            display: flex; align-items: center; gap: 6px;
         }
+        .chip.on { background: var(--accent-red); border-color: var(--accent-red); font-weight: 600; }
 
-        .chip.on { background: #e8401c; color: white; border-color: #e8401c; }
-
-        #container { display: flex; flex: 1; position: relative; }
+        /* --- ZONE CARTE & PANNEAU --- */
+        #main-container { display: flex; flex: 1; position: relative; overflow: hidden; }
         
-        /* LA CARTE PREND TOUT L'ESPACE */
         #map { flex: 1; height: 100%; width: 100%; z-index: 1; }
 
-        /* PANNEAU LATÉRAL */
+        /* --- PANNEAU LATÉRAL (Responsive) --- */
         #panel {
             position: absolute; top: 0; right: 0; bottom: 0; width: 0;
-            background: white; z-index: 2000; transition: width 0.3s;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1); overflow: hidden;
+            background: var(--bg-panel); z-index: 2000; transition: width 0.3s ease;
+            border-left: 1px solid var(--border-color); overflow: hidden;
+            display: flex; flex-direction: column;
         }
-        #panel.open { width: 320px; }
-        #panel-content { padding: 20px; width: 320px; box-sizing: border-box; }
-        #close-btn { float: right; cursor: pointer; font-size: 20px; }
+        #panel.open { width: 360px; }
         
+        #panel-content { padding: 25px; width: 360px; box-sizing: border-box; overflow-y: auto; flex: 1; }
+        
+        #close-btn { 
+            position: absolute; top: 15px; right: 15px;
+            cursor: pointer; font-size: 24px; color: var(--text-muted); background: none; border: none;
+        }
+        
+        #p-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-top: 10px;}
+        #p-icon { font-size: 24px; }
+        #p-name { font-size: 20px; font-weight: 700; margin: 0; }
+        #p-addr { color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 25px; }
+
+        .section-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 600; margin-bottom: 10px; }
+        
+        #p-games { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
         .game-tag {
-            display: inline-block; padding: 4px 10px; background: #f3f4f6;
-            border-radius: 5px; font-size: 11px; margin: 2px;
+            display: inline-block; padding: 6px 14px; background: rgba(255,255,255,0.05);
+            border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-main);
+        }
+
+        /* Horaires */
+        #p-hours { border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-input); overflow: hidden; margin-bottom: 25px; }
+        .hour-row { display: flex; justify-content: space-between; padding: 10px 15px; font-size: 13px; border-bottom: 1px solid var(--border-color); }
+        .hour-row:last-child { border-bottom: none; }
+        .day { color: var(--text-muted); font-weight: 500; }
+        .time { font-weight: 600; }
+        .hour-row.today { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+
+        #status { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 25px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* Bouton Itinéraire */
+        #itin-btn { 
+            display: block; text-align: center; padding: 15px; 
+            background: var(--accent-red); color: white; border-radius: 8px; 
+            font-size: 15px; font-weight: 700; text-decoration: none; width: 100%;
+        }
+
+        /* --- MEDIA QUERIES (RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            #topbar { padding: 8px 10px; gap: 8px; }
+            #logo { font-size: 16px; }
+            #add-btn { padding: 8px 12px; font-size: 12px; }
+            #cnt { display: none; } /* Cache le compteur sur mobile */
+            #chips-container { padding: 8px 10px; }
+            .chip { padding: 6px 12px; font-size: 12px; }
+
+            #panel.open { width: 100%; } /* Plein écran sur mobile */
+            #panel-content { width: 100%; padding: 20px; }
         }
     </style>
 </head>
@@ -74,92 +153,180 @@
     <div id="topbar">
         <div id="logo">CARTO<b>.</b></div>
         <input id="srch" type="text" placeholder="Rechercher un bar, un jeu (billard, échecs...)" />
+        <button id="add-btn">+ Ajouter</button>
         <div id="cnt">Chargement...</div>
     </div>
 
-    <div id="chips">
-        <button class="chip on" data-f="all">🎮 Tous</button>
-        <button class="chip" data-f="Jeux de société">🎲 Jeux</button>
-        <button class="chip" data-f="Billard">🎱 Billard</button>
-        <button class="chip" data-f="Fléchettes">🎯 Fléchettes</button>
-        <button class="chip" data-f="Karaoké">🎤 Karaoké</button>
+    <div id="chips-container">
+        <div id="chips">
+            <button class="chip on" data-f="all">🎮 Tous</button>
+            <button class="chip" data-f="Jeux de société">🎲 Jeux</button>
+            <button class="chip" data-f="Billard">🎱 Billard</button>
+            <button class="chip" data-f="Fléchettes">🎯 Fléchettes</button>
+            <button class="chip" data-f="Karaoké">🎤 Karaoké</button>
+            <button class="chip" data-f="Ping-pong">🏓 Ping-pong</button>
+        </div>
     </div>
 
-    <div id="container">
+    <div id="main-container">
         <div id="map"></div>
+        
         <div id="panel">
+            <button id="close-btn">×</button>
             <div id="panel-content">
-                <span id="close-btn">×</span>
-                <h2 id="p-name">Nom du lieu</h2>
-                <p id="p-addr" style="color: #666; font-size: 13px;"></p>
-                <hr>
-                <h4>Jeux disponibles :</h4>
+                <div id="p-head">
+                    <span id="p-icon">📍</span>
+                    <h2 id="p-name">Nom du lieu</h2>
+                </div>
+                <p id="p-addr"></p>
+                
+                <div class="section-title">Jeux proposés</div>
                 <div id="p-games"></div>
+
+                <div class="section-title">Horaires</div>
+                <div id="p-hours">
+                    </div>
+
+                <div id="status">
+                    <div class="status-dot"></div>
+                    <span id="status-text"></span>
+                </div>
+
+                <a id="itin-btn" target="_blank" rel="noopener">Itinéraire Google Maps</a>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Initialisation de la carte sur Paris
-    var map = L.map('map').setView([48.8566, 2.3522], 13);
-
-    // Chargement des "tuiles" (le dessin de la carte avec rues et métros)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Données d'exemple
-    var venues = [
-        { name: "Le Nid - Cocon Ludique", addr: "227 Rue Saint-Martin, 75003 Paris", lat: 48.8644, lng: 2.3531, games: ["Jeux de société"] },
-        { name: "Shoot Again", addr: "9 Cité Debergue, 75012 Paris", lat: 48.8460, lng: 2.4043, games: ["Billard"] },
-        { name: "Les Petites Flèches", addr: "49 Rue Jean-Pierre Timbaud, 75011 Paris", lat: 48.8669, lng: 2.3739, games: ["Fléchettes"] },
-        { name: "BAM Karaoke Box", addr: "40 Av. de la République, 75011 Paris", lat: 48.8654, lng: 2.3731, games: ["Karaoké"] }
+    // --- DONNÉES D'EXEMPLE ---
+    var VenuesData = [
+        { 
+            id: 1, name: "Le Nid - Cocon Ludique", icon: "🎲", addr: "227 Rue Saint-Martin, 75003 Paris", lat: 48.8644, lng: 2.3531, 
+            games: ["Jeux de société"],
+            hours: ["17h30 – 00h", "12h – 01h", "12h – 01h", "12h – 01h", "12h – 01h", "13h30 – 01h", "13h30 – 22h"],
+            isOpen: true
+        },
+        { 
+            id: 2, name: "Shoot Again", icon: "🎱", addr: "9 Cité Debergue, 75012 Paris", lat: 48.8460, lng: 2.4043, 
+            games: ["Billard", "Baby-foot"],
+            hours: ["14h – 02h", "14h – 02h", "14h – 02h", "14h – 02h", "14h – 04h", "14h – 04h", "14h – 02h"],
+            isOpen: true
+        },
+        { 
+            id: 3, name: "Les Petites Flèches", icon: "🎯", addr: "49 Rue Jean-Pierre Timbaud, 75011 Paris", lat: 48.8669, lng: 2.3739, 
+            games: ["Fléchettes"],
+            hours: ["18h – 00h", "18h – 01h", "18h – 01h", "18h – 02h", "18h – 02h", "15h30 – 03h", "15h30 – 23h"],
+            isOpen: false
+        }
     ];
 
-    var markers = [];
+    var DaysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
-    function displayVenues(filter = 'all') {
-        // Nettoyer les anciens marqueurs
-        markers.forEach(m => map.removeLayer(m));
-        markers = [];
+    // --- INITIALISATION DE LA CARTE ---
+    var map = L.map('map', {zoomControl: false}).setView([48.8566, 2.3522], 13);
 
+    // Style de carte détaillé
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Repositionner le contrôle de zoom en bas à droite
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    var MarkersGroup = L.layerGroup().addTo(map);
+
+    // --- FONCTIONS INTERFACE ---
+    
+    function populatePanel(venueId) {
+        var venue = VenuesData.find(v => v.id === venueId);
+        if(!venue) return;
+
+        // Remplir les textes simples
+        document.getElementById('p-icon').innerText = venue.icon;
+        document.getElementById('p-name').innerText = venue.name;
+        document.getElementById('p-addr').innerText = venue.addr;
+        
+        // Remplir les jeux (tags)
+        document.getElementById('p-games').innerHTML = venue.games.map(g => `<span class="game-tag">${g}</span>`).join('');
+        
+        // Remplir les horaires
+        var todayIndex = (new Date().getDay() + 6) % 7; // Convertir Dim=0 à Lun=0
+        var hoursHtml = venue.hours.map((h, index) => `
+            <div class="hour-row ${index === todayIndex ? 'today' : ''}">
+                <span class="day">${DaysOfWeek[index]}</span>
+                <span class="time">${h}</span>
+            </div>
+        `).join('');
+        document.getElementById('p-hours').innerHTML = hoursHtml;
+
+        // Statut d'ouverture
+        var statusDot = document.querySelector('.status-dot');
+        var statusText = document.getElementById('status-text');
+        if(venue.isOpen) {
+            statusDot.style.backgroundColor = '#16a34a'; // Vert
+            statusText.innerText = 'Ouvert actuellement';
+            statusText.style.color = '#16a34a';
+        } else {
+            statusDot.style.backgroundColor = '#dc2626'; // Rouge
+            statusText.innerText = 'Fermé actuellement';
+            statusText.style.color = '#dc2626';
+        }
+
+        // Lien Itinéraire
+        document.getElementById('itin-btn').href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(venue.addr);
+
+        // Ouvrir le panneau
+        document.getElementById('panel').classList.add('open');
+    }
+
+    function displayMarkers(filter = 'all') {
+        MarkersGroup.clearLayers();
         var count = 0;
-        venues.forEach(v => {
+
+        VenuesData.forEach(v => {
             if (filter === 'all' || v.games.includes(filter)) {
-                var m = L.marker([v.lat, v.lng]).addTo(map);
-                m.on('click', () => {
-                    document.getElementById('p-name').innerText = v.name;
-                    document.getElementById('p-addr').innerText = v.addr;
-                    document.getElementById('p-games').innerHTML = v.games.map(g => `<span class="game-tag">${g}</span>`).join('');
-                    document.getElementById('panel').classList.add('open');
+                // Créer un marqueur simple (point bleu par défaut)
+                var marker = L.marker([v.lat, v.lng]);
+                
+                // Au clic, on remplit le panneau et on l'ouvre
+                marker.on('click', function() {
+                    populatePanel(v.id);
                 });
-                markers.push(m);
+
+                MarkersGroup.addLayer(marker);
                 count++;
             }
         });
-        document.getElementById('cnt').innerText = count + " lieux trouvés";
+        document.getElementById('cnt').innerText = count + " lieux";
     }
 
-    // Gestion des filtres (chips)
-    document.querySelectorAll('.chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
-            btn.classList.add('on');
-            displayVenues(btn.getAttribute('data-f'));
-        });
-    });
+    // --- GESTIONNAIRES D'ÉVÉNEMENTS ---
 
     // Fermer le panneau
     document.getElementById('close-btn').addEventListener('click', () => {
         document.getElementById('panel').classList.remove('open');
     });
 
-    // Lancement initial
-    displayVenues();
+    // Clic sur la carte ferme le panneau
+    map.on('click', () => {
+        document.getElementById('panel').classList.remove('open');
+    });
 
-    // Correction bug d'affichage Leaflet au chargement
-    setTimeout(() => { map.invalidateSize(); }, 400);
+    // Gestion des filtres (chips)
+    document.querySelectorAll('.chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            displayMarkers(btn.getAttribute('data-f'));
+        });
+    });
+
+    // --- LANCEMENT ---
+    displayMarkers();
+
+    // Correction d'un bug d'affichage de Leaflet quand il est dans un conteneur flex
+    setTimeout(() => { map.invalidateSize(); }, 200);
 </script>
 
 </body>
