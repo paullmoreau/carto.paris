@@ -36,11 +36,9 @@ html,body{height:100%;width:100%;overflow:hidden;font-family:system-ui,-apple-sy
 #body{display:flex;flex:1;overflow:hidden;position:relative}
 #map{flex:1;z-index:0;background:#0f0f0f}
 
-/* Bouton Géo */
 .geo-btn{width:34px;height:34px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,0.4);margin-bottom:10px}
 .geo-btn svg{width:20px;height:20px;fill:#333}
 
-/* PANEL RESPONSIVE */
 #panel{position:absolute;top:0;right:0;bottom:0;width:0;overflow:hidden;background:#1a1a1a;color:#fff;border-left:1px solid #333;transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);z-index:1000}
 #panel.open{width:320px}
 #pi{width:320px;padding:20px;height:100%;overflow-y:auto;box-sizing:border-box}
@@ -59,24 +57,20 @@ html,body{height:100%;width:100%;overflow:hidden;font-family:system-ui,-apple-sy
 #ps{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:13px;font-weight:600}
 #pit{display:block;text-align:center;padding:14px;background:#e8401c;color:#fff;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none}
 
-/* MODAL ADD */
 #mbk{display:none;position:absolute;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;padding:16px}
 #mbk.open{display:flex}
 #mdl{background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:16px;padding:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
 .fi{width:100%;padding:12px;background:#2a2a2a;border:1px solid #333;border-radius:10px;color:#fff;margin-bottom:16px}
 
-/* MARKERS */
 .mk{border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #1a1a1a;box-shadow:0 3px 10px rgba(0,0,0,0.5)}
 .mk.act{transform:rotate(-45deg) scale(1.3)!important;border-color:#fff}
 .mk span{transform:rotate(45deg)}
 
-/* MOBILE ADJUSTMENTS */
 @media(max-width:640px){
     #panel{top:auto;right:0;left:0;bottom:0;width:100%;height:0;border-left:none;border-top:1px solid #333;border-radius:20px 20px 0 0}
     #panel.open{width:100%;height:70vh}
     #pi{width:100%}
     .addtxt{display:none}
-    .gg{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -120,17 +114,11 @@ html,body{height:100%;width:100%;overflow:hidden;font-family:system-ui,-apple-sy
     <div id="mbk">
       <div id="mdl">
         <div class="mt">➕ Ajouter un lieu</div>
-        <label class="fl">Nom du lieu *</label>
         <input class="fi" id="fn" type="text" placeholder="Nom">
-        <label class="fl">Adresse *</label>
         <input class="fi" id="fa" type="text" placeholder="Adresse complète">
-        <button id="fbtn">🔍 Récupérer horaires</button>
-        <div id="hrs-out"></div>
-        <label class="fl">Jeux disponibles *</label>
-        <div class="gg" id="gg"></div>
         <div class="mf">
-          <button class="mbtn cancel" id="mcancel">Annuler</button>
-          <button class="mbtn save" id="msave">Ajouter</button>
+          <button class="mbtn cancel" id="mcancel" style="background:#333;color:#fff;border:none;border-radius:8px;cursor:pointer">Annuler</button>
+          <button class="mbtn save" id="msave" style="background:#e8401c;color:#fff;border:none;border-radius:8px;cursor:pointer">Ajouter</button>
         </div>
       </div>
     </div>
@@ -138,7 +126,6 @@ html,body{height:100%;width:100%;overflow:hidden;font-family:system-ui,-apple-sy
 </div>
 
 <script>
-// Config & Datas (identiques à votre code)
 var GC={'Jeux de société':{e:'🎲',c:'#e8401c'},'Jeux de plateau':{e:'🗺️',c:'#e8401c'},'Jeux de rôle':{e:'🐉',c:'#e8401c'},'Billard':{e:'🎱',c:'#2563eb'},'Fléchettes':{e:'🎯',c:'#16a34a'},'Baby-foot':{e:'⚽',c:'#d97706'},'Ping-pong':{e:'🏓',c:'#7c3aed'},'Karaoké':{e:'🎤',c:'#db2777'},'Bowling':{e:'🎳',c:'#0891b2'},'Arcade':{e:'🕹️',c:'#4f46e5'},'Rétrogaming':{e:'👾',c:'#4f46e5'},'Jeux VR':{e:'🥽',c:'#4f46e5'},'Échecs':{e:'♟️',c:'#6b7280'},'Pétanque':{e:'🥏',c:'#65a30d'},'Quiz night':{e:'❓',c:'#0891b2'}};
 var PRIO=['Jeux de société','Billard','Fléchettes','Baby-foot','Ping-pong','Karaoké','Bowling','Arcade','Échecs','Pétanque'];
 var DKEYS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
@@ -147,20 +134,86 @@ var DMAP={Lun:1,Mar:2,Mer:3,Jeu:4,Ven:5,Sam:6,Dim:0};
 var DATA=[
 {name:"Le Nid – Cocon Ludique",addr:"227 Rue Saint-Martin, 75003 Paris",games:["Jeux de société","Jeux de plateau"],lat:48.8644,lng:2.3531,op:14,cl:1,ho:["Lun: 17h30 – 00h","Mar: 12h – 1h","Mer: 12h – 1h","Jeu: 12h – 1h","Ven: 12h – 1h","Sam: 13h30 – 1h","Dim: 13h30 – 22h"]},
 {name:"Les Grands Gamins",addr:"19 Rue de Cléry, 75002 Paris",games:["Jeux de société"],lat:48.8680,lng:2.3461,op:17,cl:1,ho:["Lun: Fermé","Mar: 17h30 – 23h30","Mer: 17h30 – 23h30","Jeu: 17h30 – 23h30","Ven: 17h30 – 1h","Sam: 14h – 1h","Dim: 14h – 22h"]},
+{name:"La Cabane",addr:"76 Rue Notre Dame de Nazareth, 75003 Paris",games:["Jeux de société"],lat:48.8679,lng:2.3554,op:14,cl:0,ho:["Lun: 17h – 23h","Mar: 14h – 23h","Mer: 14h – 23h","Jeu: 14h – 23h30","Ven: 14h – 0h","Sam: 14h – 0h30","Dim: 14h – 22h"]},
+{name:"Les Mauvais Joueurs Bastille",addr:"46 Rue Sedaine, 75011 Paris",games:["Jeux de société"],lat:48.8572,lng:2.3756,op:17,cl:1,ho:["Lun: Fermé","Mar: 17h – 23h","Mer: 17h – 23h","Jeu: 17h – 0h","Ven: 17h – 1h","Sam: 14h – 1h","Dim: 14h – 22h"]},
+{name:"The Good Game",addr:"78 Rue de Cléry, 75002 Paris",games:["Jeux de société"],lat:48.8690,lng:2.3501,op:17,cl:1,ho:["Lun: 17h30 – 0h","Mar: 17h30 – 0h","Mer: 17h30 – 0h","Jeu: 17h30 – 0h","Ven: 17h30 – 1h","Sam: 14h – 1h","Dim: 14h – 23h"]},
+{name:"Le Chauve qui Rit",addr:"29 Rue de Maubeuge, 75009 Paris",games:["Jeux de société"],lat:48.8782,lng:2.3444,op:17,cl:0,ho:["Lun: Fermé","Mar: 17h – 0h","Mer: 17h – 0h","Jeu: 17h – 0h","Ven: 17h – 0h","Sam: 14h – 0h","Dim: 14h – 19h"]},
+{name:"Loufoque Paris 5",addr:"57 Rue Galande, 75005 Paris",games:["Jeux de société","Quiz night"],lat:48.8516,lng:2.3469,op:17,cl:0,ho:["Lun: 17h – 0h","Mar: 17h – 0h","Mer: 17h – 0h","Jeu: 17h – 0h","Ven: 17h – 0h","Sam: 12h – 0h","Dim: 12h – 19h30"]},
+{name:"Au Bonheur des Jeux",addr:"21 Bd de Charonne, 75011 Paris",games:["Jeux de société","Jeux de plateau"],lat:48.8499,lng:2.3985,op:18,cl:0,ho:["Lun: 18h – 23h","Mar: 18h – 23h","Mer: 18h – 23h","Jeu: 18h – 23h","Ven: 18h – 0h","Sam: 15h – 0h","Dim: 15h – 21h"]},
+{name:"Au Dé 12",addr:"126 Av. de la République, 75011 Paris",games:["Jeux de société","Jeux de rôle"],lat:48.8629,lng:2.3859,op:15,cl:0,ho:["Lun: 15h30 – 22h","Mar: Fermé","Mer: 15h30 – 23h30","Jeu: 15h30 – 23h30","Ven: 15h30 – 0h","Sam: 14h30 – 0h","Dim: 14h30 – 22h"]},
+{name:"Le Dernier Bar avant la Fin du Monde",addr:"19 Av. Victoria, 75001 Paris",games:["Jeux de société"],lat:48.8595,lng:2.3471,op:11,cl:0,ho:["Lun: 11h – 0h","Mar: 11h – 0h","Mer: 11h – 0h","Jeu: 11h – 0h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 0h"]},
+{name:"L'Oya",addr:"25 Rue de la Reine Blanche, 75013 Paris",games:["Jeux de société"],lat:48.8376,lng:2.3542,op:14,cl:0,ho:["Lun: 14h – 0h","Mar: 14h – 0h","Mer: 14h – 0h","Jeu: 14h – 0h","Ven: 14h – 0h","Sam: 14h – 0h","Dim: 14h – 0h"]},
+{name:"L'Ours",addr:"7 Rue de Paradis, 75010 Paris",games:["Jeux de société"],lat:48.8755,lng:2.3544,op:16,cl:1,ho:["Lun: 16h – 1h","Mar: 16h – 1h","Mer: 16h – 1h","Jeu: 16h – 1h","Ven: 16h – 1h","Sam: 16h – 1h","Dim: 16h – 1h"]},
+{name:"Kizoku Paris",addr:"13 Rue Grange aux Belles, 75010 Paris",games:["Jeux de société"],lat:48.8730,lng:2.3660,op:16,cl:0,ho:["Lun: 16h – 0h","Mar: 16h – 0h","Mer: 16h – 0h","Jeu: 16h – 0h","Ven: 16h – 2h","Sam: 16h – 2h","Dim: Fermé"]},
+{name:"Pili Pili",addr:"299 Rue du Fbg Saint-Antoine, 75011 Paris",games:["Jeux de société"],lat:48.8494,lng:2.3989,op:17,cl:1,ho:["Lun: 17h – 1h","Mar: 17h – 1h","Mer: 17h – 1h","Jeu: 17h – 1h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: Fermé"]},
+{name:"Le Purgatoire",addr:"34 Rue de Châteaudun, 75009 Paris",games:["Jeux de société"],lat:48.8773,lng:2.3395,op:17,cl:1,ho:["Lun: 17h – 1h","Mar: 17h – 1h","Mer: 17h – 1h","Jeu: 17h – 1h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 1h"]},
+{name:"La Recyclerie",addr:"83 Bd Ornano, 75018 Paris",games:["Jeux de société"],lat:48.8971,lng:2.3451,op:9,cl:23,ho:["Lun: 9h – 23h","Mar: 9h – 23h","Mer: 9h – 23h","Jeu: 9h – 23h","Ven: 9h – 2h","Sam: 9h – 2h","Dim: Fermé"]},
+{name:"Pavillon des Canaux",addr:"39 Quai de la Loire, 75019 Paris",games:["Jeux de société"],lat:48.8860,lng:2.3754,op:11,cl:1,ho:["Lun: 11h – 1h","Mar: 11h – 1h","Mer: 11h – 1h","Jeu: 11h – 1h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 1h"]},
+{name:"Social Bar",addr:"25 Rue Vée, 75003 Paris",games:["Jeux de société","Karaoké"],lat:48.8608,lng:2.3602,op:18,cl:2,ho:["Lun: 18h – 2h","Mar: 18h – 2h","Mer: 18h – 2h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 18h – 2h","Dim: 18h – 2h"]},
+{name:"Player One",addr:"224 Rue Saint-Denis, 75002 Paris",games:["Rétrogaming","Jeux de société"],lat:48.8635,lng:2.3525,op:16,cl:2,ho:["Lun: 16h – 2h","Mar: 16h – 2h","Mer: 16h – 2h","Jeu: 16h – 2h","Ven: 16h – 4h","Sam: 16h – 4h","Dim: 16h – 2h"]},
+{name:"Le Hasard Ludique",addr:"128 Av. de Saint-Ouen, 75018 Paris",games:["Pétanque","Jeux de société"],lat:48.8925,lng:2.3302,op:9,cl:0,ho:["Lun: 9h – 0h","Mar: 9h – 0h","Mer: 9h – 0h","Jeu: 9h – 0h","Ven: 9h – 2h","Sam: 9h – 3h","Dim: Fermé"]},
 {name:"Billard Nation Shoot Again",addr:"9 Cité Debergue, 75012 Paris",games:["Billard"],lat:48.8460,lng:2.4043,op:14,cl:2,ho:["Lun: 14h – 2h","Mar: 14h – 2h","Mer: 14h – 2h","Jeu: 14h – 2h","Ven: 14h – 4h","Sam: 14h – 4h","Dim: 14h – 2h"]},
-{name:"Les Petites Flèches",addr:"49 Rue Jean-Pierre Timbaud, 75011 Paris",games:["Fléchettes"],lat:48.8669,lng:2.3739,op:18,cl:1,ho:["Lun: 18h – 0h","Mar: 18h – 1h","Mer: 18h – 1h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 15h30 – 3h","Dim: 15h30 – 23h"]},
-{name:"Ground Control",addr:"81 Rue du Charolais, 75012 Paris",games:["Baby-foot","Arcade"],lat:48.8405,lng:2.3791,op:12,cl:0,ho:["Lun: 12h – 0h","Mar: 12h – 0h","Mer: 12h – 0h","Jeu: 12h – 0h","Ven: 12h – 2h","Sam: 12h – 2h","Dim: Fermé"]}
+{name:"Le BAP",addr:"111 Rue Saint-Maur, 75011 Paris",games:["Billard","Baby-foot"],lat:48.8658,lng:2.3770,op:17,cl:2,ho:["Lun: Fermé","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 4h","Sam: 17h – 4h","Dim: 17h – 0h"]},
+{name:"Académie de Billard de Paris",addr:"47 Rue de Berri, 75008 Paris",games:["Billard"],lat:48.8740,lng:2.3108,op:14,cl:2,ho:["Lun: 14h – 2h","Mar: 14h – 2h","Mer: 14h – 2h","Jeu: 14h – 2h","Ven: 14h – 4h","Sam: 14h – 4h","Dim: 14h – 2h"]},
+{name:"Indiana Club Tolbiac",addr:"74 Avenue de France, 75013 Paris",games:["Billard"],lat:48.8310,lng:2.3741,op:11,cl:2,ho:["Lun: 11h – 2h","Mar: 11h – 2h","Mer: 11h – 2h","Jeu: 11h – 2h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 2h"]},
+{name:"O'Sullivans FDR",addr:"63 Av. Franklin D. Roosevelt, 75008 Paris",games:["Billard","Fléchettes"],lat:48.8665,lng:2.3080,op:11,cl:2,ho:["Lun: 11h – 2h","Mar: 11h – 2h","Mer: 11h – 2h","Jeu: 11h – 2h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 2h"]},
+{name:"The Long Hop",addr:"25 Rue Frédéric Sauton, 75005 Paris",games:["Billard","Baby-foot","Fléchettes"],lat:48.8505,lng:2.3490,op:11,cl:2,ho:["Lun: 11h – 2h","Mar: 11h – 2h","Mer: 11h – 2h","Jeu: 11h – 2h","Ven: 11h – 2h","Sam: 12h – 3h","Dim: 12h – 2h"]},
+{name:"The Highlander",addr:"8 Rue de Nevers, 75006 Paris",games:["Fléchettes","Billard"],lat:48.8570,lng:2.3432,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 3h","Sam: 17h – 3h","Dim: Fermé"]},
+{name:"Le 114 b",addr:"114 Rue Oberkampf, 75011 Paris",games:["Billard","Baby-foot"],lat:48.8662,lng:2.3756,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"L'Exode",addr:"39 Bd de Strasbourg, 75010 Paris",games:["Ping-pong","Billard","Baby-foot"],lat:48.8719,lng:2.3554,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 3h","Dim: 17h – 2h"]},
+{name:"O'Sullivans by the Mill",addr:"92 Bd de Clichy, 75018 Paris",games:["Baby-foot","Billard"],lat:48.8844,lng:2.3324,op:11,cl:2,ho:["Lun: 11h – 2h","Mar: 11h – 2h","Mer: 11h – 2h","Jeu: 11h – 2h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 2h"]},
+{name:"Corcoran's Bastille",addr:"53 Rue du Fbg Saint-Antoine, 75011 Paris",games:["Fléchettes","Billard"],lat:48.8528,lng:2.3704,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"Les Petites Flèches Parmentier",addr:"49 Rue Jean-Pierre Timbaud, 75011 Paris",games:["Fléchettes"],lat:48.8669,lng:2.3739,op:18,cl:1,ho:["Lun: 18h – 0h","Mar: 18h – 1h","Mer: 18h – 1h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 15h30 – 3h","Dim: 15h30 – 23h"]},
+{name:"Les Petites Flèches Strasbourg",addr:"7 Rue d'Enghien, 75010 Paris",games:["Fléchettes"],lat:48.8716,lng:2.3528,op:18,cl:1,ho:["Lun: 18h – 0h","Mar: 18h – 1h","Mer: 18h – 1h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 15h30 – 3h","Dim: 15h30 – 23h"]},
+{name:"Les Petites Flèches Pigalle",addr:"49 Bd de Clichy, 75009 Paris",games:["Fléchettes"],lat:48.8831,lng:2.3339,op:18,cl:1,ho:["Lun: 18h – 0h","Mar: 18h – 1h","Mer: 18h – 1h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 15h30 – 3h","Dim: 15h30 – 23h"]},
+{name:"L'AlbaR bar à fléchettes",addr:"2 Rue Poissonnière, 75002 Paris",games:["Fléchettes"],lat:48.8687,lng:2.3478,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 3h","Dim: Fermé"]},
+{name:"Le Split",addr:"83 Rue de la Roquette, 75011 Paris",games:["Fléchettes"],lat:48.8570,lng:2.3782,op:18,cl:2,ho:["Lun: 18h – 2h","Mar: 18h – 2h","Mer: 18h – 2h","Jeu: 18h – 2h","Ven: 18h – 2h","Sam: 18h – 0h","Dim: 18h – 0h"]},
+{name:"Le Bull's Eye",addr:"15 Rue Lecourbe, 75015 Paris",games:["Fléchettes"],lat:48.8489,lng:2.3120,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"Wallace Station",addr:"70 Av. de la Motte-Picquet, 75015 Paris",games:["Fléchettes"],lat:48.8493,lng:2.3050,op:17,cl:1,ho:["Lun: 17h – 1h","Mar: 17h – 1h","Mer: 17h – 1h","Jeu: 17h – 1h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 1h"]},
+{name:"The Bombardier",addr:"2 Place du Panthéon, 75005 Paris",games:["Fléchettes","Quiz night"],lat:48.8462,lng:2.3461,op:11,cl:2,ho:["Lun: 11h – 2h","Mar: 11h – 2h","Mer: 11h – 2h","Jeu: 11h – 2h","Ven: 11h – 2h","Sam: 11h – 2h","Dim: 11h – 2h"]},
+{name:"The Frog & Rosbif",addr:"116 Rue Saint-Denis, 75002 Paris",games:["Fléchettes"],lat:48.8627,lng:2.3508,op:12,cl:2,ho:["Lun: 12h – 2h","Mar: 12h – 2h","Mer: 12h – 2h","Jeu: 12h – 2h","Ven: 12h – 2h","Sam: 12h – 2h","Dim: 12h – 2h"]},
+{name:"The Cambridge Public House",addr:"8 Rue des Filles du Calvaire, 75003 Paris",games:["Fléchettes"],lat:48.8621,lng:2.3618,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: Fermé"]},
+{name:"The Auld Alliance",addr:"80 Rue François Miron, 75004 Paris",games:["Fléchettes"],lat:48.8546,lng:2.3558,op:16,cl:1,ho:["Lun: 16h – 1h","Mar: 16h – 1h","Mer: 16h – 1h","Jeu: 16h – 1h","Ven: 16h – 2h","Sam: 16h – 2h","Dim: 16h – 1h"]},
+{name:"Connolly's Corner",addr:"12 Rue de Mirbel, 75005 Paris",games:["Fléchettes"],lat:48.8492,lng:2.3520,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"The Red Tree",addr:"13 Rue de Lappe, 75011 Paris",games:["Fléchettes"],lat:48.8534,lng:2.3701,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"Mayflower Pub",addr:"49 Rue Descartes, 75005 Paris",games:["Billard","Fléchettes"],lat:48.8470,lng:2.3503,op:12,cl:2,ho:["Lun: 12h – 2h","Mar: 12h – 2h","Mer: 12h – 2h","Jeu: 12h – 2h","Ven: 12h – 2h","Sam: 12h – 2h","Dim: 12h – 2h"]},
+{name:"LES MAH BOULES – Barbès",addr:"14 Rue de Jessaint, 75018 Paris",games:["Baby-foot","Pétanque"],lat:48.8851,lng:2.3564,op:9,cl:0,ho:["Lun: 9h – 0h","Mar: 9h – 0h","Mer: 9h – 2h","Jeu: 9h – 2h","Ven: 9h – 2h","Sam: 9h – 3h","Dim: Fermé"]},
+{name:"LES MAH BOULES – Chapelle",addr:"8 Rue des Cheminots, 75018 Paris",games:["Baby-foot","Pétanque"],lat:48.8953,lng:2.3575,op:9,cl:0,ho:["Lun: 9h – 0h","Mar: 9h – 0h","Mer: 9h – 0h","Jeu: 9h – 0h","Ven: 9h – 2h","Sam: 9h – 3h","Dim: Fermé"]},
+{name:"Little Big Bear",addr:"45 Rue Monsieur le Prince, 75006 Paris",games:["Baby-foot"],lat:48.8495,lng:2.3403,op:17,cl:2,ho:["Lun: Fermé","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 3h","Sam: 17h – 3h","Dim: Fermé"]},
+{name:"Le Zero Zero",addr:"56 Rue de la Fontaine au Roi, 75011 Paris",games:["Baby-foot"],lat:48.8673,lng:2.3715,op:16,cl:2,ho:["Lun: 16h – 2h","Mar: 16h – 2h","Mer: 16h – 2h","Jeu: 16h – 2h","Ven: 16h – 2h","Sam: 16h – 2h","Dim: 16h – 2h"]},
+{name:"La Mercerie",addr:"98 Rue Oberkampf, 75011 Paris",games:["Baby-foot"],lat:48.8650,lng:2.3743,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: Fermé"]},
+{name:"Le Mauri 7",addr:"46 Rue du Fbg Saint-Denis, 75010 Paris",games:["Baby-foot"],lat:48.8709,lng:2.3575,op:8,cl:2,ho:["Lun: 8h – 2h","Mar: 8h – 2h","Mer: 8h – 2h","Jeu: 8h – 2h","Ven: 8h – 2h","Sam: 8h – 2h","Dim: 8h – 2h"]},
+{name:"L'Avancée",addr:"18 Rue de l'Ermitage, 75020 Paris",games:["Baby-foot"],lat:48.8673,lng:2.3937,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: 17h – 2h"]},
+{name:"Les Triplettes",addr:"102 Bd de Belleville, 75020 Paris",games:["Baby-foot"],lat:48.8677,lng:2.3871,op:17,cl:2,ho:["Lun: 17h – 2h","Mar: 17h – 2h","Mer: 17h – 2h","Jeu: 17h – 2h","Ven: 17h – 2h","Sam: 17h – 2h","Dim: Fermé"]},
+{name:"Ground Control",addr:"81 Rue du Charolais, 75012 Paris",games:["Baby-foot","Arcade"],lat:48.8405,lng:2.3791,op:12,cl:0,ho:["Lun: 12h – 0h","Mar: 12h – 0h","Mer: 12h – 0h","Jeu: 12h – 0h","Ven: 12h – 2h","Sam: 12h – 2h","Dim: Fermé"]},
+{name:"Bar de la Marine",addr:"55 Quai de la Loire, 75019 Paris",games:["Baby-foot","Pétanque"],lat:48.8857,lng:2.3748,op:8,cl:2,ho:["Lun: 8h – 2h","Mar: 8h – 2h","Mer: 8h – 2h","Jeu: 8h – 2h","Ven: 8h – 2h","Sam: 8h – 2h","Dim: 8h – 2h"]},
+{name:"Gossima Ping Pong Bar",addr:"4 Rue Victor Gelez, 75011 Paris",games:["Ping-pong"],lat:48.8649,lng:2.3827,op:16,cl:2,ho:["Lun: 16h – 0h","Mar: 16h – 2h","Mer: 16h – 2h","Jeu: 16h – 2h","Ven: 16h – 2h","Sam: 16h – 3h","Dim: Fermé"]},
+{name:"KaraFun Paris",addr:"3 Imp. Bonne Nouvelle, 75010 Paris",games:["Karaoké"],lat:48.8707,lng:2.3505,op:17,cl:1,ho:["Lun: 18h – 0h","Mar: 18h – 1h","Mer: 16h – 0h","Jeu: 18h – 2h","Ven: 17h – 2h","Sam: 15h – 3h","Dim: 15h – 22h"]},
+{name:"BAM Karaoke Box Parmentier",addr:"40 Av. de la République, 75011 Paris",games:["Karaoké"],lat:48.8654,lng:2.3731,op:14,cl:2,ho:["Lun: 13h50 – 2h","Mar: 13h50 – 2h","Mer: 13h50 – 2h","Jeu: 13h50 – 2h","Ven: 13h50 – 2h","Sam: 13h30 – 3h","Dim: 13h30 – 0h30"]},
+{name:"Concerto Karaoke Saint-Michel",addr:"4 Rue Suger, 75006 Paris",games:["Karaoké"],lat:48.8531,lng:2.3425,op:19,cl:1,ho:["Lun: Fermé","Mar: Fermé","Mer: Fermé","Jeu: 19h – 22h30","Ven: 19h30 – 1h","Sam: 19h30 – 1h","Dim: Fermé"]},
+{name:"Singing Studio Paris",addr:"6 Bd du Bois le Prêtre, 75017 Paris",games:["Karaoké"],lat:48.8991,lng:2.3218,op:14,cl:0,ho:["Lun: 14h – 0h","Mar: 14h – 0h","Mer: 14h – 0h","Jeu: 14h – 0h","Ven: 14h – 2h","Sam: 14h – 2h","Dim: 14h – 0h"]},
+{name:"Smile World Gaîté",addr:"80 Av. du Maine, 75014 Paris",games:["Bowling","Karaoké","Arcade"],lat:48.8388,lng:2.3219,op:14,cl:1,ho:["Lun: 14h – 1h","Mar: 14h – 1h","Mer: 14h – 1h","Jeu: 14h – 2h","Ven: 14h – 2h","Sam: 10h – 3h","Dim: 10h – 23h"]},
+{name:"Le 3Bis – Bar à jeux",addr:"41 Rue des Pirogues de Bercy, 75012 Paris",games:["Karaoké","Jeux de société","Arcade"],lat:48.8332,lng:2.3873,op:15,cl:2,ho:["Lun: 15h – 2h","Mar: 15h – 2h","Mer: 15h – 2h","Jeu: 15h – 2h","Ven: 15h – 2h","Sam: 10h30 – 3h","Dim: 10h – 0h"]},
+{name:"Seven Squares – Villette",addr:"30 Av. Corentin Cariou, 75019 Paris",games:["Bowling","Arcade","Jeux VR"],lat:48.8960,lng:2.3894,op:10,cl:1,ho:["Lun: 14h – 1h","Mar: 14h – 1h","Mer: 10h – 1h","Jeu: 10h – 1h","Ven: 10h – 2h","Sam: 10h – 3h","Dim: 10h – 1h"]},
+{name:"Bowling Mouffetard",addr:"73 Rue Mouffetard, 75005 Paris",games:["Bowling"],lat:48.8422,lng:2.3500,op:14,cl:2,ho:["Lun: 14h – 2h","Mar: 14h – 2h","Mer: 14h – 2h","Jeu: 14h – 2h","Ven: 14h – 2h","Sam: 10h – 3h","Dim: 10h – 2h"]},
+{name:"Extra Life Café",addr:"9 Pass. des Patriarches, 75005 Paris",games:["Arcade","Jeux VR","Jeux de société"],lat:48.8411,lng:2.3501,op:14,cl:22,ho:["Lun: 14h – 22h","Mar: Fermé","Mer: 14h – 22h","Jeu: 14h – 22h","Ven: 14h – 22h","Sam: 14h – 22h","Dim: 14h – 20h"]},
+{name:"La Tête dans les Nuages",addr:"5 Bd des Italiens, 75002 Paris",games:["Arcade","Bowling"],lat:48.8716,lng:2.3392,op:11,cl:0,ho:["Lun: 11h – 0h30","Mar: 11h – 0h30","Mer: 11h – 0h30","Jeu: 11h – 0h30","Ven: 11h – 2h","Sam: 10h – 3h","Dim: 10h – 0h30"]},
+{name:"Reset",addr:"17 Rue du Cygne, 75001 Paris",games:["Arcade","Baby-foot","Karaoké"],lat:48.8634,lng:2.3484,op:17,cl:2,ho:["Lun: 17h – 0h","Mar: 17h – 0h","Mer: 17h – 1h","Jeu: 17h – 1h30","Ven: 17h – 2h","Sam: 17h – 3h","Dim: 17h – 0h"]},
+{name:"Le Meltdown",addr:"6 Passage Thiéré, 75011 Paris",games:["Arcade"],lat:48.8561,lng:2.3695,op:14,cl:2,ho:["Lun: 14h – 2h","Mar: 14h – 2h","Mer: 14h – 2h","Jeu: 14h – 2h","Ven: 14h – 4h","Sam: 12h – 4h","Dim: 12h – 2h"]},
+{name:"EP7",addr:"133 Avenue de France, 75013 Paris",games:["Arcade"],lat:48.8303,lng:2.3757,op:11,cl:0,ho:["Lun: 11h – 0h","Mar: 11h – 0h","Mer: 11h – 0h","Jeu: 11h – 0h","Ven: 11h – 0h","Sam: 11h – 0h","Dim: 11h – 0h"]},
+{name:"Blitz Society",addr:"4 Rue du Sabot, 75006 Paris",games:["Échecs"],lat:48.8529,lng:2.3314,op:15,cl:23,ho:["Lun: 15h30 – 23h30","Mar: 15h30 – 23h30","Mer: 15h30 – 23h30","Jeu: 15h30 – 23h30","Ven: 15h30 – 23h30","Sam: 12h – 23h30","Dim: 10h – 23h30"]},
+{name:"BarOurcq",addr:"68 Quai de la Loire, 75019 Paris",games:["Pétanque"],lat:48.8865,lng:2.3773,op:8,cl:2,ho:["Lun: 8h – 2h","Mar: 8h – 2h","Mer: 8h – 2h","Jeu: 8h – 2h","Ven: 8h – 2h","Sam: 8h – 3h","Dim: 8h – 2h"]},
+{name:"La Pétanque",addr:"40 Rue Etienne Dolet, 75020 Paris",games:["Pétanque"],lat:48.8682,lng:2.3862,op:8,cl:2,ho:["Lun: Fermé","Mar: 8h – 2h","Mer: 8h – 2h","Jeu: 8h – 2h","Ven: 8h – 2h","Sam: 8h – 3h","Dim: 8h – 2h"]},
+{name:"Le Perchoir Versailles",addr:"2 Av. de la Porte de Plaisance, 75015 Paris",games:["Pétanque","Baby-foot"],lat:48.8295,lng:2.2820,op:12,cl:1,ho:["Lun: 12h – 1h","Mar: 12h – 1h","Mer: 12h – 1h","Jeu: 12h – 1h","Ven: 12h – 2h","Sam: 12h – 2h","Dim: 12h – 1h"]},
 ];
 
-// INIT MAP DARK
 var map=L.map('map',{center:[48.856,2.352],zoom:13,zoomControl:false});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; OpenStreetMap &copy; CARTO'
+    attribution:'© OpenStreetMap © CARTO'
 }).addTo(map);
 
 L.control.zoom({position:'bottomright'}).addTo(map);
 
-// BOUTON GEOLOCALISATION
 var geoControl = L.Control.extend({
     options: { position: 'bottomright' },
     onAdd: function() {
@@ -179,7 +232,6 @@ map.on('locationfound', function(e) {
     L.marker(e.latlng).addTo(map).bindPopup("Vous êtes ici").openPopup();
 });
 
-// LOGIQUE INTERFACE (Adaptée)
 function mg(g){for(var i=0;i<PRIO.length;i++)if(g.indexOf(PRIO[i])>-1)return PRIO[i];return g[0]||null}
 function gc(g){var k=mg(g);return k&&GC[k]?GC[k].c:'#6b7280'}
 function ge(g){var k=mg(g);return k&&GC[k]?GC[k].e:'🎮'}
@@ -237,7 +289,6 @@ function render(){
   document.getElementById('cnt').textContent=n+' lieux';
 }
 
-// Events
 document.querySelectorAll('.chip').forEach(b=>{
     b.onclick=()=>{
         document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
@@ -251,9 +302,16 @@ document.getElementById('px').onclick=()=>{
 };
 map.on('click',()=>document.getElementById('px').click());
 
-// Modal Logic (simplifiée pour l'exemple)
 document.getElementById('addbtn').onclick=()=>document.getElementById('mbk').classList.add('open');
 document.getElementById('mcancel').onclick=()=>document.getElementById('mbk').classList.remove('open');
+document.getElementById('msave').onclick=function(){
+    var name=document.getElementById('fn').value;
+    var addr=document.getElementById('fa').value;
+    if(name && addr){
+        alert("Demande d'ajout envoyée pour : " + name);
+        document.getElementById('mbk').classList.remove('open');
+    }
+};
 
 render();
 </script>
