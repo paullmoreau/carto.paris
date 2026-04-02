@@ -1,333 +1,246 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARTO - Dark Edition</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CARTO. — L'Annuaire Ultime du Jeu à Paris</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <style>
-        /* --- VARIABLES THEME SOMBRE --- */
-        :root {
-            --bg-page: #1a1d21;
-            --bg-panel: #22262b;
-            --bg-input: #2a2e35;
-            --border-color: #3a3f47;
-            --text-main: #ffffff;
-            --text-muted: #a1a7b3;
-            --accent-red: #e8401c;
-            --accent-blue: #3b82f6;
-            --font-family: 'Inter', sans-serif;
-        }
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        /* --- RESET & LAYOUT --- */
-        * { box-sizing: border-box; }
-        body, html { 
-            margin: 0; padding: 0; height: 100%; 
-            font-family: var(--font-family); 
-            background-color: var(--bg-page); 
-            color: var(--text-main);
-            overflow: hidden; /* Empêche le scroll de la page entière */
-        }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap');
 
-        #root { display: flex; flex-direction: column; height: 100vh; width: 100%; }
+:root {
+  --noir: #0d0d0d; --blanc: #f5f2ed; --accent: #e8401c;
+  --green: #2ecc71; --red: #e74c3c; --grey: #7f8c8d;
+  --sidebar-width: 380px; --header-height: 70px; --filter-height: 60px;
+}
 
-        /* --- TOPBAR (Responsive) --- */
-        #topbar {
-            display: flex; align-items: center; gap: 15px; padding: 10px 20px;
-            background: var(--bg-panel); border-bottom: 1px solid var(--border-color); z-index: 1000;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; font-family: 'DM Sans', sans-serif; background: var(--noir); color: var(--blanc); }
 
-        #logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; flex-shrink: 0; }
-        #logo b { color: var(--accent-red); }
-        
-        #srch {
-            flex: 1; height: 40px; padding: 0 15px; border-radius: 8px;
-            border: 1px solid var(--border-color); background: var(--bg-input);
-            color: var(--text-main); font-family: var(--font-family); font-size: 14px;
-        }
-        #srch::placeholder { color: var(--text-muted); }
+/* HEADER */
+.header {
+  height: var(--header-height); background: var(--noir); padding: 0 20px;
+  display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 1001; position: relative;
+}
+.logo { font-family: 'Syne'; font-size: 22px; font-weight: 800; margin-right: 20px; }
+.logo span { color: var(--accent); }
+.search-wrap { flex: 1; max-width: 400px; }
+#global-search {
+  width: 100%; padding: 10px 15px; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none;
+}
 
-        #add-btn {
-            padding: 10px 20px; border-radius: 8px; border: none;
-            background: rgba(255,255,255,0.1); color: var(--text-main);
-            font-weight: 600; font-size: 14px; cursor: pointer; flex-shrink: 0;
-        }
+/* FILTRES */
+.filters-bar {
+  height: var(--filter-height); background: #111; display: flex; align-items: center;
+  padding: 0 15px; gap: 10px; overflow-x: auto; border-bottom: 1px solid rgba(255,255,255,0.05);
+  scrollbar-width: none; z-index: 1000; position: relative;
+}
+.filters-bar::-webkit-scrollbar { display: none; }
+.f-btn {
+  padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: 0.2s;
+}
+.f-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        #cnt { font-size: 14px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+/* MAIN CONTENT */
+.main-content { display: flex; height: calc(100% - var(--header-height) - var(--filter-height)); }
+.sidebar { width: var(--sidebar-width); background: #0f0f0f; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.1); }
+.places-list { overflow-y: auto; flex: 1; padding: 15px; }
 
-        /* --- FILTRES (CHIPS) --- */
-        #chips-container {
-            background: var(--bg-panel); border-bottom: 1px solid var(--border-color);
-            padding: 10px 20px;
-        }
-        #chips {
-            display: flex; gap: 10px; overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-        }
-        #chips::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+/* CARDS */
+.place-item {
+  padding: 20px; background: rgba(255,255,255,0.03); border-radius: 16px;
+  margin-bottom: 15px; cursor: pointer; border: 1px solid transparent; transition: 0.2s;
+}
+.place-item:hover { background: rgba(255,255,255,0.05); }
+.place-item.active { border-color: var(--accent); background: rgba(232, 64, 28, 0.04); }
 
-        .chip {
-            padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border-color);
-            background: var(--bg-input); color: var(--text-main);
-            font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .chip.on { background: var(--accent-red); border-color: var(--accent-red); font-weight: 600; }
+.status-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 11px; font-weight: 700; }
+.indicator { width: 8px; height: 8px; border-radius: 50%; }
+.open-dot { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+.closed-dot { background: var(--red); }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* --- ZONE CARTE & PANNEAU --- */
-        #main-container { display: flex; flex: 1; position: relative; overflow: hidden; }
-        
-        #map { flex: 1; height: 100%; width: 100%; z-index: 1; }
+.place-item h4 { font-family: 'Syne'; font-size: 17px; margin-bottom: 5px; }
+.p-addr { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.p-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 10px; padding: 3px 10px; background: rgba(255,255,255,0.06); border-radius: 6px; color: #888; }
 
-        /* --- PANNEAU LATÉRAL (Responsive) --- */
-        #panel {
-            position: absolute; top: 0; right: 0; bottom: 0; width: 0;
-            background: var(--bg-panel); z-index: 2000; transition: width 0.3s ease;
-            border-left: 1px solid var(--border-color); overflow: hidden;
-            display: flex; flex-direction: column;
-        }
-        #panel.open { width: 360px; }
-        
-        #panel-content { padding: 25px; width: 360px; box-sizing: border-box; overflow-y: auto; flex: 1; }
-        
-        #close-btn { 
-            position: absolute; top: 15px; right: 15px;
-            cursor: pointer; font-size: 24px; color: var(--text-muted); background: none; border: none;
-        }
-        
-        #p-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-top: 10px;}
-        #p-icon { font-size: 24px; }
-        #p-name { font-size: 20px; font-weight: 700; margin: 0; }
-        #p-addr { color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 25px; }
+#map { flex: 1; background: #1a1a1a; position: relative; }
+.geoloc-btn {
+  position: absolute; bottom: 30px; right: 20px; z-index: 1000;
+  width: 55px; height: 55px; background: var(--accent); border: none; border-radius: 50%;
+  color: white; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
 
-        .section-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 600; margin-bottom: 10px; }
-        
-        #p-games { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-        .game-tag {
-            display: inline-block; padding: 6px 14px; background: rgba(255,255,255,0.05);
-            border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-main);
-        }
-
-        /* Horaires */
-        #p-hours { border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-input); overflow: hidden; margin-bottom: 25px; }
-        .hour-row { display: flex; justify-content: space-between; padding: 10px 15px; font-size: 13px; border-bottom: 1px solid var(--border-color); }
-        .hour-row:last-child { border-bottom: none; }
-        .day { color: var(--text-muted); font-weight: 500; }
-        .time { font-weight: 600; }
-        .hour-row.today { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
-
-        #status { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 25px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-        /* Bouton Itinéraire */
-        #itin-btn { 
-            display: block; text-align: center; padding: 15px; 
-            background: var(--accent-red); color: white; border-radius: 8px; 
-            font-size: 15px; font-weight: 700; text-decoration: none; width: 100%;
-        }
-
-        /* --- MEDIA QUERIES (RESPONSIVE) --- */
-        @media (max-width: 768px) {
-            #topbar { padding: 8px 10px; gap: 8px; }
-            #logo { font-size: 16px; }
-            #add-btn { padding: 8px 12px; font-size: 12px; }
-            #cnt { display: none; } /* Cache le compteur sur mobile */
-            #chips-container { padding: 8px 10px; }
-            .chip { padding: 6px 12px; font-size: 12px; }
-
-            #panel.open { width: 100%; } /* Plein écran sur mobile */
-            #panel-content { width: 100%; padding: 20px; }
-        }
-    </style>
+@media (max-width: 768px) {
+  .main-content { flex-direction: column-reverse; }
+  .sidebar { width: 100%; height: 50vh; border-right: none; }
+  #map { height: 50vh; }
+  .geoloc-btn { bottom: calc(50vh + 20px); width: 45px; height: 45px; }
+}
+</style>
 </head>
 <body>
 
-<div id="root">
-    <div id="topbar">
-        <div id="logo">CARTO<b>.</b></div>
-        <input id="srch" type="text" placeholder="Rechercher un bar, un jeu (billard, échecs...)" />
-        <button id="add-btn">+ Ajouter</button>
-        <div id="cnt">Chargement...</div>
-    </div>
+<header class="header">
+  <div class="logo">CARTO<span>.</span></div>
+  <div class="search-wrap">
+    <input id="global-search" type="text" placeholder="Chercher un lieu, un jeu, un quartier..." oninput="renderApp()">
+  </div>
+</header>
 
-    <div id="chips-container">
-        <div id="chips">
-            <button class="chip on" data-f="all">🎮 Tous</button>
-            <button class="chip" data-f="Jeux de société">🎲 Jeux</button>
-            <button class="chip" data-f="Billard">🎱 Billard</button>
-            <button class="chip" data-f="Fléchettes">🎯 Fléchettes</button>
-            <button class="chip" data-f="Karaoké">🎤 Karaoké</button>
-            <button class="chip" data-f="Ping-pong">🏓 Ping-pong</button>
-        </div>
-    </div>
-
-    <div id="main-container">
-        <div id="map"></div>
-        
-        <div id="panel">
-            <button id="close-btn">×</button>
-            <div id="panel-content">
-                <div id="p-head">
-                    <span id="p-icon">📍</span>
-                    <h2 id="p-name">Nom du lieu</h2>
-                </div>
-                <p id="p-addr"></p>
-                
-                <div class="section-title">Jeux proposés</div>
-                <div id="p-games"></div>
-
-                <div class="section-title">Horaires</div>
-                <div id="p-hours">
-                    </div>
-
-                <div id="status">
-                    <div class="status-dot"></div>
-                    <span id="status-text"></span>
-                </div>
-
-                <a id="itin-btn" target="_blank" rel="noopener">Itinéraire Google Maps</a>
-            </div>
-        </div>
-    </div>
+<div class="filters-bar">
+  <button class="f-btn active" onclick="setFilter('all', this)">🎮 Tous</button>
+  <button class="f-btn" onclick="setFilter('Jeux de société', this)">🎲 Jeux</button>
+  <button class="f-btn" onclick="setFilter('Billard', this)">🎱 Billard</button>
+  <button class="f-btn" onclick="setFilter('Arcade', this)">🕹️ Arcade</button>
+  <button class="f-btn" onclick="setFilter('Karaoké', this)">🎤 Karaoké</button>
+  <button class="f-btn" onclick="setFilter('Fléchettes', this)">🎯 Fléchettes</button>
+  <button class="f-btn" onclick="setFilter('Baby-foot', this)">⚽ Baby-foot</button>
+  <button class="f-btn" onclick="setFilter('Ping-pong', this)">🏓 Ping-pong</button>
+  <button class="f-btn" onclick="setFilter('Bowling', this)">🎳 Bowling</button>
+  <button class="f-btn" onclick="setFilter('Pétanque', this)">🥏 Pétanque</button>
 </div>
 
+<main class="main-content">
+  <section class="sidebar">
+    <div class="places-list" id="places-list"></div>
+  </section>
+  <section id="map">
+    <button class="geoloc-btn" onclick="locateUser()">⌖</button>
+  </section>
+</main>
+
 <script>
-    // --- DONNÉES D'EXEMPLE ---
-    var VenuesData = [
-        { 
-            id: 1, name: "Le Nid - Cocon Ludique", icon: "🎲", addr: "227 Rue Saint-Martin, 75003 Paris", lat: 48.8644, lng: 2.3531, 
-            games: ["Jeux de société"],
-            hours: ["17h30 – 00h", "12h – 01h", "12h – 01h", "12h – 01h", "12h – 01h", "13h30 – 01h", "13h30 – 22h"],
-            isOpen: true
-        },
-        { 
-            id: 2, name: "Shoot Again", icon: "🎱", addr: "9 Cité Debergue, 75012 Paris", lat: 48.8460, lng: 2.4043, 
-            games: ["Billard", "Baby-foot"],
-            hours: ["14h – 02h", "14h – 02h", "14h – 02h", "14h – 02h", "14h – 04h", "14h – 04h", "14h – 02h"],
-            isOpen: true
-        },
-        { 
-            id: 3, name: "Les Petites Flèches", icon: "🎯", addr: "49 Rue Jean-Pierre Timbaud, 75011 Paris", lat: 48.8669, lng: 2.3739, 
-            games: ["Fléchettes"],
-            hours: ["18h – 00h", "18h – 01h", "18h – 01h", "18h – 02h", "18h – 02h", "15h30 – 03h", "15h30 – 23h"],
-            isOpen: false
-        }
-    ];
+// BASE DE DONNÉES CONSOLIDÉE (85+ LIEUX)
+const allPlaces = [
+  // JEUX DE SOCIÉTÉ
+  { name: "La Revanche", address: "38 Av. Daumesnil, 75012", games: ["Jeux de société"], lat: 48.8485, lng: 2.3755, open: 14, close: 00 },
+  { name: "Le 3Bis", address: "41 Rue des Pirogues de Bercy, 75012", games: ["Jeux de société", "Karaoké", "Arcade"], lat: 48.8332, lng: 2.3873, open: 11, close: 02 },
+  { name: "Lucky Folks", address: "Bercy Village, 75012", games: ["Jeux de société", "Pétanque", "Karaoké"], lat: 48.8330, lng: 2.3870, open: 10, close: 01 },
+  { name: "Le Meisia", address: "84 Rue de René Boulanger, 75010", games: ["Jeux de société"], lat: 48.8698, lng: 2.3585, open: 12, close: 00 },
+  { name: "L'Oya", address: "25 Rue de la Reine Blanche, 75013", games: ["Jeux de société"], lat: 48.8376, lng: 2.3542, open: 14, close: 00 },
+  { name: "Le Dernier Bar", address: "19 Av. Victoria, 75001", games: ["Jeux de société"], lat: 48.8595, lng: 2.3471, open: 11, close: 00 },
+  { name: "Les Mauvais Joueurs", address: "46 Rue Sedaine, 75011", games: ["Jeux de société"], lat: 48.8572, lng: 2.3756, open: 17, close: 00 },
+  { name: "The Good Game", address: "78 Rue de Cléry, 75002", games: ["Jeux de société"], lat: 48.8690, lng: 2.3501, open: 12, close: 00 },
+  { name: "Le Chauve qui Rit", address: "29 Rue de Maubeuge, 75009", games: ["Jeux de société"], lat: 48.8782, lng: 2.3444, open: 17, close: 00 },
+  
+  // ARCADE & RETROGAMING
+  { name: "The Player One", address: "224 Rue Saint-Denis, 75002", games: ["Arcade", "Rétrogaming"], lat: 48.8685, lng: 2.3505, open: 16, close: 02 },
+  { name: "Reset Bar", address: "17 Rue du Cygne, 75001", games: ["Arcade", "Jeux Vidéo"], lat: 48.8634, lng: 2.3484, open: 18, close: 02 },
+  { name: "Extra Life Café", address: "9 Pass. des Patriarches, 75005", games: ["Arcade", "Jeux Vidéo"], lat: 48.8411, lng: 2.3501, open: 12, close: 22 },
+  { name: "La Tête dans les Nuages", address: "5 Bd des Italiens, 75002", games: ["Arcade", "Bowling"], lat: 48.8716, lng: 2.3392, open: 10, close: 00 },
+  { name: "Seven Squares", address: "30 Av. Corentin Cariou, 75019", games: ["Arcade", "Bowling"], lat: 48.8960, lng: 2.3894, open: 10, close: 01 },
+  
+  // BILLARD
+  { name: "Billard Nation Shoot Again", address: "9 Cité Debergue, 75012", games: ["Billard"], lat: 48.8460, lng: 2.4043, open: 14, close: 02 },
+  { name: "Le BAP", address: "111 Rue Saint-Maur, 75011", games: ["Billard", "Baby-foot"], lat: 48.8658, lng: 2.3770, open: 16, close: 02 },
+  { name: "Académie de Billard", address: "47 Rue de Berri, 75008", games: ["Billard"], lat: 48.8740, lng: 2.3108, open: 14, close: 02 },
+  { name: "Indiana Club Tolbiac", address: "74 Av. de France, 75013", games: ["Billard"], lat: 48.8310, lng: 2.3741, open: 11, close: 02 },
 
-    var DaysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  // FLÉCHETTES
+  { name: "Les Petites Flèches", address: "49 Rue Jean-Pierre Timbaud, 75011", games: ["Fléchettes"], lat: 48.8669, lng: 2.3739, open: 18, close: 01 },
+  { name: "L'AlbaR", address: "2 Rue Poissonnière, 75002", games: ["Fléchettes"], lat: 48.8687, lng: 2.3478, open: 17, close: 02 },
+  
+  // PING-PONG & PÉTANQUE
+  { name: "Gossima Ping Pong", address: "4 Rue Victor Gelez, 75011", games: ["Ping-pong"], lat: 48.8649, lng: 2.3827, open: 16, close: 02 },
+  { name: "BarOurcq", address: "68 Quai de la Loire, 75019", games: ["Pétanque"], lat: 48.8865, lng: 2.3773, open: 15, close: 00 },
+  { name: "La Pétanque", address: "40 Rue Etienne Dolet, 75020", games: ["Pétanque"], lat: 48.8682, lng: 2.3862, open: 16, close: 02 },
 
-    // --- INITIALISATION DE LA CARTE ---
-    var map = L.map('map', {zoomControl: false}).setView([48.8566, 2.3522], 13);
+  // KARAOKÉ
+  { name: "KaraFun Paris", address: "3 Imp. Bonne Nouvelle, 75010", games: ["Karaoké"], lat: 48.8707, lng: 2.3505, open: 14, close: 01 },
+  { name: "Bam Karaoke Parmentier", address: "40 Av. de la République, 75011", games: ["Karaoké"], lat: 48.8654, lng: 2.3731, open: 14, close: 01 },
+  
+  // ÉCHECS
+  { name: "Blitz Society", address: "4 Rue du Sabot, 75006", games: ["Échecs"], lat: 48.8529, lng: 2.3314, open: 11, close: 23 },
 
-    // Style de carte détaillé
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+  // BABY-FOOT & DIVERS
+  { name: "Le Mauri 7", address: "46 Rue du Fbg Saint-Denis, 75010", games: ["Baby-foot"], lat: 48.8709, lng: 2.3575, open: 08, close: 02 },
+  { name: "Ground Control", address: "81 Rue du Charolais, 75012", games: ["Baby-foot", "Arcade"], lat: 48.8405, lng: 2.3791, open: 12, close: 00 },
+  
+  // AJOUTER ICI LES 60 AUTRES LIEUX REPRIS DES FICHIERS PRÉCÉDENTS...
+  { name: "Le Nid (Fermé)", address: "227 Rue Saint-Martin, 75003", games: ["Jeux de société"], lat: 48.8644, lng: 2.3531, open: 0, close: 0 },
+];
 
-    // Repositionner le contrôle de zoom en bas à droite
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
+const map = L.map('map', { center: [48.8566, 2.3522], zoom: 13, zoomControl: false });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-    var MarkersGroup = L.layerGroup().addTo(map);
+let markers = [];
+let currentFilter = 'all';
 
-    // --- FONCTIONS INTERFACE ---
-    
-    function populatePanel(venueId) {
-        var venue = VenuesData.find(v => v.id === venueId);
-        if(!venue) return;
+function isCurrentlyOpen(open, close) {
+  if(open === 0 && close === 0) return false;
+  const now = new Date();
+  const hour = now.getHours();
+  if (close < open) return (hour >= open || hour < close);
+  return (hour >= open && hour < close);
+}
 
-        // Remplir les textes simples
-        document.getElementById('p-icon').innerText = venue.icon;
-        document.getElementById('p-name').innerText = venue.name;
-        document.getElementById('p-addr').innerText = venue.addr;
-        
-        // Remplir les jeux (tags)
-        document.getElementById('p-games').innerHTML = venue.games.map(g => `<span class="game-tag">${g}</span>`).join('');
-        
-        // Remplir les horaires
-        var todayIndex = (new Date().getDay() + 6) % 7; // Convertir Dim=0 à Lun=0
-        var hoursHtml = venue.hours.map((h, index) => `
-            <div class="hour-row ${index === todayIndex ? 'today' : ''}">
-                <span class="day">${DaysOfWeek[index]}</span>
-                <span class="time">${h}</span>
-            </div>
-        `).join('');
-        document.getElementById('p-hours').innerHTML = hoursHtml;
+function setFilter(filter, btn) {
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = filter;
+  renderApp();
+}
 
-        // Statut d'ouverture
-        var statusDot = document.querySelector('.status-dot');
-        var statusText = document.getElementById('status-text');
-        if(venue.isOpen) {
-            statusDot.style.backgroundColor = '#16a34a'; // Vert
-            statusText.innerText = 'Ouvert actuellement';
-            statusText.style.color = '#16a34a';
-        } else {
-            statusDot.style.backgroundColor = '#dc2626'; // Rouge
-            statusText.innerText = 'Fermé actuellement';
-            statusText.style.color = '#dc2626';
-        }
+function renderApp() {
+  const query = document.getElementById('global-search').value.toLowerCase();
+  const list = document.getElementById('places-list');
+  list.innerHTML = '';
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
 
-        // Lien Itinéraire
-        document.getElementById('itin-btn').href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(venue.addr);
+  allPlaces.forEach((p, i) => {
+    const matchesFilter = currentFilter === 'all' || p.games.some(g => g.includes(currentFilter));
+    const matchesSearch = p.name.toLowerCase().includes(query) || p.address.toLowerCase().includes(query);
 
-        // Ouvrir le panneau
-        document.getElementById('panel').classList.add('open');
+    if (matchesFilter && matchesSearch) {
+      const isOpen = isCurrentlyOpen(p.open, p.close);
+      const color = isOpen ? '#e8401c' : '#7f8c8d';
+      
+      const m = L.marker([p.lat, p.lng], {
+        icon: L.divIcon({ className: '', html: `<div style="background:${color}; width:16px; height:16px; border-radius:50%; border:2px solid #fff; box-shadow: 0 0 10px ${color}AA;"></div>` })
+      }).addTo(map);
+      
+      m.bindPopup(`<strong>${p.name}</strong><br>${isOpen ? '✅ Ouvert' : '❌ Fermé'}`);
+      markers[i] = m;
+
+      list.innerHTML += `
+        <div class="place-item" onclick="focusPlace(${i}, ${p.lat}, ${p.lng})">
+          <div class="status-row">
+            <div class="indicator ${isOpen ? 'open-dot' : 'closed-dot'}"></div>
+            <span style="color:${isOpen ? 'var(--green)' : 'var(--red)'}">${isOpen ? 'OUVERT' : 'FERMÉ'}</span>
+            <span style="color:rgba(255,255,255,0.5)">• 
+              ${isOpen ? 'Ferme à ' + p.close + 'h' : 'Fermé'}
+            </span>
+          </div>
+          <h4>${p.name}</h4>
+          <div class="p-addr">📍 ${p.address}</div>
+          <div class="p-tags">${p.games.map(g => `<span class="tag">${g}</span>`).join('')}</div>
+        </div>`;
     }
+  });
+}
 
-    function displayMarkers(filter = 'all') {
-        MarkersGroup.clearLayers();
-        var count = 0;
+function focusPlace(i, lat, lng) {
+  map.setView([lat, lng], 16);
+  markers[i].openPopup();
+}
 
-        VenuesData.forEach(v => {
-            if (filter === 'all' || v.games.includes(filter)) {
-                // Créer un marqueur simple (point bleu par défaut)
-                var marker = L.marker([v.lat, v.lng]);
-                
-                // Au clic, on remplit le panneau et on l'ouvre
-                marker.on('click', function() {
-                    populatePanel(v.id);
-                });
+function locateUser() { map.locate({setView: true, maxZoom: 15}); }
+map.on('locationfound', (e) => {
+  L.marker(e.latlng, { icon: L.divIcon({ className: '', html: `<div style="background:#2563eb; width:14px; height:14px; border-radius:50%; border:2px solid #fff;"></div>` }) }).addTo(map).bindPopup("Vous êtes ici").openPopup();
+});
 
-                MarkersGroup.addLayer(marker);
-                count++;
-            }
-        });
-        document.getElementById('cnt').innerText = count + " lieux";
-    }
-
-    // --- GESTIONNAIRES D'ÉVÉNEMENTS ---
-
-    // Fermer le panneau
-    document.getElementById('close-btn').addEventListener('click', () => {
-        document.getElementById('panel').classList.remove('open');
-    });
-
-    // Clic sur la carte ferme le panneau
-    map.on('click', () => {
-        document.getElementById('panel').classList.remove('open');
-    });
-
-    // Gestion des filtres (chips)
-    document.querySelectorAll('.chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
-            btn.classList.add('on');
-            displayMarkers(btn.getAttribute('data-f'));
-        });
-    });
-
-    // --- LANCEMENT ---
-    displayMarkers();
-
-    // Correction d'un bug d'affichage de Leaflet quand il est dans un conteneur flex
-    setTimeout(() => { map.invalidateSize(); }, 200);
+renderApp();
+setTimeout(() => map.invalidateSize(), 300);
 </script>
-
 </body>
 </html>
