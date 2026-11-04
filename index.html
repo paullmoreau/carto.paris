@@ -180,8 +180,33 @@ svg{display:block}
 .pos small{display:block;color:var(--muted);font-weight:500;font-size:13px}
 .textbtn{height:40px;padding:0 14px;border-radius:999px;background:var(--card);font-weight:600;color:var(--blue)}
 
+/* Recherche d'un lieu à ajouter (façon Google Maps) */
+.sbox{display:flex;align-items:center;gap:10px;height:54px;padding:0 8px 0 16px;border-radius:18px;background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.05);margin-bottom:12px}
+.sbox > svg{width:20px;height:20px;color:var(--muted);flex:none}
+.sbox input{flex:1;min-width:0;border:0;outline:none;background:none;font-size:17px;-webkit-appearance:none;appearance:none}
+.sbox input::-webkit-search-cancel-button,.sbox input::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.sbox button{width:36px;height:36px;border-radius:50%;background:var(--fill);display:grid;place-items:center;flex:none}
+.sbox button svg{width:16px;height:16px}
+.sugg{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
+.sg{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;background:var(--card);border-radius:18px;text-align:left;min-height:62px}
+.sg .ava{width:44px;height:44px;border-radius:50%;background:var(--grouped);display:grid;place-items:center;font-size:23px;flex:none}
+.sg .tx{flex:1;min-width:0}
+.sg .nm{display:block;font-weight:700;font-size:16px;line-height:1.25;overflow-wrap:anywhere}
+.sg .sb{display:block;font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.sg .ds{font-weight:600;font-size:13.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sg:active,.prow:active{transform:scale(.98)}
+.sg-info{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:18px;background:var(--card);color:var(--muted);font-size:14.5px}
+.manual{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:transparent;border:1.5px dashed rgba(60,60,67,.25);text-align:left}
+.manual .emo{font-size:24px}
+.manual b{display:block;font-size:15.5px}
+.manual small{display:block;color:var(--muted);font-size:13.5px}
+.auto{display:flex;align-items:flex-start;gap:10px;margin:6px 0 18px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#eef4ff,#f6efff);color:var(--ink-2);font-size:14.5px;font-weight:500;line-height:1.4}
+.auto .emo{font-size:18px}
+.auto .spin{margin-top:2px}
+.pk .sp{font-size:12px;margin-left:2px}
+
 /* Placement */
-.crosshair{position:fixed;z-index:12;left:50%;top:var(--cross-y,45%);transform:translate(-50%,-100%);pointer-events:none;font-size:46px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
+.crosshair{position:fixed;z-index:12;left:var(--cross-x,50%);top:var(--cross-y,45%);transform:translate(-50%,-100%);pointer-events:none;font-size:46px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
 .crosshair::after{content:"";position:absolute;left:50%;bottom:-2px;width:12px;height:5px;margin-left:-6px;border-radius:50%;background:rgba(0,0,0,.28)}
 
 /* Marqueurs façon Bump */
@@ -211,7 +236,7 @@ body[data-view="list"] .bottom,body[data-view="fav"] .bottom{transform:none;opac
 body[data-view="list"] .bottom > :not(.tabs),body[data-view="fav"] .bottom > :not(.tabs){visibility:hidden}
 body[data-view="list"] .bottom .tabs,body[data-view="fav"] .bottom .tabs,body[data-view="list"] .bottom .tabs *,body[data-view="fav"] .bottom .tabs *{pointer-events:auto}
 body[data-view="list"] .bottom::before,body[data-view="fav"] .bottom::before{display:none}
-body[data-view="form"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
+body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
 
 @media (min-width:900px){
   .bottom{left:auto;right:24px;width:460px;bottom:16px}
@@ -227,8 +252,8 @@ body[data-view="form"] .top,body[data-view="list"] .top,body[data-view="fav"] .t
   body[data-view="detail"] .bottom{transform:none;opacity:1}
   body[data-view] .bottom > *{visibility:visible}
   body[data-view] .bottom *{pointer-events:auto}
-  body[data-view="place"] .bottom,body[data-view="form"] .bottom{opacity:0;transform:translateY(30px)}
-  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *{pointer-events:none}
+  body[data-view="place"] .bottom,body[data-view="form"] .bottom,body[data-view="search"] .bottom{opacity:0;transform:translateY(30px)}
+  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *,body[data-view="search"] .bottom *{pointer-events:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -293,6 +318,7 @@ const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
 const S = i => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${i}</svg>`;
 const ICON = {
   close:S('<path d="M6 6l12 12M18 6L6 18"/>'),
+  back:S('<path d="M15 18l-6-6 6-6"/>'),
   heart:S('<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/>'),
   heartFill:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/></svg>',
   route:S('<path d="M3 11l18-8-8 18-2-8z"/>'),
@@ -585,6 +611,7 @@ function render(){
   } else card.classList.remove("show");
   if (state.view === "list"){ const st = page.scrollTop; page.innerHTML = listHTML(vis); page.classList.add("show"); page.scrollTop = st; }
   else if (state.view === "fav"){ page.innerHTML = favHTML(); page.classList.add("show"); }
+  else if (state.view === "search"){ if (!page.querySelector("#ps")) page.innerHTML = searchHTML(); page.classList.add("show"); renderSugg(); }
   else if (state.view === "form"){ if (!page.querySelector("#addForm")) page.innerHTML = formHTML(); page.classList.add("show"); }
   else page.classList.remove("show");
   updateHere(); syncAttr();
@@ -600,7 +627,7 @@ function detailHTML(p){
   const facts = [
     p.address && `<span class="tile">${ICON.pin}${esc(p.address)}</span>`,
     `<span class="tile">${ICON.walk}${fmtD(dist(ref(), p))}${state.me ? " · " + Math.max(1, Math.round(dist(state.me, p) / 80)) + " min à pied" : ""}</span>`,
-    p.hours && `<span class="tile">${ICON.clock}${esc(p.hours)}</span>`,
+    p.hours && `<span class="tile">${ICON.clock}${esc(frHours(p.hours))}</span>`,
     p.phone && `<span class="tile" style="user-select:all">${ICON.phone}${esc(p.phone)}</span>`,
     p.note && `<span class="tile">${ICON.info}${esc(p.note)}</span>`,
   ].filter(Boolean).join("");
@@ -628,7 +655,7 @@ function detailHTML(p){
     <p class="src">${src}</p>`;
 }
 function openDetail(key){
-  if (state.view === "place" || state.view === "form") return;
+  if (state.view === "place" || state.view === "form" || state.view === "search") return;
   const p = findPlace(key); if (!p) return;
   if (state.view !== "detail") state.prevView = state.view;
   const prev = state.selected; state.selected = key; state.view = "detail";
@@ -656,11 +683,12 @@ $("card").addEventListener("click", e => {
   if (t.closest("#favBtn")){ toggleFav(state.selected); return; }
   if (t.closest("#delBtn")){ deleteMine(state.selected, t.closest("#delBtn")); return; }
   if (t.closest("#cancelAdd")){ endAdd(); return; }
+  if (t.closest("#backSearch")){ $("crosshair").hidden = true; state.view = "search"; render(); setTimeout(() => $("ps") && $("ps").focus(), 380); return; }
   if (t.closest("#confirmPos")){ confirmPosition(); return; }
   if (t.closest("#meHere")){ if (state.me) focusOn(state.me.lat, state.me.lon, 18); else toast("Position indisponible pour l'instant"); }
 });
 map.on("click", () => { if (state.view === "detail") closeDetail(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape"){ if (state.view === "detail") closeDetail(); else if (state.view === "place" || state.view === "form") endAdd(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape"){ if (state.view === "detail") closeDetail(); else if (["place","form","search"].includes(state.view)) endAdd(); } });
 
 function toggleFav(key){
   state.favs.has(key) ? state.favs.delete(key) : state.favs.add(key);
@@ -724,44 +752,181 @@ $("page").addEventListener("click", e => {
   if (t.closest("#more")){ state.shown += 30; render(); return; }
   if (t.closest("#retry")){ loadOSM(); return; }
   if (t.closest("#cancelForm")){ endAdd(); return; }
-  if (t.closest("#movePos")){ state.view = "place"; render(); placeCross(); return; }
+  if (t.closest("#movePos")){ const d = state.draft; draftLayer.clearLayers(); state.view = "place"; render(); placeCross(); requestAnimationFrame(() => { focusOn(d.lat, d.lon, 18); placeCross(); }); return; }
+  const sg = t.closest(".sg"); if (sg){ pickSugg(+sg.dataset.i); return; }
+  if (t.closest("#manual")){ startManual(); return; }
+  if (t.closest("#psClear")){ const i = $("ps"); i.value = ""; onSearchInput(""); i.focus(); return; }
   const pk = t.closest(".pk");
-  if (pk){ const g = state.draft.games, i = g.indexOf(pk.dataset.id); i < 0 ? g.push(pk.dataset.id) : g.splice(i, 1); pk.setAttribute("aria-pressed", i < 0); $("eGames").hidden = true; }
+  if (pk){ const g = state.draft.games, i = g.indexOf(pk.dataset.id); i < 0 ? g.push(pk.dataset.id) : g.splice(i, 1); pk.setAttribute("aria-pressed", i < 0); state.draft.gamesTouched = true; $("eGames").hidden = true; }
 });
 
 /* ================= Ajouter un lieu ================= */
+/* 1. Recherche par nom (suggestions Photon, données OpenStreetMap, triées autour de toi)
+   2. La carte va au point exact, l'utilisateur valide ou ajuste le repère
+   3. Fiche OpenStreetMap du lieu lue automatiquement : adresse, horaires, téléphone, site, jeux connus */
+const DAYS = {Mo:"lun", Tu:"mar", We:"mer", Th:"jeu", Fr:"ven", Sa:"sam", Su:"dim", PH:"jours fériés"};
+function frHours(h){
+  if (!h) return "";
+  return h.replace(/24\/7/g, "24h/24").replace(/\b(Mo|Tu|We|Th|Fr|Sa|Su|PH)\b/g, d => DAYS[d])
+    .replace(/\boff\b/gi, "fermé").replace(/\s*;\s*/g, " · ").replace(/(\d)-(\d)/g, "$1–$2").replace(/,\s*/g, ", ");
+}
+const POI_EMO = {bar:"🍸", pub:"🍺", cafe:"☕", restaurant:"🍽️", fast_food:"🍔", nightclub:"🪩", biergarten:"🍻", bowling_alley:"🎳", amusement_arcade:"👾", pitch:"🏟️", park:"🌳", sports_centre:"🏅", games:"🎲", hotel:"🏨"};
+function photonEmoji(pr){
+  const g = classify({name:pr.name || ""});
+  if (g.length) return CAT[g[0]].e;
+  return POI_EMO[pr.osm_value] || (pr.osm_key === "place" || pr.osm_key === "highway" ? "📍" : pr.osm_key === "building" ? "🏠" : "📍");
+}
+function photonAddr(pr){
+  const street = [pr.housenumber, pr.street || (pr.osm_key === "highway" ? pr.name : "")].filter(Boolean).join(" ");
+  const city = [pr.postcode, pr.city || pr.town || pr.village || pr.district].filter(Boolean).join(" ");
+  return [street, city].filter(Boolean).join(", ");
+}
+let suggCtrl = null, suggT = null, suggList = [];
+function searchHTML(){
+  return `<div class="ph"><h1>Ajouter<br>un lieu</h1><button class="textbtn" id="cancelForm">Annuler</button></div>
+    <p class="lead">Cherche le bar par son nom, on s'occupe du reste.</p>
+    <div class="sbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+      <label class="sr" for="ps">Nom du lieu</label>
+      <input id="ps" type="search" placeholder="Le Bar des Amis, Paris 11e…" autocomplete="off" enterkeyhint="search">
+      <button type="button" id="psClear" aria-label="Effacer" hidden>${ICON.close}</button></div>
+    <ul class="sugg" id="sugg" aria-live="polite"></ul>
+    <button type="button" class="manual" id="manual"><span class="emo">📍</span><span><b>Placer le lieu à la main</b><small>S'il n'apparaît pas dans les résultats</small></span></button>`;
+}
+function renderSugg(status){
+  const ul = $("sugg"); if (!ul) return;
+  if (status === "loading" && !suggList.length){ ul.innerHTML = `<li class="sg-info"><span class="spin"></span>Recherche…</li>`; return; }
+  if (status === "error"){ ul.innerHTML = `<li class="sg-info">La recherche ne répond pas. Réessaie ou place le lieu à la main.</li>`; return; }
+  if (status === "empty"){ ul.innerHTML = `<li class="sg-info">Aucun résultat. Essaie un autre nom ou ajoute la ville.</li>`; return; }
+  const r = ref();
+  ul.innerHTML = suggList.map((f, i) => {
+    const pr = f.properties, [lon, lat] = f.geometry.coordinates;
+    return `<li><button type="button" class="sg" data-i="${i}"><span class="ava emo">${photonEmoji(pr)}</span>
+      <span class="tx"><span class="nm">${esc(pr.name || photonAddr(pr) || "Lieu sans nom")}</span><span class="sb">${esc(photonAddr(pr) || pr.country || "")}</span></span>
+      <span class="ds">${fmtD(dist(r, {lat, lon}))}</span></button></li>`;
+  }).join("");
+}
+async function fetchSugg(q){
+  if (suggCtrl) suggCtrl.abort();
+  suggCtrl = new AbortController();
+  const r = ref();
+  renderSugg("loading");
+  try{
+    const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&lat=${r.lat.toFixed(4)}&lon=${r.lon.toFixed(4)}&limit=8&lang=fr`, {signal:suggCtrl.signal});
+    if (!res.ok) throw 0;
+    const j = await res.json();
+    // on garde les lieux et adresses, pas les pays ou régions entières
+    suggList = (j.features || []).filter(f => !["country","state","county"].includes(f.properties.type)).slice(0, 7);
+    renderSugg(suggList.length ? "" : "empty");
+  }catch(e){ if (e && e.name === "AbortError") return; suggList = []; renderSugg("error"); }
+}
+function onSearchInput(v){
+  $("psClear").hidden = !v;
+  clearTimeout(suggT);
+  if (v.trim().length < 2){ suggList = []; $("sugg").innerHTML = ""; return; }
+  suggT = setTimeout(() => fetchSugg(v.trim()), 280);
+}
+function pickSugg(i){
+  const f = suggList[i]; if (!f) return;
+  const pr = f.properties, [lon, lat] = f.geometry.coordinates;
+  const isPoi = !!pr.name && !["place","highway","boundary","landuse","natural","waterway","railway"].includes(pr.osm_key);
+  const d = state.draft;
+  Object.assign(d, {name:isPoi ? pr.name : "", address:photonAddr(pr), lat, lon, picked:{lat, lon},
+    osm:pr.osm_type && pr.osm_id ? {type:{N:"node", W:"way", R:"relation"}[pr.osm_type], id:pr.osm_id} : null,
+    kind:"", hours:"", phone:"", website:"", auto:null, enriching:true});
+  enrich(d);
+  goPlace(lat, lon);
+}
+async function enrich(d){
+  let t = null;
+  if (d.osm && d.osm.type){
+    try{ const j = await fetchJSON(`https://api.openstreetmap.org/api/0.6/${d.osm.type}/${d.osm.id}.json`, {}, 9000); t = j.elements && j.elements[0] && j.elements[0].tags; }catch{}
+  }
+  if (state.draft !== d) return;
+  d.enriching = false;
+  if (t){
+    const games = classify(t).filter(g => !d.games.includes(g));
+    d.auto = {hours:frHours(t.opening_hours), phone:t.phone || t["contact:phone"] || "", website:t.website || t["contact:website"] || "", kind:osmKind(t), games:classify(t)};
+    if (!d.gamesTouched) d.games.push(...games);
+    for (const k of ["hours","phone","website","kind"]) if (!d[k]) d[k] = d.auto[k];
+    if (!d.address) d.address = osmAddr(t);
+    if (!d.name && t.name) d.name = t.name;
+  }
+  if (state.view === "form") fillForm();
+}
+function goPlace(lat, lon){
+  state.view = "place"; render(); placeCross();
+  requestAnimationFrame(() => { focusOn(lat, lon, 18); placeCross(); });
+}
 function placeHTML(){
+  const d = state.draft || {};
+  const known = !!d.picked;
   return `<div class="card-top"><div class="stack"><span class="emo" style="--c:#ffd60a">📍</span></div>
-      <div class="card-acts"><button class="ibtn" id="cancelAdd" aria-label="Annuler">${ICON.close}</button></div></div>
-    <h2>Où est ce lieu ?</h2><div class="kind">Fais glisser la carte pour mettre le repère dessus.</div>
-    <div class="row-btns" style="margin-top:16px"><button class="cta light" id="meHere">${ICON.route}Ma position</button><button class="cta" id="confirmPos">C'est ici</button></div>`;
+      <div class="card-acts"><button class="ibtn" id="${known ? "backSearch" : "cancelAdd"}" aria-label="${known ? "Retour à la recherche" : "Annuler"}">${known ? ICON.back : ICON.close}</button></div></div>
+    <h2>${known ? "C'est bien ici ?" : "Où est ce lieu ?"}</h2>
+    <div class="kind">${known ? `<b style="color:var(--ink)">${esc(d.name || "Adresse choisie")}</b>${d.address ? "<br>" + esc(d.address) : ""}<br><span style="font-size:14px">Fais glisser la carte si le repère n'est pas pile dessus.</span>` : "Fais glisser la carte pour mettre le repère dessus."}</div>
+    <div class="row-btns" style="margin-top:16px">${known ? "" : `<button class="cta light" id="meHere">${ICON.route}Ma position</button>`}<button class="cta" id="confirmPos">${known ? "Oui, c'est ici" : "C'est ici"}</button></div>`;
 }
 function formHTML(){
   const d = state.draft;
   return `<div class="ph"><h1>Nouveau<br>lieu</h1><button class="textbtn" id="cancelForm">Annuler</button></div>
-    <p class="lead">Il apparaîtra sur ta carte avec une pastille jaune.</p>
+    <div id="autoLine">${autoLine()}</div>
     <form id="addForm" novalidate>
       <div class="pos"><span class="emo">📍</span><span style="flex:1;min-width:0"><span id="addrPreview">${d.address ? esc(d.address) : "Position choisie sur la carte"}</span><small>Repère placé sur la carte</small></span><button type="button" class="textbtn" id="movePos">Modifier</button></div>
-      <div class="group">
+      <p class="glabel" id="lGames">On y joue à</p>
+      <div class="pick" role="group" aria-labelledby="lGames" id="fGames">${pickHTML()}</div>
+      <p class="ferr" id="eGames" hidden style="margin-top:4px">Choisis au moins un jeu.</p>
+      <div class="group" style="margin-top:16px">
         <label class="f"><span class="k">Nom du lieu</span><input type="text" id="fName" maxlength="80" placeholder="Le Bar des Amis" value="${esc(d.name)}" autocomplete="off"></label>
         <label class="f"><span class="k">Adresse</span><input type="text" id="fAddr" maxlength="140" value="${esc(d.address)}" placeholder="Facultatif" autocomplete="street-address"></label>
+        <label class="f"><span class="k">Horaires</span><input type="text" id="fHours" maxlength="160" value="${esc(d.hours)}" placeholder="Ex. mar–sam 18:00–02:00"></label>
+        <label class="f"><span class="k">Téléphone</span><input type="text" id="fPhone" maxlength="40" value="${esc(d.phone)}" placeholder="Facultatif" inputmode="tel"></label>
+        <label class="f"><span class="k">Site web</span><input type="text" id="fWeb" maxlength="200" value="${esc(d.website)}" placeholder="https://…" inputmode="url"></label>
       </div>
       <p class="ferr" id="eName" hidden>Donne un nom au lieu.</p>
-      <p class="glabel" id="lGames">On y joue à</p>
-      <div class="pick" role="group" aria-labelledby="lGames">${CATS.map(c => `<button type="button" class="pk" data-id="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${c.e}</span>${c.label}</button>`).join("")}</div>
-      <p class="ferr" id="eGames" hidden style="margin-top:4px">Choisis au moins un jeu.</p>
-      <div class="group" style="margin-top:16px"><label class="f"><span class="k">Infos utiles</span><textarea id="fNote" maxlength="300" placeholder="Quiz le mardi à 20h, 2 billards au sous-sol…">${esc(d.note)}</textarea></label></div>
-      <label class="switch"><input type="checkbox" id="fShare"${d.share ? " checked" : ""}><span>Proposer aussi ce lieu à OpenStreetMap pour que tout le monde le voie (note publique et anonyme).</span></label>
+      <div class="group"><label class="f"><span class="k">Infos sur les jeux</span><textarea id="fNote" maxlength="300" placeholder="Quiz le mardi à 20h, 2 billards au sous-sol, fléchettes électroniques…">${esc(d.note)}</textarea></label></div>
+      <label class="switch"><input type="checkbox" id="fShare"${d.share ? " checked" : ""}><span>Proposer aussi ces jeux à OpenStreetMap pour que tout le monde les voie (note publique et anonyme).</span></label>
       <button class="cta" type="submit" style="width:100%">Enregistrer le lieu</button>
     </form>`;
 }
+function pickHTML(){
+  const d = state.draft, auto = (d.auto && d.auto.games) || [];
+  return CATS.map(c => `<button type="button" class="pk" data-id="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${c.e}</span>${c.label}${auto.includes(c.id) ? '<span class="sp" title="Indiqué sur OpenStreetMap">✨</span>' : ""}</button>`).join("");
+}
+function autoLine(){
+  const d = state.draft;
+  if (!d.picked) return `<p class="lead">Coche les jeux et complète ce que tu sais.</p>`;
+  if (d.enriching) return `<p class="auto"><span class="spin"></span>Recherche des infos du lieu…</p>`;
+  if (d.auto){
+    const got = [d.auto.hours && "horaires", d.auto.phone && "téléphone", d.auto.website && "site web", d.auto.games.length && "jeux"].filter(Boolean);
+    return `<p class="auto"><span class="emo">✨</span>${got.length ? `Adresse${got.length ? ", " + got.join(", ") : ""} remplis automatiquement. Vérifie-les, puis coche les jeux.` : "Adresse remplie automatiquement. Ce lieu n'a pas encore d'horaires connus : ajoute-les si tu les as."}</p>`;
+  }
+  return `<p class="auto"><span class="emo">✨</span>Adresse remplie automatiquement. Ajoute les horaires si tu les connais, puis coche les jeux.</p>`;
+}
+function fillForm(){
+  const d = state.draft; if (!d || !$("addForm")) return;
+  const set = (id, v) => { const el = $(id); if (el && !el.value && v) el.value = v; };
+  set("fName", d.name); set("fAddr", d.address); set("fHours", d.hours); set("fPhone", d.phone); set("fWeb", d.website);
+  if (d.address && $("addrPreview")) $("addrPreview").textContent = d.address;
+  $("fGames").innerHTML = pickHTML();
+  $("autoLine").innerHTML = autoLine();
+}
 function placeCross(){
   $("crosshair").hidden = false;
-  requestAnimationFrame(() => { const r = freeRect(); document.documentElement.style.setProperty("--cross-y", ((r.y0 + r.y1) / 2 + 23) + "px"); });
+  requestAnimationFrame(() => {
+    const r = freeRect(), s = document.documentElement.style;
+    s.setProperty("--cross-y", ((r.y0 + r.y1) / 2) + "px");
+    s.setProperty("--cross-x", ((r.x0 + r.x1) / 2) + "px");
+  });
 }
 function startAdd(){
   if (state.view === "detail") closeDetail(false);
-  state.draft = {name:"", games:[...state.active], address:"", note:"", share:false, lat:null, lon:null};
+  state.draft = {name:"", games:[...state.active], address:"", note:"", share:false, lat:null, lon:null, hours:"", phone:"", website:"", kind:"", picked:null, osm:null, auto:null, enriching:false, gamesTouched:false};
+  suggList = [];
+  state.view = "search"; render();
+  setTimeout(() => $("ps") && $("ps").focus(), 380);
+}
+function startManual(){
+  const d = state.draft; d.picked = null; d.osm = null; d.auto = null;
   state.view = "place"; render(); placeCross();
   const c = map.getCenter();
   if (state.me && dist(state.me, {lat:c.lat, lon:c.lng}) < 3000) focusOn(state.me.lat, state.me.lon, 18);
@@ -770,27 +935,36 @@ function startAdd(){
 function crossLatLng(){ const r = $("crosshair").getBoundingClientRect(); return map.containerPointToLatLng([r.left + r.width / 2, r.bottom - 2]); }
 async function confirmPosition(){
   const ll = crossLatLng(), d = state.draft;
-  const moved = d.lat == null || dist({lat:d.lat, lon:d.lon}, {lat:ll.lat, lon:ll.lng}) > 15;
+  const prev = d.lat != null ? {lat:d.lat, lon:d.lon} : null;
   d.lat = ll.lat; d.lon = ll.lng;
+  const moved = !prev || dist(prev, {lat:ll.lat, lon:ll.lng}) > 25;
   $("crosshair").hidden = true; draftLayer.clearLayers();
   L.marker(ll, {icon:L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
   state.view = "form"; $("page").innerHTML = ""; render();
-  setTimeout(() => $("fName") && $("fName").focus(), 420);
-  if (moved){
+  setTimeout(() => { const el = d.name ? null : $("fName"); if (el) el.focus(); }, 420);
+  if (moved && !(d.picked && dist(d.picked, {lat:ll.lat, lon:ll.lng}) < 25)){
     const a = await reverse(ll.lat, ll.lng);
-    if (a && state.draft){ state.draft.address = a; if ($("fAddr")) $("fAddr").value = a; if ($("addrPreview")) $("addrPreview").textContent = a; }
+    if (a && state.draft === d){ d.address = a; if ($("fAddr")) $("fAddr").value = a; if ($("addrPreview")) $("addrPreview").textContent = a; }
   }
 }
 $("page").addEventListener("input", e => {
   const d = state.draft; if (!d) return;
-  if (e.target.id === "fName"){ d.name = e.target.value; $("eName").hidden = true; }
-  if (e.target.id === "fAddr") d.address = e.target.value;
-  if (e.target.id === "fNote") d.note = e.target.value;
-  if (e.target.id === "fShare") d.share = e.target.checked;
+  const id = e.target.id, v = e.target.value;
+  if (id === "ps") onSearchInput(v);
+  if (id === "fName"){ d.name = v; $("eName").hidden = true; }
+  if (id === "fAddr") d.address = v;
+  if (id === "fHours") d.hours = v;
+  if (id === "fPhone") d.phone = v;
+  if (id === "fWeb") d.website = v;
+  if (id === "fNote") d.note = v;
+  if (id === "fShare") d.share = e.target.checked;
+});
+$("page").addEventListener("keydown", e => {
+  if (e.target.id === "ps" && e.key === "Enter"){ e.preventDefault(); if (suggList.length) pickSugg(0); else if (e.target.value.trim().length > 1) fetchSugg(e.target.value.trim()); }
 });
 $("page").addEventListener("submit", e => { e.preventDefault(); saveDraft(); });
 function endAdd(){
-  state.draft = null; $("crosshair").hidden = true; draftLayer.clearLayers();
+  state.draft = null; suggList = []; $("crosshair").hidden = true; draftLayer.clearLayers();
   $("page").innerHTML = ""; state.view = "map"; render();
 }
 async function saveDraft(){
@@ -798,16 +972,18 @@ async function saveDraft(){
   d.name = d.name.trim();
   if (!d.name){ $("eName").hidden = false; ok = false; }
   if (!d.games.length){ $("eGames").hidden = false; ok = false; }
-  if (!ok){ if (!d.name) $("fName").focus(); else $("lGames").scrollIntoView({block:"center", behavior:"smooth"}); return; }
+  if (!ok){ if (!d.games.length) $("lGames").scrollIntoView({block:"center", behavior:"smooth"}); else { $("fName").focus(); $("fName").scrollIntoView({block:"center", behavior:"smooth"}); } return; }
+  const web = d.website.trim();
   const p = {key:"m" + Date.now().toString(36), src:"mine", name:d.name, games:CATS.map(c => c.id).filter(id => d.games.includes(id)),
-    lat:d.lat, lon:d.lon, kind:"Lieu ajouté", address:d.address.trim(), note:d.note.trim(), hours:"", phone:"", website:""};
+    lat:d.lat, lon:d.lon, kind:d.kind || "Lieu ajouté", address:d.address.trim(), note:d.note.trim(), hours:d.hours.trim(), phone:d.phone.trim(),
+    website:web && !/^https?:\/\//i.test(web) ? "https://" + web : web, osm:d.osm || null};
   state.mine.push(p);
   const saved = store.set("mine", state.mine), share = d.share;
   endAdd();
   toast(saved ? "Lieu ajouté" : "Lieu ajouté pour cette visite. Ton navigateur bloque l'enregistrement durable.");
   openDetail(p.key);
   if (share){
-    const text = `Lieu de jeux proposé via Tournée Générale.\nNom : ${p.name}\nJeux : ${p.games.map(g => CAT[g].label).join(", ")}${p.address ? "\nAdresse : " + p.address : ""}${p.note ? "\nInfos : " + p.note : ""}`;
+    const text = `Lieu de jeux proposé via Tournée Générale.\nNom : ${p.name}\nJeux : ${p.games.map(g => CAT[g].label).join(", ")}${p.address ? "\nAdresse : " + p.address : ""}${p.note ? "\nInfos : " + p.note : ""}${p.osm ? `\nObjet OSM : https://www.openstreetmap.org/${p.osm.type}/${p.osm.id}` : ""}`;
     try{
       const r = await fetch("https://api.openstreetmap.org/api/0.6/notes.json", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:`lat=${p.lat}&lon=${p.lon}&text=${encodeURIComponent(text)}`});
       if (!r.ok) throw 0;
