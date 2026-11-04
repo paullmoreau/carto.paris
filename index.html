@@ -1846,13 +1846,31 @@ addEventListener("resize", () => { syncAttr(); });
 /* ================= Pas de zoom de la page (seulement la carte) ================= */
 ["gesturestart","gesturechange","gestureend"].forEach(t => document.addEventListener(t, e => { if (!e.target.closest || !e.target.closest("#map")) e.preventDefault(); }, {passive:false}));
 
+/* ================= Mise à jour automatique ================= */
+// version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
+const APP_VERSION = "202611041820";
+async function checkUpdate(){
+  try{
+    const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
+    if (!r.ok) return;
+    const v = (await r.text()).trim();
+    if (v && v !== APP_VERSION && !["form","edit","evform","place","search"].includes(state.view)){
+      if (navigator.serviceWorker) (await navigator.serviceWorker.getRegistrations()).forEach(x => x.update());
+      location.reload();
+    }
+  }catch{}
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkUpdate(); });
+addEventListener("pageshow", e => { if (e.persisted) checkUpdate(); });
+setTimeout(checkUpdate, 4000);
+
 /* ================= Lancement et installation ================= */
 (() => {
   const splash = $("splash");
   const hide = () => { splash.classList.add("out"); document.body.classList.add("launched"); setTimeout(() => { splash.remove(); document.body.classList.remove("launched"); }, 900); };
   setTimeout(hide, 1300);
 })();
-if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js", {updateViaCache:"none"}).catch(() => {});
 var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 var installEvt = null;

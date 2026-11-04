@@ -29,3 +29,7 @@ Les lieux et soirées ajoutés depuis l'app sont enregistrés dans Supabase et v
 
 Le bouton ✏️ d'un lieu permet à l'admin de corriger les jeux, les horaires, le nom, ou de masquer le lieu.
 Le mot de passe est vérifié par Supabase et n'apparaît jamais dans le code.
+
+## Mises à jour
+
+À chaque publication, changer `version.txt` et `APP_VERSION` dans `index.html` (même valeur) : les apps installées se rechargent toutes seules à la réouverture.
