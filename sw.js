@@ -1,7 +1,7 @@
 // Carto : ouverture hors ligne et installation comme une app
-const VERSION = "carto-v1";
+const VERSION = "carto-v2";
 const SHELL = ["./", "index.html", "config.js", "places.json", "events.json", "map-style.json", "map-style-dark.json",
-  "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+  "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "favicon-32.png", "logo-336.jpg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
