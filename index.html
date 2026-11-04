@@ -267,20 +267,20 @@ body.searching .top,body.searching .bottom{visibility:hidden}
 .crosshair::after{content:"";position:absolute;left:50%;bottom:-2px;width:12px;height:5px;margin-left:-6px;border-radius:50%;background:rgba(0,0,0,.28)}
 
 /* Marqueurs façon Bump */
-.mk{position:relative;width:46px;height:46px}
-.mk .b{width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:25px;box-shadow:0 3px 10px rgba(0,0,0,.18),0 0 0 2px rgba(255,255,255,.9);transition:transform .15s}
-.mk .st{position:absolute;right:-1px;top:-1px;width:13px;height:13px;border-radius:50%;background:var(--s);border:2px solid #fff}
-.mk .lb{display:none;position:absolute;left:52px;top:50%;transform:translateY(-50%);width:max-content;max-width:160px;pointer-events:none;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 5px #fff,0 0 8px rgba(255,255,255,.9)}
-.mk .lb b{display:block;font-size:13.5px;font-weight:700;line-height:1.15;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mk .lb i{display:block;font-size:12px;color:#55555c;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk{position:relative;width:34px;height:34px}
+.mk .b{width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 2px 6px rgba(0,0,0,.18),0 0 0 1.5px rgba(255,255,255,.9);transition:transform .15s}
+.mk .st{position:absolute;right:-2px;top:-2px;width:11px;height:11px;border-radius:50%;background:var(--s);border:2px solid #fff}
+.mk .lb{display:none;position:absolute;left:39px;top:50%;transform:translateY(-50%);width:max-content;max-width:160px;pointer-events:none;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 5px #fff,0 0 8px rgba(255,255,255,.9)}
+.mk .lb b{display:block;font-size:12.5px;font-weight:700;line-height:1.15;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk .lb i{display:block;font-size:11px;color:#55555c;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #map.labels .mk .lb{display:block}
-.mk.sel .b{transform:scale(1.25);box-shadow:0 0 0 3px var(--black),0 8px 20px rgba(0,0,0,.25)}
-.mk .dotm{display:none;position:absolute;left:17px;top:17px;width:12px;height:12px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.mk.sel .b{transform:scale(1.3);box-shadow:0 0 0 2.5px var(--black),0 6px 16px rgba(0,0,0,.25)}
+.mk .dotm{display:none;position:absolute;left:12px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 #map:not(.z16) .mk.anon:not(.sel) .dotm{display:block}
 #map:not(.z16) .mk.anon:not(.sel) .b{display:none}
-.cl{display:flex;align-items:center;height:44px;padding:0 10px 0 4px;border-radius:999px;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.18);width:max-content;transform:translate(-50%,-50%)}
-.cl span{width:36px;height:36px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:20px;border:2px solid #fff;margin-right:-10px}
-.cl b{margin-left:16px;font-size:14px;font-weight:800}
+.cl{display:flex;align-items:center;height:32px;padding:0 9px 0 3px;border-radius:999px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);width:max-content;transform:translate(-50%,-50%)}
+.cl span{width:26px;height:26px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:14px;border:1.5px solid #fff;margin-right:-8px}
+.cl b{margin-left:13px;font-size:12.5px;font-weight:800}
 .me{width:22px;height:22px;border-radius:50%;background:#0a84ff;border:3.5px solid #fff;box-shadow:0 0 0 8px rgba(10,132,255,.18),0 2px 6px rgba(0,0,0,.3)}
 
 .toast{position:fixed;z-index:60;left:50%;top:calc(66px + var(--sat));transform:translate(-50%,-10px);opacity:0;background:var(--black);color:#fff;padding:12px 18px;border-radius:999px;font-weight:600;font-size:14.5px;box-shadow:var(--shadow-lg);transition:opacity .2s,transform .2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
@@ -534,9 +534,9 @@ if (window.maplibregl && mlLayer && hasWebGL()){
   }).catch(rasterBase);
 } else rasterBase();
 
-const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:50, disableClusteringAtZoom:17, spiderfyOnMaxZoom:true,
+const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:64, disableClusteringAtZoom:18, spiderfyOnMaxZoom:true, chunkedLoading:true,
   iconCreateFunction:c => {
-    const seen = []; for (const m of c.getAllChildMarkers()){ const g = m.options.g; if (g && !seen.includes(g)) seen.push(g); if (seen.length === 3) break; }
+    const seen = []; for (const m of c.getAllChildMarkers()){ const g = m.options.g; if (g && !seen.includes(g)) seen.push(g); if (seen.length === 2) break; }
     return L.divIcon({className:"", iconSize:[0,0], html:`<div class="cl">${seen.map(g => `<span class="emo" style="--c:${CAT[g].color}">${CAT[g].e}</span>`).join("")}<b>${c.getChildCount()}</b></div>`});
   }});
 map.addLayer(cluster);
@@ -544,7 +544,7 @@ let meMarker = null, meAcc = null;
 const markers = new Map();
 const draftLayer = L.layerGroup().addTo(map);
 // noms à partir du zoom 15 ; les terrains sans nom restent de petites pastilles jusqu'au zoom 16
-const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 15); c.classList.toggle("z16", z >= 16); };
+const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 16); c.classList.toggle("z16", z >= 16); };
 map.on("zoomend", labelsOn); labelsOn();
 
 /* ================= Données ================= */
@@ -567,7 +567,7 @@ function inRadius(){ return allPlaces(); }
 function inView(){ const b = map.getBounds(); return allPlaces().filter(p => b.contains([p.lat, p.lon])); }
 function visiblePlaces(){
   const r = ref();
-  return inRadius().filter(p => shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).map(p => ({p, d:dist(r, p)}))
+  return inRadius().filter(p => onMap(p) && shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).map(p => ({p, d:dist(r, p)}))
     .sort((a, b) => (b.p.src === "mine") - (a.p.src === "mine") || a.d - b.d);
 }
 const subOf = p => p.note && p.src !== "osm" ? p.kind.toLowerCase() : p.games.map(g => CAT[g].label.toLowerCase()).join(" · ");
@@ -578,17 +578,35 @@ function mkIcon(p, sel){
   const labelled = p.src !== "osm" || p.named;
   const os = ohState(p);
   const status = os && os.open ? "#34c759" : p.src === "mine" ? "#ffcc00" : "";
-  return L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23],
+  return L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
     html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${CAT[g].e}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
 }
+// les tables de ping-pong et terrains de pétanque sans nom n'apparaissent que si on filtre ces jeux
+const onMap = p => p.src !== "osm" || p.named || p.games.some(g => state.active.has(g)) || state.selected === p.key;
 function renderMarkers(vis){
-  cluster.clearLayers(); markers.clear();
-  cluster.addLayers(vis.map(({p}) => {
-    const m = L.marker([p.lat, p.lon], {icon:mkIcon(p, state.selected === p.key), title:p.name, alt:p.name, g:shownGames(p)[0] || p.games[0], riseOnHover:true});
-    m.on("click", () => openDetail(p.key));
-    if (state.selected === p.key) m.setZIndexOffset(1500);
-    markers.set(p.key, m); return m;
-  }));
+  const want = new Map();
+  for (const {p} of vis) if (onMap(p)) want.set(p.key, p);
+  const rm = [];
+  for (const [k, m] of markers) if (!want.has(k)){ rm.push(m); markers.delete(k); }
+  if (rm.length) cluster.removeLayers(rm);
+  const add = []; let regroup = false;
+  for (const [k, p] of want){
+    const sel = state.selected === k, g = shownGames(p)[0] || p.games[0], os = ohState(p);
+    const sig = [sel, g, !!(os && os.open), p.name, p.src, p.games.join()].join("|");
+    let m = markers.get(k);
+    if (!m){
+      m = L.marker([p.lat, p.lon], {icon:mkIcon(p, sel), title:p.name, alt:p.name, g, riseOnHover:true});
+      m.on("click", () => openDetail(k));
+      markers.set(k, m); add.push(m);
+    } else if (m._sig !== sig){
+      if (m.options.g !== g){ m.options.g = g; regroup = true; }
+      m.setIcon(mkIcon(p, sel));
+    }
+    m._sig = sig;
+    if (!!m._sel !== sel){ m.setZIndexOffset(sel ? 1500 : 0); m._sel = sel; }
+  }
+  if (add.length) cluster.addLayers(add);
+  if (regroup) cluster.refreshClusters();
 }
 
 /* ================= Bas de l'écran ================= */
@@ -600,7 +618,7 @@ function renderBottom(){
   cats.classList.toggle("filtering", state.active.size > 0);
   cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">✨</span><span class="lbl">Tout</span></button>` +
     order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${c.e}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.short || c.label}</span></button>`).join("");
-  const n = pool.filter(p => shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).length;
+  const n = pool.filter(p => onMap(p) && shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).length;
   const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
   $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
     ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">🎉</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
@@ -1007,7 +1025,7 @@ async function confirmPosition(){
   d.lat = ll.lat; d.lon = ll.lng;
   const moved = !prev || dist(prev, {lat:ll.lat, lon:ll.lng}) > 25;
   $("crosshair").hidden = true; draftLayer.clearLayers();
-  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
+  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
   state.view = "form"; $("page").innerHTML = ""; render();
   setTimeout(() => { const el = d.name ? null : $("fName"); if (el) el.focus(); }, 420);
   if (moved && !(d.picked && dist(d.picked, {lat:ll.lat, lon:ll.lng}) < 25)){
@@ -1501,7 +1519,7 @@ async function showEventOnMap(id){
   go("map");
   const T = EVT[ev.type] || EVT.jeux;
   evLayer.clearLayers();
-  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23],
+  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
     html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${T.e}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
     .on("click", () => { const p = allPlaces().find(q => norm(q.name) === norm(ev.venue) || dist(q, ev) < 40); if (p) openDetail(p.key); }).addTo(evLayer);
   focusOn(ev.lat, ev.lon, 17);
