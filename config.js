@@ -3,5 +3,5 @@
 // La clé « anon public » est faite pour être publique : les règles de supabase-setup.sql protègent la base.
 window.TG_CONFIG = {
   supabaseUrl: "https://fakblxkadepnayqkddvx.supabase.co",
-  supabaseKey: ""
+  supabaseKey: "sb_publishable_pJ6-MfUoLnAuMACb2I7Esw_459mPMRv"
 };

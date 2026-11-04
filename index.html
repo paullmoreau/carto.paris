@@ -1273,7 +1273,7 @@ async function loadCurated(){
 const CFG = window.TG_CONFIG || {};
 const DB = CFG.supabaseUrl && CFG.supabaseKey ? {url:CFG.supabaseUrl.replace(/\/+$/, ""), key:CFG.supabaseKey} : null;
 async function sb(path, opts = {}){
-  const r = await fetch(DB.url + "/rest/v1/" + path, {...opts, headers:{apikey:DB.key, Authorization:"Bearer " + DB.key, "Content-Type":"application/json", Prefer:"return=representation", ...(opts.headers || {})}});
+  const r = await fetch(DB.url + "/rest/v1/" + path, {...opts, headers:{apikey:DB.key, ...(DB.key.startsWith("eyJ") ? {Authorization:"Bearer " + DB.key} : {}), "Content-Type":"application/json", Prefer:"return=representation", ...(opts.headers || {})}});
   if (!r.ok){ let msg = ""; try{ msg = (await r.json()).message || ""; }catch{} const e = new Error(msg || "HTTP " + r.status); e.status = r.status; throw e; }
   const txt = await r.text(); return txt ? JSON.parse(txt) : null;
 }
