@@ -446,7 +446,11 @@ body.launched .mk .b{animation:mkin .45s var(--ease) both}
 .inst-steps .ic svg{width:17px;height:17px}
 .inst-later{display:block;margin:6px auto 0;color:var(--muted)}
 @media (min-width:900px){.inst{left:auto;right:24px;width:400px;bottom:24px}}
-@media (prefers-reduced-motion:reduce){.splash{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .splash{transition:opacity .4s ease,visibility .4s!important}
+  .splash .splash-ico,.splash .splash-name,.splash .splash-tag{animation:fadein .5s ease both!important}
+}
+@keyframes fadein{from{opacity:0}}
 </style>
 </head>
 <body data-view="map">
@@ -765,6 +769,7 @@ function renderBottom(){
   const n = pool.filter(p => onMap(p) && shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).length;
   const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
   $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
+    ${canInstall() ? `<button class="pill glass" id="instPill" type="button"><span class="emo">📲</span>Installer l'app</button>` : ""}
     ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">🎉</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
   const w = $("where");
   w.innerHTML = state.loading ? `<span class="spin"></span>Recherche…` : esc(state.me && !state.centerLabel ? "Autour de toi" : state.centerLabel ? state.centerLabel : "Paris") + ` · ${n}`;
@@ -780,6 +785,7 @@ function toggleFilter(id){
 }
 $("pills").addEventListener("click", e => {
   if (e.target.closest("#openPill")){ state.openOnly = !state.openOnly; store.set("openOnly", state.openOnly); render(); if (state.openOnly) toast("Seuls les lieux dont on connaît les horaires et ouverts maintenant s'affichent"); }
+  else if (e.target.closest("#instPill")){ offerInstall(); }
   else if (e.target.closest("#evPill")){ state.evDay = 0; go("events"); }
 });
 
@@ -1806,15 +1812,15 @@ addEventListener("resize", () => { syncAttr(); });
 /* ================= Lancement et installation ================= */
 (() => {
   const splash = $("splash");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hide = () => { splash.classList.add("out"); document.body.classList.add("launched"); setTimeout(() => { splash.remove(); document.body.classList.remove("launched"); }, 900); };
-  if (reduce) hide(); else setTimeout(hide, 1250);
+  setTimeout(hide, 1300);
 })();
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
-const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
-const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-let installEvt = null;
-addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; maybeOfferInstall(); }); // remplace la bannière du navigateur
+var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+var installEvt = null;
+function canInstall(){ return !standalone && (!!installEvt || isIOS); }
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; renderBottom(); maybeOfferInstall(); }); // remplace la bannière du navigateur
 addEventListener("appinstalled", () => { closeInstall(); toast("Carto est installée 🎉"); });
 function closeInstall(){ $("inst").hidden = true; $("instBg").hidden = true; }
 function offerInstall(){
