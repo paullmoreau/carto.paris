@@ -6,22 +6,22 @@ import json, sys, copy
 
 PALETTES = {
   "map-style.json": dict(
-    land="#f2f3f5", resid="#eceef1", park="#c3ecb2", wood="#b5e3a3", grass="#c8eebb", pitch="#d3efc6",
-    cemetery="#d6ebcd", hospital="#fce8e6", school="#eef0f4", sand="#f6edd3", ice="#eef5f7",
-    water="#90daee", water_label="#2f86b0", aero="#e9eaee",
-    building="#e5e6ea", building_line="#d9dadf",
-    minor="#ffffff", minor_casing="#dadce0", major="#ffffff", major_casing="#d2d5da",
-    trunk="#fff1b8", trunk_casing="#efcb62", motor="#fcd56b", motor_casing="#e4ae3c",
+    land="#f3f4f6", resid="#f3f4f6", park="#dcefd6", wood="#d8edd1", grass="#dcefd6", pitch="#e2f1dd",
+    cemetery="#e2f1dd", hospital="#f3f4f6", school="#f3f4f6", sand="#f3f4f6", ice="#f3f4f6",
+    water="#bfe3f2", water_label="#2f86b0", aero="#f3f4f6",
+    building="#ebecef", building_line="#e3e4e8",
+    minor="#ffffff", minor_casing="#e3e5e8", major="#ffffff", major_casing="#e3e5e8",
+    trunk="#ffffff", trunk_casing="#e3e5e8", motor="#ffffff", motor_casing="#e3e5e8",
     path="#ffffff", rail="#c4c8cd",
     label="#3c4043", label_halo="#ffffff", road_label="#5f6368", poi_label="#5f6368", transit="#1a73e8",
     boundary="#9aa0a6"),
   "map-style-dark.json": dict(
-    land="#1f2022", resid="#232427", park="#1d3427", wood="#1f3a29", grass="#1d3427", pitch="#20392a",
-    cemetery="#1f3528", hospital="#3a2a2c", school="#26282c", sand="#2f2c25", ice="#2a2f33",
+    land="#1f2022", resid="#1f2022", park="#1d3427", wood="#1f3a29", grass="#1d3427", pitch="#20392a",
+    cemetery="#1f3528", hospital="#1f2022", school="#1f2022", sand="#1f2022", ice="#1f2022",
     water="#14324a", water_label="#7fb4d6", aero="#2a2c30",
     building="#2b2d31", building_line="#33363a",
-    minor="#3a3d42", minor_casing="#2a2c30", major="#474a50", major_casing="#2e3034",
-    trunk="#5c5546", trunk_casing="#3f3a30", motor="#7a6a43", motor_casing="#4f4530",
+    minor="#3a3d42", minor_casing="#2a2c30", major="#3a3d42", major_casing="#2a2c30",
+    trunk="#3a3d42", trunk_casing="#2a2c30", motor="#3a3d42", motor_casing="#2a2c30",
     path="#3a3d42", rail="#4a4d52",
     label="#e8eaed", label_halo="#1f2022", road_label="#b0b4b9", poi_label="#a8adb3", transit="#8ab4f8",
     boundary="#6b7075"),
@@ -38,6 +38,15 @@ def recolor(src, P):
     for l in s["layers"]:
         i, t = l["id"], l["type"]
         if i in DROP_IDS: continue
+        # carte épurée : pas de noms de quartiers/villages, pas d'eau nommée, pas de voies ferrées
+        if i in ("label_other", "label_village", "label_state", "waterway_line_label", "water_name_point_label", "water_name_line_label", "highway-name-path"): continue
+        if "rail" in i: continue
+        if i.startswith("tunnel_") or i.startswith("aeroway") or i.startswith("boundary"): continue
+        if i.startswith("bridge_path") or i.startswith("road_path") or i == "road_area_pier" or i == "road_pier": continue
+        # noms de rues (et places) seulement en zoomant
+        if i in ("highway-name-minor", "highway-name-major"): l["minzoom"] = 15 if i == "highway-name-minor" else 14.5
+        # villes seulement en vue large
+        if i in ("label_city", "label_city_capital", "label_town"): l["maxzoom"] = 12
         p = l.setdefault("paint", {})
         def setc(k, v):
             p[k] = v
