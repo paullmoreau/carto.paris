@@ -402,6 +402,17 @@ details.hrs[open] .chev{transform:rotate(90deg)}
 #map:not(.z15) .mk:not(.sel) .dotm{display:block}
 #map:not(.z13) .mk:not(.sel) .dotm{left:10px;top:10px;width:8px;height:8px;border-width:1px}
 .mk.sel .b{transform:scale(1.35)}
+
+/* Filtres compacts : toutes les catégories sur un écran */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;margin-bottom:22px}
+.fgrid .folder{position:relative;height:auto;min-height:0;padding:10px 6px 9px;border-radius:16px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:5px;justify-content:center;box-shadow:inset 0 0 0 1px var(--line);overflow:visible;color:var(--ink);text-align:center}
+.fgrid .folder::before,.fgrid .folder::after{display:none}
+.fgrid .fi{position:static;transform:none;filter:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:color-mix(in srgb,var(--c) 26%,var(--card))}
+.fgrid .ft{display:block;width:100%}
+.fgrid .ft b{display:block;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.fgrid .ft small{position:absolute;top:6px;right:7px;min-width:20px;height:18px;padding:0 5px;border-radius:9px;background:var(--fill);font-size:11px;font-weight:700;color:var(--ink-2);display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.fgrid .folder[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 20%,var(--card));box-shadow:inset 0 0 0 2px var(--c)}
+.irow .iv small.todayh{display:block;margin-top:1px}
 </style>
 </head>
 <body data-view="map">
@@ -812,11 +823,11 @@ function detailHTML(p){
     : p.src === "curated" && p.source === "ancienne-liste" ? "Lieu de ta liste d'origine : vérifie les infos avant d'y aller."
     : p.src === "curated" ? `Sélection Tournée Générale d'après <a href="${esc(p.source)}" target="_blank" rel="noopener">ce guide</a>.`
     : `Données <a href="${esc(p.url)}" target="_blank" rel="noopener">OpenStreetMap</a>${p.srcUrl ? `, complétées d'après <a href="${esc(p.srcUrl)}" target="_blank" rel="noopener">ce guide</a>` : ""}.`);
-  const sub = [norm(p.kind) !== norm(p.name) ? esc(p.kind) : "", fmtD(d),
-    s ? `<span class="ost ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${esc(s.open ? (s.soon ? "Ferme bientôt" : "Ouvert") : "Fermé")}</span>` : ""].filter(Boolean).join(" · ");
+  // le statut d'ouverture n'apparaît qu'une fois, dans la ligne Horaires
+  const sub = [norm(p.kind) !== norm(p.name) ? esc(p.kind) : "", fmtD(d)].filter(Boolean).join(" · ");
   const evs = eventsAt(p);
   const rows = [
-    p.hours ? (week ? `<details class="irow hrs"><summary><span class="ik">${ICON.clock}</span><span class="iv"><small>Horaires</small>${s ? `<b class="ost ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${esc(s.label)}</b>` : `<b>${esc(week[today].txt)}</b>`}</span><span class="chev">${ICON.chevR}</span></summary>
+    p.hours ? (week ? `<details class="irow hrs"><summary><span class="ik">${ICON.clock}</span><span class="iv"><small>Horaires</small>${s ? `<b class="ost ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${esc(s.label)}</b><small class="todayh">Aujourd'hui : ${esc(week[today].txt)}</small>` : `<b>Aujourd'hui : ${esc(week[today].txt)}</b>`}</span><span class="chev">${ICON.chevR}</span></summary>
         <table class="week">${week.map((w, i) => `<tr${i === today ? ' class="today"' : ""}><th>${w.name}</th><td>${esc(w.txt)}</td></tr>`).join("")}</table></details>`
       : `<div class="irow"><span class="ik">${ICON.clock}</span><span class="iv"><small>Horaires</small>${esc(frHours(p.hours))}</span></div>`) : "",
     p.address ? `<button class="irow" data-copy="${esc(p.address)}"><span class="ik">${ICON.pin}</span><span class="iv"><small>Adresse</small>${esc(p.address)}</span><span class="chev">${ICON.copy}</span></button>` : "",
@@ -826,7 +837,7 @@ function detailHTML(p){
   ].filter(Boolean).join("");
   return `<div class="pc-head">
       <div class="pc-title"><h2>${esc(p.name)}</h2><p class="pc-sub">${sub}</p></div>
-      <button class="ibtn" id="closeCard" aria-label="Fermer">${ICON.close}</button>
+      <div class="card-acts"><button class="ibtn" id="editBtn" aria-label="Corriger ce lieu">${ICON.edit}</button><button class="ibtn" id="closeCard" aria-label="Fermer">${ICON.close}</button></div>
     </div>
     <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${CAT[g].e}</span>${CAT[g].label}</span>`).join("")}</div>
     <div class="acts5">
@@ -838,10 +849,7 @@ function detailHTML(p){
     </div>
     ${rows ? `<div class="ilist">${rows}</div>` : ""}
     ${evs.length ? `<p class="glabel">Soirées ici</p><div class="here-evs">${evs.map(ev => { const T = EVT[ev.type] || EVT.jeux, rel = relDay(nextOcc(ev)); return `<button data-evgo="${ev.id}"><span class="emo">${T.e}</span><span><b>${esc(ev.title)}</b><small>${esc(whenLabel(ev))}${rel ? " · " + rel.toLowerCase() : ""}</small></span></button>`; }).join("")}</div>` : ""}
-    <div class="ilist">
-      <button class="irow" id="editBtn"><span class="ik">${ICON.edit}</span><span class="iv">Corriger ce lieu<small>Réservé à l'admin</small></span><span class="chev">${ICON.chevR}</span></button>
-      ${p.src === "mine" ? `<button class="irow danger" id="delBtn"><span class="ik">${ICON.trash}</span><span class="iv">Supprimer ce lieu</span></button>` : ""}
-    </div>
+    ${p.src === "mine" ? `<div class="ilist"><button class="irow danger" id="delBtn"><span class="ik">${ICON.trash}</span><span class="iv">Supprimer ce lieu</span></button></div>` : ""}
     <p class="src">${src}</p>`;
 }
 async function sharePlace(p){
@@ -930,7 +938,7 @@ function listHTML(vis){
       <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>du plus proche au plus loin</div></div>
     <p class="lead"><span class="dot${state.me ? " on" : ""}"></span>${state.me ? "Position en direct" : "Position non partagée"}${state.loading ? ' · <span class="spin"></span> recherche…' : ""}</p>`;
   if (state.error) h += `<div class="err-line">Les serveurs OpenStreetMap ne répondent pas.<button id="retry">Réessayer</button></div>`;
-  if (cats.length) h += `<div class="folders">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="emo">${c.e}</span><b>${c.label}</b><small>${counts[c.id]} lieu${counts[c.id] > 1 ? "x" : ""}</small></button>`).join("")}</div>`;
+  if (cats.length) h += `<div class="fgrid">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="fi emo">${c.e}</span><span class="ft"><b>${c.short || c.label}</b><small>${counts[c.id]}</small></span></button>`).join("")}</div>`;
   h += `<div class="sec">${state.active.size ? "Pour tes jeux" : "Les plus proches"}${state.active.size ? `<small><button class="textbtn" id="clearF" style="height:30px">Tout voir</button></small>` : ""}</div>`;
   if (!n) h += `<div class="empty"><span class="emo">🔍</span><b>${state.loading ? "Recherche en cours…" : "Rien par ici"}</b>${state.loading ? "" : "Agrandis le rayon ou ajoute un lieu que tu connais."}</div>`;
   else {
@@ -1459,7 +1467,7 @@ function ohState(p, now = new Date()){
     if (m >= a && m < end) return {open:true, closes:end, label: end - a >= 1440 ? "Ouvert 24h/24" : "Ouvert · ferme à " + hhmm(end), soon:end - m <= 45};
   }
   const later = today.filter(([a]) => a > m).sort((x, y) => x[0] - y[0])[0];
-  if (later) return {open:false, label:"Fermé · ouvre à " + hhmm(later[0])};
+  if (later) return {open:false, opensToday:later[0], label:"Fermé · ouvre aujourd'hui à " + hhmm(later[0])};
   for (let k = 1; k <= 7; k++){
     const r = (oh.week[(d + k) % 7] || []).slice().sort((x, y) => x[0] - y[0])[0];
     if (r) return {open:false, label:"Fermé · ouvre " + (k === 1 ? "demain" : DAY_FR[(now.getDay() + k) % 7]) + " à " + hhmm(r[0])};
@@ -1758,7 +1766,18 @@ loadShared();
 autoLoad();
 startGPS();
 // les statuts « ouvert » et « ce soir » bougent avec l'heure
-setInterval(() => { if (!map._animatingZoom && ["map","list","fav","events"].includes(state.view)) render(); }, 120000);
+// statuts « ouvert / fermé » recalculés chaque minute, fiche ouverte comprise
+setInterval(() => {
+  if (map._animatingZoom) return;
+  if (["map","list","fav","events"].includes(state.view)) render();
+  else if (state.view === "detail"){
+    const p = findPlace(state.selected), card = $("card"); if (!p || card.querySelector("#pwForm")) return;
+    const open = !!card.querySelector("details.hrs[open]"), st = card.scrollTop;
+    card.innerHTML = detailHTML(p); card.scrollTop = st;
+    if (open){ const d = card.querySelector("details.hrs"); if (d) d.open = true; }
+    renderMarkers(visiblePlaces());
+  }
+}, 60000);
 setTimeout(() => { if (!state.center) setCenter(S0.lat, S0.lon, "Paris", true); }, 6000);
 })();
 </script>
