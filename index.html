@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <style>
 /* Carte plein écran + barre de recherche flottante + tiroir du bas (mobile) / panneau gauche (ordinateur).
    Thème clair unique, choisi volontairement pour aller avec le fond de carte. */
@@ -34,7 +35,7 @@ button{cursor:pointer}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 svg{display:block}
 
-#map{position:fixed;inset:0;background:#eef0ec;z-index:0}
+#map{position:fixed;inset:0;background:#f5f3ee;z-index:0}
 
 /* ---------- Barre du haut ---------- */
 .top{position:fixed;z-index:20;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));pointer-events:none;display:flex;flex-direction:column;gap:10px}
@@ -214,6 +215,8 @@ body[data-snap="full"] .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 24px
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script>
 (() => {
@@ -361,13 +364,30 @@ const state = {
 };
 
 /* ================= Carte ================= */
-const map = L.map("map", {zoomControl:false, attributionControl:true, tap:true}).setView([S0.lat, S0.lon], 14);
+const map = L.map("map", {zoomControl:false, attributionControl:true, maxZoom:20, minZoom:3}).setView([S0.lat, S0.lon], 14);
 L.control.zoom({position:"bottomright"}).addTo(map);
 map.attributionControl.setPrefix(false);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png", {
-  maxZoom:20, subdomains:"abcd", detectRetina:false,
-  attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-}).addTo(map);
+/* Fond de carte : style vectoriel maison « Tournée » (map-style.json) sur les tuiles gratuites OpenFreeMap.
+   Si le téléphone ne gère pas WebGL ou si le style ne charge pas, on bascule sur CARTO Positron. */
+const OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
+let base = null, baseOK = false;
+function rasterBase(){
+  if (base && base._rasterFallback) return;
+  if (base) map.removeLayer(base);
+  base = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png", {
+    maxZoom:20, subdomains:"abcd", attribution: OSM_ATTR + ' · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(map);
+  base._rasterFallback = true;
+}
+function hasWebGL(){ try{ const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); }catch{ return false; } }
+const mlLayer = (window.MaplibreGLLeaflet && MaplibreGLLeaflet.maplibreGL) || L.maplibreGL;
+if (window.maplibregl && mlLayer && hasWebGL()){
+  fetch("map-style.json").then(r => { if (!r.ok) throw 0; return r.json(); }).then(style => {
+    base = mlLayer({style, interactive:false,
+      attribution:'<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · ' + OSM_ATTR}).addTo(map);
+    base.getMaplibreMap().once("load", () => { baseOK = true; });
+    setTimeout(() => { if (!baseOK) rasterBase(); }, 12000);
+  }).catch(rasterBase);
+} else rasterBase();
 const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:42, disableClusteringAtZoom:17, spiderfyOnMaxZoom:true,
   iconCreateFunction:c => L.divIcon({html:`<div class="cluster">${c.getChildCount()}</div>`, className:"", iconSize:[42,42]})});
 map.addLayer(cluster);
