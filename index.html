@@ -70,13 +70,13 @@ svg{display:block}
 .pill{height:34px;border-radius:999px;padding:0 13px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;white-space:nowrap;flex:none;color:var(--ink)}
 .pill svg{width:16px;height:16px}
 .pill .chev{width:12px;height:12px;opacity:.6}
-.cats{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:2px var(--gut-r) 0 var(--gut);scroll-snap-type:x proximity}
+.cats{display:flex;gap:6px;overflow-x:auto;overflow-y:visible;scrollbar-width:none;padding:10px var(--gut-r) 4px var(--gut);margin-top:-8px;scroll-snap-type:x proximity}
 .cats::-webkit-scrollbar{display:none}
-.cat{flex:none;width:62px;display:flex;flex-direction:column;align-items:center;gap:3px;scroll-snap-align:start;transition:opacity .2s}
+.cat{flex:none;width:auto;min-width:56px;padding:0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;scroll-snap-align:start;transition:opacity .2s}
 .cat .bub{position:relative;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:27px;transition:transform .15s}
 .cat .bub .emo{filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
-.cat .lbl{font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:62px;overflow:hidden;text-overflow:ellipsis}
-.cat .cnt{position:absolute;top:-4px;right:-8px;min-width:20px;height:18px;padding:0 5px;border-radius:999px;background:var(--black);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.cat .lbl{font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:none;overflow:hidden;text-overflow:ellipsis}
+.cat .cnt{position:absolute;top:-6px;right:-10px;min-width:20px;height:18px;padding:0 5px;border-radius:999px;background:var(--black);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .cat[aria-pressed="true"] .bub{background:var(--c);box-shadow:0 0 0 3px #fff,0 6px 16px color-mix(in srgb,var(--c) 55%,transparent)}
 .cat[aria-pressed="true"] .lbl{color:var(--ink);font-weight:700}
 .cats.filtering .cat[aria-pressed="false"]{opacity:.5}
@@ -257,6 +257,11 @@ body.searching .top,body.searching .bottom{visibility:hidden}
 .here-evs b{display:block;font-size:14.5px}
 .here-evs small{display:block;font-size:13px;color:var(--muted)}
 
+.hint-line{font-size:13px;color:var(--muted);margin:-8px 6px 18px;line-height:1.45}
+.pwf input{width:100%;height:52px;border-radius:14px;border:0;background:var(--grouped);padding:0 16px;font-size:17px;outline:none;margin-top:14px}
+.pwf input:focus{box-shadow:0 0 0 3px rgba(10,132,255,.35)}
+.cta[disabled]{opacity:.6}
+
 /* Placement */
 .crosshair{position:fixed;z-index:12;left:var(--cross-x,50%);top:var(--cross-y,45%);transform:translate(-50%,-100%);pointer-events:none;font-size:46px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
 .crosshair::after{content:"";position:absolute;left:50%;bottom:-2px;width:12px;height:5px;margin-left:-6px;border-radius:50%;background:rgba(0,0,0,.28)}
@@ -288,7 +293,7 @@ body[data-view="list"] .bottom,body[data-view="fav"] .bottom,body[data-view="eve
 body[data-view="list"] .bottom > :not(.tabs),body[data-view="fav"] .bottom > :not(.tabs),body[data-view="events"] .bottom > :not(.tabs){visibility:hidden}
 body[data-view="list"] .bottom .tabs,body[data-view="fav"] .bottom .tabs,body[data-view="list"] .bottom .tabs *,body[data-view="fav"] .bottom .tabs *,body[data-view="events"] .bottom .tabs,body[data-view="events"] .bottom .tabs *{pointer-events:auto}
 body[data-view="list"] .bottom::before,body[data-view="fav"] .bottom::before,body[data-view="events"] .bottom::before{display:none}
-body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="evform"] .top,body[data-view="events"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
+body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="edit"] .top,body[data-view="evform"] .top,body[data-view="events"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
 
 @media (min-width:900px){
   .bottom{left:auto;right:24px;width:460px;bottom:16px}
@@ -305,8 +310,8 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="evform
   body[data-view="detail"] .bottom{transform:none;opacity:1}
   body[data-view] .bottom > *{visibility:visible}
   body[data-view] .bottom *{pointer-events:auto}
-  body[data-view="place"] .bottom,body[data-view="form"] .bottom,body[data-view="search"] .bottom,body[data-view="evform"] .bottom{opacity:0;transform:translateY(30px)}
-  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *,body[data-view="search"] .bottom *,body[data-view="evform"] .bottom *{pointer-events:none}
+  body[data-view="place"] .bottom,body[data-view="form"] .bottom,body[data-view="search"] .bottom,body[data-view="edit"] .bottom,body[data-view="evform"] .bottom{opacity:0;transform:translateY(30px)}
+  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *,body[data-view="search"] .bottom *,body[data-view="edit"] .bottom *,body[data-view="evform"] .bottom *{pointer-events:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -331,8 +336,7 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="evform
 <div class="crosshair emo" id="crosshair" hidden aria-hidden="true">📍</div>
 
 <div class="bottom" id="bottom">
-  <button class="here" id="here" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>Chercher ici</button>
-  <div class="pills" id="pills"></div>
+    <div class="pills" id="pills"></div>
   <div class="cats" id="cats" role="group" aria-label="Filtrer par jeu"></div>
   <nav class="tabs glass" aria-label="Navigation">
     <button class="tab" data-tab="map" aria-label="Carte" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 4L3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg></button>
@@ -347,6 +351,7 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="evform
 <section class="page" id="page"></section>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
@@ -361,7 +366,7 @@ const CATS = [
   {id:"babyfoot",label:"Baby-foot",e:"⚽",color:"#5ac8fa",re:/table_soccer|table_football|foosball|kicker|babyfoot|baby_foot/i,name:/baby[- ]?foot/i},
   {id:"flipper",label:"Flipper",e:"🕹️",color:"#c79bff",re:/pinball|flipper/i,name:/flipper|pinball/i},
   {id:"beerpong",label:"Beer-pong",e:"🍺",color:"#ffb340",re:/beer_?pong/i,name:/beer[- ]?pong/i},
-  {id:"societe",label:"Jeux de société",e:"🎲",color:"#ff8fab",re:/board_?game|boardgame|tabletop|club=board|club=games/i,name:/ludo|ludique|\bjeux\b|board ?game/i},
+  {id:"societe",label:"Jeux de société",short:"Société",e:"🎲",color:"#ff8fab",re:/board_?game|boardgame|tabletop|club=board|club=games/i,name:/ludo|ludique|\bjeux\b|board ?game/i},
   {id:"echecs",label:"Échecs",e:"♟️",color:"#c7c7cc",re:/chess/i,name:/[ée]checs|chess/i},
   {id:"petanque",label:"Pétanque",e:"🔘",color:"#d9bf94",re:/boules|petanque|pétanque|bocce|sport=bowls/i,name:/p[ée]tanque|boulodrome/i},
   {id:"pingpong",label:"Ping-pong",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
@@ -369,13 +374,14 @@ const CATS = [
   {id:"quiz",label:"Quiz",e:"🧠",color:"#a5a3ff",re:/quiz|trivia/i,name:/quiz/i},
   {id:"arcade",label:"Arcade",e:"👾",color:"#64d2ff",re:/amusement_arcade|arcade|video_?game|retrogaming/i,name:/arcade|retro ?gaming/i},
   {id:"bowling",label:"Bowling",e:"🎳",color:"#ff9f80",re:/bowling|10pin|9pin/i,name:/bowling/i},
-  {id:"autres",label:"Escape & golf",e:"⛳",color:"#b5e07a",re:/escape_game|escape_room|miniature_golf|minigolf|laser_?game|lasergame/i,name:/escape|mini[- ]?golf|laser ?game/i},
+  {id:"autres",label:"Escape & golf",short:"Escape",e:"⛳",color:"#b5e07a",re:/escape_game|escape_room|miniature_golf|minigolf|laser_?game|lasergame/i,name:/escape|mini[- ]?golf|laser ?game/i},
 ];
 const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
 const S = i => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${i}</svg>`;
 const ICON = {
   close:S('<path d="M6 6l12 12M18 6L6 18"/>'),
   back:S('<path d="M15 18l-6-6 6-6"/>'),
+  edit:S('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'),
   heart:S('<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/>'),
   heartFill:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/></svg>',
   route:S('<path d="M3 11l18-8-8 18-2-8z"/>'),
@@ -439,8 +445,8 @@ async function reverse(lat, lon){
 
 /* ================= OpenStreetMap (Overpass) ================= */
 const KEY_RE = "billiard|snooker|dart|table_soccer|table_football|foosball|kicker|babyfoot|pinball|beer_pong|beerpong|board_game|chess|boules|petanque|table_tennis|karaoke|quiz|trivia|arcade|bowling";
-function query(lat, lon, r){
-  const a = `(around:${r},${lat.toFixed(5)},${lon.toFixed(5)})`;
+function query(b){
+  const a = `(${b.getSouth().toFixed(4)},${b.getWest().toFixed(4)},${b.getNorth().toFixed(4)},${b.getEast().toFixed(4)})`;
   return `[out:json][timeout:45];(
 nwr[~"${KEY_RE}"~".",i]${a};
 nwr["sport"~"billiards|snooker|pool|darts|chess|boules|petanque|table_tennis|table_soccer|10pin|9pin|bowls|bowling"]${a};
@@ -500,7 +506,8 @@ const state = {
   me:null, center:null, centerLabel:"", follow:true,
   osm:[], curated:[], mine: store.get("mine", []), favs: new Set(store.get("favs", [])),
   view:"map", prevView:"map", selected:null, shown:30, loading:false, error:false, draft:null,
-  openOnly: store.get("openOnly", false), events:[], myEvents: store.get("events", []), evDay:"all", evTypes:new Set(), evDraft:null
+  openOnly: store.get("openOnly", false), events:[], myEvents: store.get("events", []), evDay:"all", evTypes:new Set(), evDraft:null,
+  shared:[], sharedEvents:[], ov:{}, admin:"", editKey:null, editDraft:null
 };
 const isDesk = () => matchMedia("(min-width:900px)").matches;
 
@@ -533,7 +540,6 @@ const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadiu
     return L.divIcon({className:"", iconSize:[0,0], html:`<div class="cl">${seen.map(g => `<span class="emo" style="--c:${CAT[g].color}">${CAT[g].e}</span>`).join("")}<b>${c.getChildCount()}</b></div>`});
   }});
 map.addLayer(cluster);
-const ring = L.circle([S0.lat, S0.lon], {radius:state.radius, color:"#0a84ff", weight:1.5, opacity:.45, dashArray:"2 7", lineCap:"round", fill:false, interactive:false}).addTo(map);
 let meMarker = null, meAcc = null;
 const markers = new Map();
 const draftLayer = L.layerGroup().addTo(map);
@@ -544,21 +550,21 @@ map.on("zoomend", labelsOn); labelsOn();
 /* ================= Données ================= */
 function allPlaces(){
   const out = [...state.osm];
-  for (const c of [...state.curated, ...state.mine]){
+  for (const c of [...state.curated, ...state.shared, ...state.mine]){
     if (c.lat == null) continue;
+    if (c.osm){ const o = out.find(x => x.key === "o" + c.osm.type[0] + c.osm.id); if (o){ o.games = [...new Set([...o.games, ...c.games])]; o.note = o.note || c.note; o.hours = o.hours || c.hours; continue; } }
     const twin = c.src === "curated" && out.find(o => o.src === "osm" && o.named && dist(o, c) < 90 && (norm(o.name).includes(norm(c.name).split(" ")[0]) || norm(c.name).includes(norm(o.name))));
     if (twin){ twin.games = [...new Set([...twin.games, ...c.games])]; twin.note = twin.note || c.note; twin.srcUrl = c.source; continue; }
     out.push(c);
   }
-  return out;
+  // corrections de l'admin : jeux, horaires, nom… ou lieu masqué
+  return out.flatMap(p => { const o = state.ov[p.key]; return !o ? [p] : o.hidden ? [] : [{...p, ...o, edited:true}]; });
 }
 const findPlace = k => allPlaces().find(p => p.key === k);
 const shownGames = p => state.active.size ? p.games.filter(g => state.active.has(g)) : p.games;
 const ref = () => state.me || state.center || S0;
-function inRadius(){
-  const ctr = state.center || S0;
-  return allPlaces().filter(p => p.src === "mine" || dist(ctr, p) <= state.radius * 1.02);
-}
+function inRadius(){ return allPlaces(); }
+function inView(){ const b = map.getBounds(); return allPlaces().filter(p => b.contains([p.lat, p.lon])); }
 function visiblePlaces(){
   const r = ref();
   return inRadius().filter(p => shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).map(p => ({p, d:dist(r, p)}))
@@ -587,17 +593,16 @@ function renderMarkers(vis){
 
 /* ================= Bas de l'écran ================= */
 function renderBottom(){
-  const pool = inRadius();
+  const pool = inView();
   const counts = {}; pool.forEach(p => p.games.forEach(g => counts[g] = (counts[g] || 0) + 1));
   const order = [...CATS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
   const cats = $("cats");
   cats.classList.toggle("filtering", state.active.size > 0);
   cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">✨</span><span class="lbl">Tout</span></button>` +
-    order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${c.e}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.label}</span></button>`).join("");
-  const n = visiblePlaces().length;
+    order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${c.e}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.short || c.label}</span></button>`).join("");
+  const n = pool.filter(p => shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).length;
   const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
   $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
-    <button class="pill glass" id="radiusPill" type="button">${ICON.ruler.replace("<svg", '<svg style="color:#0a84ff"')}${state.radius / 1000} km${ICON.chev}</button>
     ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">🎉</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
   const w = $("where");
   w.innerHTML = state.loading ? `<span class="spin"></span>Recherche…` : esc(state.me && !state.centerLabel ? "Autour de toi" : state.centerLabel ? state.centerLabel : "Paris") + ` · ${n}`;
@@ -612,14 +617,9 @@ function toggleFilter(id){
   render();
 }
 $("pills").addEventListener("click", e => {
-  if (e.target.closest("#radiusPill")) setRadius(RADII[(RADII.indexOf(state.radius) + 1) % RADII.length]);
-  else if (e.target.closest("#openPill")){ state.openOnly = !state.openOnly; store.set("openOnly", state.openOnly); render(); if (state.openOnly) toast("Seuls les lieux dont on connaît les horaires et ouverts maintenant s'affichent"); }
+  if (e.target.closest("#openPill")){ state.openOnly = !state.openOnly; store.set("openOnly", state.openOnly); render(); if (state.openOnly) toast("Seuls les lieux dont on connaît les horaires et ouverts maintenant s'affichent"); }
   else if (e.target.closest("#evPill")){ state.evDay = 0; go("events"); }
 });
-function setRadius(r){
-  state.radius = r; store.set("radius", r); state.shown = 30; ring.setRadius(r);
-  fitCircle(); loadOSM();
-}
 
 /* ================= Zone libre de la carte ================= */
 function freeRect(){
@@ -641,10 +641,7 @@ function focusOn(lat, lon, zoom){
   const off = L.point((r.x0 + r.x1) / 2 - innerWidth / 2, (r.y0 + r.y1) / 2 - innerHeight / 2);
   map.setView(map.unproject(map.project([lat, lon], z).subtract(off), z), z, {animate:true});
 }
-function fitCircle(){
-  const c = state.center || S0, r = freeRect();
-  map.fitBounds(L.latLng(c.lat, c.lon).toBounds(state.radius * 2), {paddingTopLeft:[r.x0 + 10, r.y0], paddingBottomRight:[innerWidth - r.x1 + 10, innerHeight - r.y1 + 10], animate:true});
-}
+function fitCircle(){ const c = state.center || S0; focusOn(c.lat, c.lon, 15); }
 function syncAttr(){ document.documentElement.style.setProperty("--attr-b", (isDesk() || state.view !== "map" ? 0 : innerHeight - $("pills").getBoundingClientRect().top + 10) + "px"); }
 
 /* ================= Vues ================= */
@@ -673,11 +670,12 @@ function render(){
   if (state.view === "list"){ const st = page.scrollTop; page.innerHTML = listHTML(vis); page.classList.add("show"); page.scrollTop = st; }
   else if (state.view === "fav"){ page.innerHTML = favHTML(); page.classList.add("show"); }
   else if (state.view === "events"){ const st = page.scrollTop; page.innerHTML = eventsHTML(); page.classList.add("show"); page.scrollTop = st; }
+  else if (state.view === "edit"){ if (!page.querySelector("#editForm")) page.innerHTML = editHTML(); page.classList.add("show"); }
   else if (state.view === "evform"){ if (!page.querySelector("#evForm")) page.innerHTML = evFormHTML(); page.classList.add("show"); }
   else if (state.view === "search"){ if (!page.querySelector("#ps")) page.innerHTML = searchHTML(); page.classList.add("show"); renderSugg(); }
   else if (state.view === "form"){ if (!page.querySelector("#addForm")) page.innerHTML = formHTML(); page.classList.add("show"); }
   else page.classList.remove("show");
-  updateHere(); syncAttr();
+  syncAttr();
 }
 document.querySelector(".tabs").addEventListener("click", e => {
   const t = e.target.closest(".tab"); if (!t) return;
@@ -696,13 +694,15 @@ function detailHTML(p){
   ].filter(Boolean).join("");
   const site = p.website && /^https?:\/\//i.test(p.website) ? p.website : "";
   const fav = state.favs.has(p.key);
-  const src = p.src === "mine" ? "Ajouté par toi, visible seulement sur cet appareil."
+  const src = (p.edited ? "Corrigé par l'admin. " : "") + (p.src === "mine" ? "Ajouté par toi, visible seulement sur cet appareil."
+    : p.src === "shared" ? "Ajouté par la communauté Tournée Générale."
     : p.src === "curated" ? `Sélection Tournée Générale d'après <a href="${esc(p.source)}" target="_blank" rel="noopener">ce guide</a>. Vérifie les horaires avant d'y aller.`
-    : `Données <a href="${esc(p.url)}" target="_blank" rel="noopener">OpenStreetMap</a>${p.srcUrl ? `, complétées d'après <a href="${esc(p.srcUrl)}" target="_blank" rel="noopener">ce guide</a>` : ""}.`;
+    : `Données <a href="${esc(p.url)}" target="_blank" rel="noopener">OpenStreetMap</a>${p.srcUrl ? `, complétées d'après <a href="${esc(p.srcUrl)}" target="_blank" rel="noopener">ce guide</a>` : ""}.`);
   return `<div class="card-top">
       <div class="stack">${p.games.slice(0, 4).map(g => `<span class="emo" style="--c:${CAT[g].color}">${CAT[g].e}</span>`).join("")}</div>
       <div class="card-acts">
         <button class="ibtn${fav ? " fav-on" : ""}" id="favBtn" aria-pressed="${fav}" aria-label="${fav ? "Retirer des favoris" : "Ajouter aux favoris"}">${fav ? ICON.heartFill : ICON.heart}</button>
+        <button class="ibtn" id="editBtn" aria-label="Modifier ce lieu">${ICON.edit}</button>
         <button class="ibtn" id="closeCard" aria-label="Fermer">${ICON.close}</button>
       </div>
     </div>
@@ -719,7 +719,7 @@ function detailHTML(p){
     <p class="src">${src}</p>`;
 }
 function openDetail(key){
-  if (state.view === "place" || state.view === "form" || state.view === "search") return;
+  if (["place","form","search","edit"].includes(state.view)) return;
   const p = findPlace(key); if (!p) return;
   if (state.view !== "detail") state.prevView = state.view;
   const prev = state.selected; state.selected = key; state.view = "detail";
@@ -741,10 +741,13 @@ function closeDetail(doRender = true){
   const m = markers.get(k), q = k && findPlace(k); if (m && q){ m.setIcon(mkIcon(q, false)); m.setZIndexOffset(0); }
   if (doRender) render();
 }
+$("card").addEventListener("submit", e => { if (e.target.id === "pwForm"){ e.preventDefault(); submitPw(); } });
 $("card").addEventListener("click", e => {
   const t = e.target;
   if (t.closest("#closeCard")){ closeDetail(); return; }
   if (t.closest("#favBtn")){ toggleFav(state.selected); return; }
+  if (t.closest("#editBtn")){ askEdit(state.selected); return; }
+  if (t.closest("#pwCancel")){ const p = findPlace(state.selected); if (p) $("card").innerHTML = detailHTML(p); return; }
   if (t.closest("[data-evgo]")){ closeDetail(false); state.evDay = "all"; go("events"); return; }
   if (t.closest("#delBtn")){ deleteMine(state.selected, t.closest("#delBtn")); return; }
   if (t.closest("#cancelAdd")){ endAdd(); return; }
@@ -782,9 +785,8 @@ function listHTML(vis){
   const cats = CATS.filter(c => counts[c.id]).sort((a, b) => counts[b.id] - counts[a.id]);
   const n = vis.length;
   let h = `<div class="ph"><h1>${state.me && !state.centerLabel ? "Autour<br>de toi" : esc(state.centerLabel || "Paris")}</h1>
-      <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>dans ${state.radius / 1000} km</div></div>
-    <p class="lead"><span class="dot${state.me ? " on" : ""}"></span>${state.me ? "Position en direct" : "Position non partagée"}${state.loading ? ' · <span class="spin"></span> recherche…' : ""}</p>
-    <div class="seg" role="group" aria-label="Rayon">${RADII.map(r => `<button data-r="${r}" aria-pressed="${state.radius === r}">${r / 1000} km</button>`).join("")}</div>`;
+      <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>du plus proche au plus loin</div></div>
+    <p class="lead"><span class="dot${state.me ? " on" : ""}"></span>${state.me ? "Position en direct" : "Position non partagée"}${state.loading ? ' · <span class="spin"></span> recherche…' : ""}</p>`;
   if (state.error) h += `<div class="err-line">Les serveurs OpenStreetMap ne répondent pas.<button id="retry">Réessayer</button></div>`;
   if (cats.length) h += `<div class="folders">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="emo">${c.e}</span><b>${c.label}</b><small>${counts[c.id]} lieu${counts[c.id] > 1 ? "x" : ""}</small></button>`).join("")}</div>`;
   h += `<div class="sec">${state.active.size ? "Pour tes jeux" : "Les plus proches"}${state.active.size ? `<small><button class="textbtn" id="clearF" style="height:30px">Tout voir</button></small>` : ""}</div>`;
@@ -812,10 +814,10 @@ $("page").addEventListener("click", e => {
   const t = e.target;
   const row = t.closest(".prow"); if (row){ openDetail(row.dataset.key); return; }
   const f = t.closest(".folder"); if (f){ toggleFilter(f.dataset.id); return; }
-  const r = t.closest(".seg button"); if (r){ setRadius(+r.dataset.r); return; }
   if (t.closest("#clearF")){ toggleFilter(""); return; }
   if (t.closest("#more")){ state.shown += 30; render(); return; }
   if (t.closest("#retry")){ loadOSM(); return; }
+  if (t.closest("#zoomIn")){ go("map"); map.setZoom(14); return; }
   if (t.closest("#cancelForm")){ endAdd(); return; }
   if (t.closest("#movePos")){ const d = state.draft; draftLayer.clearLayers(); state.view = "place"; render(); placeCross(); requestAnimationFrame(() => { focusOn(d.lat, d.lon, 18); placeCross(); }); return; }
   const sg = t.closest(".sg"); if (sg){ pickSugg(+sg.dataset.i); return; }
@@ -950,7 +952,7 @@ function formHTML(){
       </div>
       <p class="ferr" id="eName" hidden>Donne un nom au lieu.</p>
       <div class="group"><label class="f"><span class="k">Infos sur les jeux</span><textarea id="fNote" maxlength="300" placeholder="Quiz le mardi à 20h, 2 billards au sous-sol, fléchettes électroniques…">${esc(d.note)}</textarea></label></div>
-      <label class="switch"><input type="checkbox" id="fShare"${d.share ? " checked" : ""}><span>Proposer aussi ces jeux à OpenStreetMap pour que tout le monde les voie (note publique et anonyme).</span></label>
+      <p class="hint-line">${DB ? "Le lieu sera visible par tout le monde sur la carte." : "Base partagée pas encore branchée : le lieu restera sur ton téléphone."}</p>
       <button class="cta" type="submit" style="width:100%">Enregistrer le lieu</button>
     </form>`;
 }
@@ -1043,48 +1045,56 @@ async function saveDraft(){
   const p = {key:"m" + Date.now().toString(36), src:"mine", name:d.name, games:CATS.map(c => c.id).filter(id => d.games.includes(id)),
     lat:d.lat, lon:d.lon, kind:d.kind || "Lieu ajouté", address:d.address.trim(), note:d.note.trim(), hours:d.auto && d.autoRaw && d.hours.trim() === d.auto.hours ? d.autoRaw : d.hours.trim(), phone:d.phone.trim(),
     website:web && !/^https?:\/\//i.test(web) ? "https://" + web : web, osm:d.osm || null};
-  state.mine.push(p);
-  const saved = store.set("mine", state.mine), share = d.share;
-  endAdd();
-  toast(saved ? "Lieu ajouté" : "Lieu ajouté pour cette visite. Ton navigateur bloque l'enregistrement durable.");
-  openDetail(p.key);
-  if (share){
-    const text = `Lieu de jeux proposé via Tournée Générale.\nNom : ${p.name}\nJeux : ${p.games.map(g => CAT[g].label).join(", ")}${p.address ? "\nAdresse : " + p.address : ""}${p.note ? "\nInfos : " + p.note : ""}${p.osm ? `\nObjet OSM : https://www.openstreetmap.org/${p.osm.type}/${p.osm.id}` : ""}`;
+  const btn = $("addForm").querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Enregistrement…";
+  if (DB){
     try{
-      const r = await fetch("https://api.openstreetmap.org/api/0.6/notes.json", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:`lat=${p.lat}&lon=${p.lon}&text=${encodeURIComponent(text)}`});
-      if (!r.ok) throw 0;
-      toast("Lieu ajouté et proposé à OpenStreetMap");
-    }catch{ toast("Lieu ajouté. L'envoi à OpenStreetMap a échoué, réessaie plus tard."); }
+      const [row] = await sb("places", {method:"POST", body:JSON.stringify({name:p.name, games:p.games, lat:p.lat, lon:p.lon, address:p.address, kind:p.kind,
+        hours:p.hours, phone:p.phone, website:p.website, note:p.note, osm_type:p.osm ? p.osm.type : null, osm_id:p.osm ? p.osm.id : null})});
+      const sp = rowToPlace(row); state.shared.push(sp);
+      endAdd(); toast("Lieu ajouté pour tout le monde 🎉"); openDetail(sp.key); return;
+    }catch{ toast("La base ne répond pas : lieu gardé sur ton téléphone"); }
   }
+  state.mine.push(p);
+  const saved = store.set("mine", state.mine);
+  endAdd();
+  if (!DB) toast(saved ? "Lieu ajouté sur ce téléphone" : "Lieu ajouté pour cette visite. Ton navigateur bloque l'enregistrement durable.");
+  openDetail(p.key);
 }
 
-/* ================= « Chercher ici » ================= */
-function updateHere(){
-  const r = freeRect(), c = map.containerPointToLatLng([(r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2]), ctr = state.center;
-  $("here").hidden = !(state.view === "map" && ctr && dist(ctr, {lat:c.lat, lon:c.lng}) > Math.min(state.radius * 0.45, 600));
+/* ================= Chargement automatique de la zone visible ================= */
+let autoT = null;
+function autoLoad(){
+  clearTimeout(autoT);
+  autoT = setTimeout(() => {
+    renderBottom();
+    if (map.getZoom() < 12) return;
+    const v = map.getBounds();
+    if (!loadedBoxes.some(b => b.contains(v))) loadOSM(v.pad(0.35));
+  }, 600);
 }
-map.on("moveend", updateHere);
-$("here").addEventListener("click", () => { const c = map.getCenter(); state.follow = false; $("locate").classList.remove("on"); setCenter(c.lat, c.lng, "Cette zone", false); });
+map.on("moveend", autoLoad);
 map.on("dragstart", () => { if (state.follow){ state.follow = false; $("locate").classList.remove("on"); } });
 
 /* ================= Chargement des lieux ================= */
-let reqId = 0;
-async function loadOSM(){
-  const c = state.center || S0, r = state.radius, id = ++reqId;
-  const ck = `${c.lat.toFixed(3)},${c.lon.toFixed(3)},${r}`;
-  const cache = store.get("osm", null);
-  if (cache && cache.k === ck && Date.now() - cache.t < 6 * 3600e3){ state.osm = cache.items; state.error = false; render(); return; }
-  state.loading = true; state.error = false; render();
+let reqId = 0, lastBox = null;
+const loadedBoxes = [];
+const osmMap = new Map();
+(() => { const c = store.get("osm2", null); if (c && Date.now() - c.t < 24 * 3600e3) c.items.forEach(p => osmMap.set(p.key, p)); state.osm = [...osmMap.values()]; })();
+async function loadOSM(box){
+  box = box || lastBox; if (!box) return;
+  lastBox = box;
+  const id = ++reqId;
+  state.loading = true; state.error = false; renderBottom(); if (state.view === "list") render();
   try{
-    const j = await overpass(query(c.lat, c.lon, r));
+    const j = await overpass(query(box));
     if (id !== reqId) return;
-    const seen = new Set();
-    state.osm = j.elements.map(fromOSM).filter(p => p && !seen.has(p.key) && seen.add(p.key));
-    if (!store.set("osm", {k:ck, t:Date.now(), items:state.osm})) store.set("osm", null);
+    j.elements.forEach(el => { const p = fromOSM(el); if (p) osmMap.set(p.key, p); });
+    loadedBoxes.push(box);
+    state.osm = [...osmMap.values()];
+    const keep = state.osm.slice(-4000);
+    if (!store.set("osm2", {t:Date.now(), items:keep})) store.set("osm2", null);
   }catch{
-    if (id !== reqId) return;
-    state.error = true;
-    if (cache && cache.items && dist(c, {lat:+cache.k.split(",")[0], lon:+cache.k.split(",")[1]}) < r) state.osm = cache.items;
+    if (id === reqId) state.error = true;
   }finally{
     if (id === reqId){ state.loading = false; render(); }
   }
@@ -1093,7 +1103,7 @@ async function loadCurated(){
   let list = [];
   try{ list = await fetchJSON("places.json", {cache:"no-cache"}); }catch{ return; }
   const geo = store.get("geo", {});
-  state.curated = list.map((x, i) => ({...x, key:"c"+i, src:"curated", kind:x.kind || "Lieu", lat:x.lat ?? geo[x.address]?.[0], lon:x.lon ?? geo[x.address]?.[1], hours:x.hours || "", phone:"", website:x.website || ""}));
+  state.curated = list.map((x, i) => ({...x, key:"c:" + norm(x.name).replace(/ /g, "-"), src:"curated", kind:x.kind || "Lieu", lat:x.lat ?? geo[x.address]?.[0], lon:x.lon ?? geo[x.address]?.[1], hours:x.hours || "", phone:"", website:x.website || ""}));
   render();
   const todo = state.curated.filter(p => p.lat == null);
   let changed = false;
@@ -1108,6 +1118,139 @@ async function loadCurated(){
 
 
 /* ================= Recherche d'adresse ================= */
+/* ================= Base partagée (Supabase) ================= */
+const CFG = window.TG_CONFIG || {};
+const DB = CFG.supabaseUrl && CFG.supabaseKey ? {url:CFG.supabaseUrl.replace(/\/+$/, ""), key:CFG.supabaseKey} : null;
+async function sb(path, opts = {}){
+  const r = await fetch(DB.url + "/rest/v1/" + path, {...opts, headers:{apikey:DB.key, Authorization:"Bearer " + DB.key, "Content-Type":"application/json", Prefer:"return=representation", ...(opts.headers || {})}});
+  if (!r.ok){ let msg = ""; try{ msg = (await r.json()).message || ""; }catch{} const e = new Error(msg || "HTTP " + r.status); e.status = r.status; throw e; }
+  const txt = await r.text(); return txt ? JSON.parse(txt) : null;
+}
+const rpc = (fn, args) => sb("rpc/" + fn, {method:"POST", body:JSON.stringify(args)});
+const rowToPlace = r => ({key:"s:" + r.id, src:"shared", name:r.name, games:(r.games || []).filter(g => CAT[g]), lat:r.lat, lon:r.lon,
+  address:r.address || "", kind:r.kind || "Lieu ajouté", hours:r.hours || "", phone:r.phone || "", website:r.website || "", note:r.note || "",
+  osm:r.osm_type && r.osm_id ? {type:r.osm_type, id:r.osm_id} : null});
+const rowToEvent = r => ({id:"s:" + r.id, shared:true, type:r.type, title:r.title, venue:r.venue, address:r.address || "", days:r.days || [], date:r.date || "",
+  time:r.start_time || "", price:r.price || "", note:r.note || "", lat:r.lat ?? undefined, lon:r.lon ?? undefined});
+async function loadShared(){
+  if (!DB){ state.ov = store.get("ov", {}); render(); return; }
+  try{
+    const [pl, ev, ov] = await Promise.all([sb("places?select=*&order=created_at.asc&limit=5000"), sb("events?select=*&limit=2000"), sb("overrides?select=key,data&limit=10000")]);
+    state.shared = pl.map(rowToPlace).filter(p => p.games.length);
+    state.sharedEvents = ev.map(rowToEvent);
+    state.ov = Object.fromEntries(ov.map(o => [o.key, o.data]));
+    store.set("sharedCache", {t:Date.now(), pl, ev, ov});
+    geocodeAll(state.sharedEvents, () => {});
+  }catch{
+    const c = store.get("sharedCache", null);
+    if (c){ state.shared = c.pl.map(rowToPlace); state.sharedEvents = c.ev.map(rowToEvent); state.ov = Object.fromEntries(c.ov.map(o => [o.key, o.data])); }
+  }
+  render();
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && DB && !["form","search","edit","evform"].includes(state.view)) loadShared(); });
+
+/* ================= Admin : corriger un lieu ================= */
+state.admin = (() => { try{ return sessionStorage.getItem("tg-admin") || ""; }catch{ return ""; } })();
+async function checkAdmin(pw){
+  try{ return await rpc("admin_check", {p_password:pw}) === true; }catch{ throw new Error("network"); }
+}
+function pwHTML(){
+  return `<div class="card-top"><div class="stack"><span class="emo" style="--c:#ffd60a">✏️</span></div>
+      <div class="card-acts"><button class="ibtn" id="pwCancel" aria-label="Annuler">${ICON.close}</button></div></div>
+    <h2>Modifier ce lieu</h2><div class="kind">Réservé à l'admin. Entre le mot de passe pour corriger les jeux, les horaires ou masquer le lieu.</div>
+    <form id="pwForm" class="pwf" novalidate><label class="sr" for="pw">Mot de passe</label>
+      <input type="password" id="pw" autocomplete="current-password" placeholder="Mot de passe">
+      <p class="ferr" id="pwErr" hidden style="margin:8px 4px 0"></p>
+      <div class="row-btns" style="margin-top:14px"><button class="cta" type="submit">Continuer</button></div></form>`;
+}
+function askEdit(key){
+  state.editKey = key;
+  if (!DB){ toast("Le mode admin marche une fois la base partagée branchée"); return; }
+  if (state.admin){ openEdit(key); return; }
+  $("card").innerHTML = pwHTML(); setTimeout(() => $("pw") && $("pw").focus(), 50);
+}
+async function submitPw(){
+  const pw = $("pw").value, err = $("pwErr");
+  if (!pw){ err.textContent = "Entre le mot de passe."; err.hidden = false; return; }
+  let ok;
+  try{ ok = await checkAdmin(pw); }catch{ err.textContent = "Impossible de vérifier, vérifie ta connexion."; err.hidden = false; return; }
+  if (!ok){ err.textContent = "Mot de passe incorrect."; err.hidden = false; $("pw").select(); return; }
+  state.admin = pw; try{ sessionStorage.setItem("tg-admin", pw); }catch{}
+  toast("Mode admin activé");
+  openEdit(state.editKey);
+}
+function openEdit(key){
+  const p = findPlace(key); if (!p) return;
+  state.editDraft = {key, name:p.name, address:p.address || "", kind:p.kind || "", hours:p.hours || "", note:p.note || "", games:[...p.games], hidden:false};
+  state.selected = null; state.view = "edit"; $("page").innerHTML = ""; render();
+}
+function editHTML(){
+  const d = state.editDraft;
+  return `<div class="ph"><h1>Modifier</h1><button class="textbtn" id="editCancel">Annuler</button></div>
+    <p class="lead">Les corrections s'appliquent ${DB ? "pour tout le monde" : "sur cet appareil (base pas encore branchée)"}.</p>
+    <form id="editForm" novalidate>
+      <p class="glabel" id="lEGames">On y joue à</p>
+      <div class="pick" role="group" aria-labelledby="lEGames">${CATS.map(c => `<button type="button" class="pk" data-eg="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${c.e}</span>${c.label}</button>`).join("")}</div>
+      <div class="group" style="margin-top:16px">
+        <label class="f"><span class="k">Nom</span><input type="text" id="xName" maxlength="80" value="${esc(d.name)}"></label>
+        <label class="f"><span class="k">Type de lieu</span><input type="text" id="xKind" maxlength="60" value="${esc(d.kind)}" placeholder="Bar, pub, café…"></label>
+        <label class="f"><span class="k">Adresse</span><input type="text" id="xAddr" maxlength="160" value="${esc(d.address)}"></label>
+        <label class="f"><span class="k">Horaires</span><input type="text" id="xHours" maxlength="200" value="${esc(d.hours)}" placeholder="Mo-Th 17:00-01:00; Fr,Sa 17:00-02:00; Su off"></label>
+      </div>
+      <p class="hint-line">Horaires au format OpenStreetMap pour que « Ouvert maintenant » fonctionne : jours Mo Tu We Th Fr Sa Su, plages 17:00-02:00, « off » pour fermé.</p>
+      <div class="group"><label class="f"><span class="k">Infos</span><textarea id="xNote" maxlength="300">${esc(d.note)}</textarea></label></div>
+      <label class="switch"><input type="checkbox" id="xHidden"${d.hidden ? " checked" : ""}><span>Masquer ce lieu de la carte (fermé, en double ou erroné).</span></label>
+      <p class="ferr" id="xErr" hidden></p>
+      <button class="cta" type="submit" style="width:100%">Enregistrer les corrections</button>
+      <button type="button" class="textbtn" id="adminOut" style="display:block;margin:14px auto 0;color:var(--muted)">Quitter le mode admin</button>
+    </form>`;
+}
+async function saveEdit(){
+  const d = state.editDraft, err = $("xErr");
+  if (!d.hidden && !d.games.length){ err.textContent = "Garde au moins un jeu, ou masque le lieu."; err.hidden = false; return; }
+  if (!d.name.trim()){ err.textContent = "Le nom ne peut pas être vide."; err.hidden = false; return; }
+  const data = d.hidden ? {hidden:true} : {name:d.name.trim(), kind:d.kind.trim(), address:d.address.trim(), hours:d.hours.trim(), note:d.note.trim(), games:CATS.map(c => c.id).filter(id => d.games.includes(id))};
+  if (!d.hidden && data.hours && !parseOH(data.hours)){ err.textContent = "Horaires illisibles. Exemple : Mo-Sa 18:00-02:00; Su off"; err.hidden = false; return; }
+  const btn = $("editForm").querySelector('button[type="submit"]'); btn.disabled = true;
+  try{
+    if (DB) await rpc("admin_edit", {p_key:d.key, p_data:data, p_password:state.admin});
+    else { const ov = store.get("ov", {}); ov[d.key] = data; store.set("ov", ov); }
+  }catch(e){
+    btn.disabled = false;
+    if (e.status === 400 || /mot de passe/i.test(e.message)){ state.admin = ""; try{ sessionStorage.removeItem("tg-admin"); }catch{} err.textContent = "Mot de passe refusé. Rouvre le lieu et entre-le à nouveau."; }
+    else err.textContent = "Enregistrement impossible, vérifie ta connexion.";
+    err.hidden = false; return;
+  }
+  state.ov[d.key] = data; state.editDraft = null; $("page").innerHTML = ""; state.view = "map"; render();
+  toast(d.hidden ? "Lieu masqué" : "Corrections enregistrées");
+  if (!d.hidden) openDetail(d.key);
+}
+async function hideEvent(id){
+  if (!state.admin){ toast("Ouvre un lieu et passe en mode admin d'abord"); return; }
+  try{
+    if (DB) await rpc("admin_edit", {p_key:"ev:" + id, p_data:{hidden:true}, p_password:state.admin});
+    else { const ov = store.get("ov", {}); ov["ev:" + id] = {hidden:true}; store.set("ov", ov); }
+    state.ov["ev:" + id] = {hidden:true}; render(); toast("Soirée masquée");
+  }catch{ toast("Impossible de masquer la soirée"); }
+}
+$("page").addEventListener("click", e => {
+  const t = e.target;
+  if (state.view === "edit"){
+    const g = t.closest("[data-eg]"); if (g){ const a = state.editDraft.games, i = a.indexOf(g.dataset.eg); i < 0 ? a.push(g.dataset.eg) : a.splice(i, 1); g.setAttribute("aria-pressed", i < 0); $("xErr").hidden = true; return; }
+    if (t.closest("#editCancel")){ const k = state.editDraft.key; state.editDraft = null; $("page").innerHTML = ""; state.view = "map"; render(); openDetail(k); return; }
+    if (t.closest("#adminOut")){ state.admin = ""; try{ sessionStorage.removeItem("tg-admin"); }catch{} const k = state.editDraft.key; state.editDraft = null; $("page").innerHTML = ""; state.view = "map"; render(); openDetail(k); toast("Mode admin désactivé"); return; }
+  }
+  const h = t.closest("[data-evhide]"); if (h){ hideEvent(h.dataset.evhide); }
+});
+$("page").addEventListener("input", e => {
+  if (state.view !== "edit" || !state.editDraft) return;
+  const m = {xName:"name", xKind:"kind", xAddr:"address", xHours:"hours", xNote:"note"}, d = state.editDraft;
+  if (m[e.target.id]) d[m[e.target.id]] = e.target.value;
+  if (e.target.id === "xHidden") d.hidden = e.target.checked;
+  $("xErr").hidden = true;
+});
+$("page").addEventListener("submit", e => { if (e.target.id === "editForm"){ e.preventDefault(); saveEdit(); } });
+
 /* ================= Horaires : ouvert maintenant ? ================= */
 /* Lit le format opening_hours d'OpenStreetMap le plus courant :
    « Mo-Fr 17:00-02:00; Sa,Su 14:00-02:00; Su off », « 24/7 », plages après minuit. */
@@ -1246,7 +1389,7 @@ const EVT = {
 const DAY_S = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
 const DAY_P = ["dimanches","lundis","mardis","mercredis","jeudis","vendredis","samedis"];
 const evLayer = L.layerGroup().addTo(map);
-function allEvents(){ return [...state.events, ...state.myEvents]; }
+function allEvents(){ return [...state.events, ...state.sharedEvents, ...state.myEvents].filter(ev => !(state.ov["ev:" + ev.id] || {}).hidden); }
 function dayStart(d){ const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
 function nextOcc(ev, now = new Date()){
   // prochaine date (minuit) de la soirée, ou null si inconnue
@@ -1287,7 +1430,7 @@ function evCard(ev){
     ${ev.note ? `<p class="ev-note">${esc(ev.note)}</p>` : ""}
     <div class="row-btns"><button class="cta small" data-evmap="${ev.id}">${ICON.pin}Voir sur la carte</button>
       ${ev.source ? `<a class="cta light small" href="${esc(ev.source)}" target="_blank" rel="noopener">Source</a>` : ""}
-      ${ev.mine ? `<button class="cta light small red" data-evdel="${ev.id}" aria-label="Supprimer cette soirée">${ICON.trash}</button>` : ""}</div>
+      ${ev.mine ? `<button class="cta light small red" data-evdel="${ev.id}" aria-label="Supprimer cette soirée">${ICON.trash}</button>` : state.admin ? `<button class="cta light small red" data-evhide="${ev.id}">Masquer</button>` : ""}</div>
   </article>`;
 }
 function eventsHTML(){
@@ -1310,7 +1453,7 @@ function eventsHTML(){
 function evFormHTML(){
   const d = state.evDraft;
   return `<div class="ph"><h1>Nouvelle<br>soirée</h1><button class="textbtn" id="cancelEv">Annuler</button></div>
-    <p class="lead">Elle s'affichera dans tes soirées, sur cet appareil.</p>
+    <p class="lead">${DB ? "Elle sera visible par tout le monde." : "Elle s'affichera dans tes soirées, sur cet appareil."}</p>
     <form id="evForm" novalidate>
       <p class="glabel">Type de soirée</p>
       <div class="pick" id="evTypes">${Object.entries(EVT).map(([k, T]) => `<button type="button" class="pk" data-evt="${k}" style="--c:${T.color}" aria-pressed="${d.type === k}"><span class="emo">${T.e}</span>${T.label}</button>`).join("")}</div>
@@ -1339,8 +1482,17 @@ async function saveEv(){
   // si le lieu est déjà sur la carte, on reprend sa position
   const twin = allPlaces().find(p => norm(p.name) === norm(ev.venue));
   if (twin){ ev.lat = twin.lat; ev.lon = twin.lon; if (!ev.address) ev.address = twin.address || ""; }
+  if (DB){
+    try{
+      const [row] = await sb("events", {method:"POST", body:JSON.stringify({type:ev.type, title:ev.title, venue:ev.venue, address:ev.address, days:ev.days, date:ev.date || null, start_time:ev.time || "", price:ev.price, note:ev.note, lat:ev.lat ?? null, lon:ev.lon ?? null})});
+      const se = rowToEvent(row); state.sharedEvents.push(se);
+      state.evDraft = null; state.view = "events"; $("page").innerHTML = ""; render(); toast("Soirée ajoutée pour tout le monde 🎉");
+      if (se.lat == null && se.address){ const g = await geocode(se.address); if (g){ se.lat = g.lat; se.lon = g.lon; } }
+      return;
+    }catch{ toast("La base ne répond pas : soirée gardée sur ton téléphone"); }
+  }
   state.myEvents.push(ev); store.set("events", state.myEvents);
-  state.evDraft = null; state.view = "events"; $("page").innerHTML = ""; render(); toast("Soirée ajoutée");
+  state.evDraft = null; state.view = "events"; $("page").innerHTML = ""; render(); if (!DB) toast("Soirée ajoutée sur ce téléphone");
   if (ev.lat == null && ev.address){ const g = await geocode(ev.address); if (g){ ev.lat = g.lat; ev.lon = g.lon; store.set("events", state.myEvents); } }
 }
 async function showEventOnMap(id){
@@ -1405,10 +1557,9 @@ $("page").addEventListener("submit", e => { if (e.target.id === "evForm"){ e.pre
 $("where").addEventListener("click", () => go("list"));
 function setCenter(lat, lon, label, fit){
   state.center = {lat, lon}; state.centerLabel = label || "";
-  ring.setLatLng([lat, lon]);
   if (state.view === "detail") closeDetail(false);
-  if (fit !== false) fitCircle();
-  state.shown = 30; loadOSM();
+  if (fit !== false) fitCircle(); else autoLoad();
+  state.shown = 30;
 }
 
 /* ================= Position en temps réel ================= */
@@ -1421,10 +1572,7 @@ function onPos(pos){
     meAcc = L.circle(ll, {radius:state.me.acc, color:"#0a84ff", weight:0, fillOpacity:.1, interactive:false}).addTo(map);
   } else { meMarker.setLatLng(ll); meAcc.setLatLng(ll).setRadius(state.me.acc); }
   if (first){ setCenter(state.me.lat, state.me.lon, "", true); return; }
-  if (state.follow && state.view === "map"){
-    if (dist(state.center, state.me) > state.radius * 0.4) setCenter(state.me.lat, state.me.lon, "", false);
-    map.panTo(ll, {animate:true});
-  }
+  if (state.follow && state.view === "map"){ state.center = {lat:state.me.lat, lon:state.me.lon}; map.panTo(ll, {animate:true}); }
   if (state.view === "list") render();
 }
 let errShown = false;
@@ -1448,12 +1596,14 @@ $("locate").addEventListener("click", () => {
   if (state.centerLabel || (state.center && dist(state.center, state.me) > 300)) setCenter(state.me.lat, state.me.lon, "", true);
   else focusOn(state.me.lat, state.me.lon, 16);
 });
-addEventListener("resize", () => { syncAttr(); updateHere(); });
+addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Démarrage ================= */
 render();
 loadCurated();
 loadEvents();
+loadShared();
+autoLoad();
 startGPS();
 // les statuts « ouvert » et « ce soir » bougent avec l'heure
 setInterval(() => { if (!map._animatingZoom && ["map","list","fav","events"].includes(state.view)) render(); }, 120000);
