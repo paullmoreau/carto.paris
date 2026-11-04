@@ -531,6 +531,10 @@ body:not([data-view="map"]):not([data-view="detail"]) .pblur{display:none}
 #map:not(.z15) .mk:not(.sel) .st{display:block}
 #map:not(.z13) .mk .st{right:2px;top:2px}
 #map.z16 .mk.hasmulti .st{visibility:visible;right:calc(50% - var(--n) * 15.5px - 8px);top:-6px}
+
+.wk{display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
+.wk .walker{width:1.05em;height:1.05em;flex:none;margin-left:-2px}
+.prow .ds small.wk{display:flex;justify-content:flex-end}
 </style>
 </head>
 <body data-view="map">
@@ -641,7 +645,9 @@ function dist(a, b){
 }
 // temps de marche estimé depuis la position en direct
 const walkMin = p => state.me ? Math.max(1, Math.round(dist(state.me, p) * 1.3 / 80)) : 0;
-const walkTxt = p => { const m = walkMin(p); return m ? (m < 60 ? m + " min à pied" : Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " à pied") : ""; };
+const WALKER = '<svg class="walker" viewBox="0 0 24 24" fill="currentColor" aria-label="à pied"><circle cx="13.5" cy="3.6" r="2.1"/><path d="M10.6 7.2c.5-.4 1.2-.6 1.9-.5l1.5.2c.9.1 1.6.7 1.9 1.5l.8 2.3 2.2 1.1c.5.3.7.9.5 1.4-.3.5-.9.7-1.4.5l-2.6-1.3c-.3-.1-.5-.4-.6-.7l-.3-.9-.9 3.9 2.3 2.4c.2.2.3.4.3.7l.6 4.4c.1.6-.3 1.1-.9 1.2-.6.1-1.1-.3-1.2-.9l-.5-4.1-2.6-2.6-.9 3.1c-.1.2-.2.4-.3.5l-3 3.5c-.4.4-1 .5-1.5.1-.4-.4-.5-1-.1-1.5l2.8-3.3 1.8-7.4-1.3.6-1.2 2.6c-.2.5-.8.8-1.4.5-.5-.2-.8-.8-.5-1.4l1.4-3.1c.1-.2.3-.4.5-.5z"/></svg>';
+const walkDur = m => m < 60 ? m + " min" : Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0");
+const walkTxt = p => { const m = walkMin(p); return m ? `<span class="wk">${WALKER}${walkDur(m)}</span>` : ""; };
 const fmtD = m => m < 1000 ? Math.max(10, Math.round(m/10)*10)+" m" : (m/1000).toFixed(m < 10000 ? 1 : 0).replace(".",",")+" km";
 const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 async function fetchJSON(url, opts = {}, ms = 15000){
@@ -1074,7 +1080,7 @@ function rowHTML(p, d){
   const g = shownGames(p)[0] || p.games[0];
   return `<li><button class="prow" data-key="${p.key}"><span class="ava emo" style="--c:${CAT[g].color}">${ico(CAT[g])}${p.src === "mine" ? "<i></i>" : ""}</span>
     <span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(subOf(p))}</span>${statusHTML(p)}</span>
-    <span class="ds">${fmtD(d)}${walkMin(p) ? `<small>${walkMin(p) < 60 ? walkMin(p) + " min" : Math.floor(walkMin(p) / 60) + " h"} 🚶</small>` : ""}</span></button></li>`;
+    <span class="ds">${fmtD(d)}${walkMin(p) ? `<small class="wk">${WALKER}${walkDur(walkMin(p))}</small>` : ""}</span></button></li>`;
 }
 function listHTML(vis){
   const pool = inRadius();
@@ -1911,7 +1917,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611041845";
+const APP_VERSION = "202611041852";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
