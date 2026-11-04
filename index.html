@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-title" content="Carto">
@@ -460,6 +460,13 @@ body.launched .mk .b{animation:mkin .45s var(--ease) both}
 .pill .emo .i3d{width:20px;height:20px}
 .crosshair .i3d{width:46px;height:46px}
 #map:not(.z13) .mk:not(.sel) .b .i3d{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.3))}
+
+/* Plein écran iPhone : pas de zoom de la page (seulement la carte), hauteur totale jusqu'en bas */
+html{background:var(--map);height:100%;touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100%;min-height:100lvh;background:var(--map)}
+#map,.splash,.inst-bg,.sov{bottom:auto;height:100vh;height:100lvh}
+@media (max-width:899px){ .page{bottom:auto;height:100vh;height:100lvh} }
+.leaflet-container{touch-action:none}
 </style>
 </head>
 <body data-view="map">
@@ -1822,6 +1829,9 @@ $("locate").addEventListener("click", () => {
 });
 addEventListener("resize", () => { syncAttr(); });
 
+
+/* ================= Pas de zoom de la page (seulement la carte) ================= */
+["gesturestart","gesturechange","gestureend"].forEach(t => document.addEventListener(t, e => { if (!e.target.closest || !e.target.closest("#map")) e.preventDefault(); }, {passive:false}));
 
 /* ================= Lancement et installation ================= */
 (() => {
