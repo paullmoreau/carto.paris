@@ -27,7 +27,7 @@ PALETTES = {
     boundary="#6b7075"),
 }
 DROP_SOURCE_LAYERS = set()
-DROP_IDS = {"natural_earth", "building-3d", "poi_r7", "poi_r20", "highway-shield-non-us", "highway-shield-us-interstate", "road_shield_us", "boundary_disputed", "road_area_pattern"}
+DROP_IDS = {"natural_earth", "building-3d", "poi_r7", "poi_r20", "poi_r1", "poi_transit", "airport", "road_one_way_arrow", "road_one_way_arrow_opposite", "highway-shield-non-us", "highway-shield-us-interstate", "road_shield_us", "boundary_disputed", "road_area_pattern"}
 
 def recolor(src, P):
     s = copy.deepcopy(src)

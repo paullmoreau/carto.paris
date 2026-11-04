@@ -402,9 +402,9 @@ details.hrs[open] .chev{transform:rotate(90deg)}
 #map .mk .dotm{display:none!important}
 #map .mk .b{transition:transform .2s var(--ease)}
 #map:not(.z15) .mk:not(.sel) .st{display:none}
-#map:not(.z15) .mk:not(.sel) .b{transform:scale(.74)}
-#map:not(.z13) .mk:not(.sel) .b{background:none;box-shadow:none;transform:scale(.82);filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1.5px var(--halo))}
-#map:not(.z11) .mk:not(.sel) .b{transform:scale(.62)}
+#map:not(.z15) .mk:not(.sel) .b{transform:scale(.9)}
+#map:not(.z13) .mk:not(.sel) .b{background:none;box-shadow:none;transform:scale(1.12);filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1.5px var(--halo))}
+#map:not(.z11) .mk:not(.sel) .b{transform:scale(.98)}
 .mk.sel .b{transform:scale(1.35)}
 
 /* Filtres compacts : toutes les catégories sur un écran */
@@ -467,6 +467,18 @@ body{min-height:100%;min-height:100lvh;background:var(--map)}
 #map,.splash,.inst-bg,.sov{bottom:auto;height:100vh;height:100lvh}
 @media (max-width:899px){ .page{bottom:auto;height:100vh;height:100lvh} }
 .leaflet-container{touch-action:none}
+
+/* Marqueurs plus grands ; en zoomant, tous les jeux du lieu côte à côte */
+.mk{width:34px;height:34px}
+.mk .b{width:34px;height:34px;font-size:17px}
+.mk .lb{left:40px}
+.mk .multi{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:40px;padding:0 5px;gap:1px;align-items:center;border-radius:20px;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.22),0 0 0 1.5px var(--ring);white-space:nowrap}
+.mk .multi span{width:30px;height:30px;display:grid;place-items:center;font-size:18px}
+#map.z16 .mk.hasmulti .multi{display:flex}
+#map.z16 .mk.hasmulti .b,#map.z16 .mk.hasmulti .st{visibility:hidden}
+#map.z16 .mk.hasmulti .lb{left:calc(50% + var(--n) * 15.5px + 10px)}
+.mk.sel .multi{box-shadow:0 0 0 2.5px var(--black),0 6px 16px rgba(0,0,0,.25)}
+#map.z16 .mk.sel.hasmulti .b{transform:none}
 </style>
 </head>
 <body data-view="map">
@@ -748,8 +760,9 @@ function mkIcon(p, sel){
   const labelled = p.src !== "osm" || p.named;
   const os = ohState(p);
   const status = os && os.open ? "#34c759" : p.src === "mine" ? "#ffcc00" : "";
-  return L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
-    html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${ico(CAT[g])}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
+  const games = [g, ...p.games.filter(x => x !== g)], multi = games.length > 1;
+  return L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
+    html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}${multi ? " hasmulti" : ""}" style="--c:${CAT[g].color};--n:${games.length}"><i class="dotm"></i><div class="b emo">${ico(CAT[g])}</div>${multi ? `<div class="multi">${games.map(x => `<span>${ico(CAT[x])}</span>`).join("")}</div>` : ""}${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
 }
 // les tables de ping-pong et terrains de pétanque sans nom n'apparaissent que si on filtre ces jeux
 const onMap = p => p.src !== "osm" || p.named || p.games.some(g => state.active.has(g)) || state.selected === p.key;
@@ -1228,7 +1241,7 @@ async function confirmPosition(){
   d.lat = ll.lat; d.lon = ll.lng;
   const moved = !prev || dist(prev, {lat:ll.lat, lon:ll.lng}) > 25;
   $("crosshair").hidden = true; draftLayer.clearLayers();
-  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14], html:'<div class="mk sel"><div class="b emo"><img class="i3d" src="icons/pin.png" alt=""></div></div>'}), interactive:false}).addTo(draftLayer);
+  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17], html:'<div class="mk sel"><div class="b emo"><img class="i3d" src="icons/pin.png" alt=""></div></div>'}), interactive:false}).addTo(draftLayer);
   state.view = "form"; $("page").innerHTML = ""; render();
   setTimeout(() => { const el = d.name ? null : $("fName"); if (el) el.focus(); }, 420);
   if (moved && !(d.picked && dist(d.picked, {lat:ll.lat, lon:ll.lng}) < 25)){
@@ -1731,7 +1744,7 @@ async function showEventOnMap(id){
   go("map");
   const T = EVT[ev.type] || EVT.jeux;
   evLayer.clearLayers();
-  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
+  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
     html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${ico(T)}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
     .on("click", () => { const p = allPlaces().find(q => norm(q.name) === norm(ev.venue) || dist(q, ev) < 40); if (p) openDetail(p.key); }).addTo(evLayer);
   focusOn(ev.lat, ev.lon, 17);
