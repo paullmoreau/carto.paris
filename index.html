@@ -452,6 +452,14 @@ body.launched .mk .b{animation:mkin .45s var(--ease) both}
   .splash .splash-ico,.splash .splash-name,.splash .splash-tag{animation:fadein .5s ease both!important}
 }
 @keyframes fadein{from{opacity:0}}
+
+/* Icônes 3D */
+.i3d{width:1.2em;height:1.2em;display:block;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+.emo .i3d,.b .i3d{margin:auto}
+.mk .b .i3d{width:1.32em;height:1.32em}
+.pill .emo .i3d{width:20px;height:20px}
+.crosshair .i3d{width:46px;height:46px}
+#map:not(.z13) .mk:not(.sel) .b .i3d{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.3))}
 </style>
 </head>
 <body data-view="map">
@@ -474,7 +482,7 @@ body.launched .mk .b{animation:mkin .45s var(--ease) both}
   <ul class="sugg" id="qsugg"></ul>
 </div>
 
-<div class="crosshair emo" id="crosshair" hidden aria-hidden="true">📍</div>
+<div class="crosshair emo" id="crosshair" hidden aria-hidden="true"><img class="i3d" src="icons/pin.png" alt=""></div>
 
 <div class="bottom" id="bottom">
     <div class="pills" id="pills"></div>
@@ -505,22 +513,25 @@ body.launched .mk .b{animation:mkin .45s var(--ease) both}
 "use strict";
 /* ================= Jeux ================= */
 const CATS = [
-  {id:"billard",label:"Billard",e:"🎱",color:"#30d158",re:/billiard|snooker|carom|pool_table/i,name:/billard|snooker/i},
-  {id:"flechettes",label:"Fléchettes",e:"🎯",color:"#ff6961",re:/dart/i,name:/fl[ée]chette|\bdarts?\b/i},
-  {id:"babyfoot",label:"Baby-foot",e:"⚽",color:"#5ac8fa",re:/table_soccer|table_football|foosball|kicker|babyfoot|baby_foot/i,name:/baby[- ]?foot/i},
-  {id:"flipper",label:"Flipper",e:"🕹️",color:"#c79bff",re:/pinball|flipper/i,name:/flipper|pinball/i},
-  {id:"beerpong",label:"Beer-pong",e:"🍺",color:"#ffb340",re:/beer_?pong/i,name:/beer[- ]?pong/i},
-  {id:"societe",label:"Jeux de société",short:"Société",e:"🎲",color:"#ff8fab",re:/board_?game|boardgame|tabletop|club=board|club=games/i,name:/ludo|ludique|\bjeux\b|board ?game/i},
-  {id:"echecs",label:"Échecs",e:"♟️",color:"#c7c7cc",re:/chess/i,name:/[ée]checs|chess/i},
-  {id:"petanque",label:"Pétanque",e:"🔘",color:"#d9bf94",re:/boules|petanque|pétanque|bocce|sport=bowls/i,name:/p[ée]tanque|boulodrome/i},
-  {id:"pingpong",label:"Ping-pong",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
-  {id:"karaoke",label:"Karaoké",e:"🎤",color:"#ffd60a",re:/karaoke/i,name:/karaok/i},
-  {id:"quiz",label:"Quiz",e:"🧠",color:"#a5a3ff",re:/quiz|trivia/i,name:/quiz/i},
-  {id:"arcade",label:"Arcade",e:"👾",color:"#64d2ff",re:/amusement_arcade|arcade|video_?game|retrogaming/i,name:/arcade|retro ?gaming/i},
-  {id:"bowling",label:"Bowling",e:"🎳",color:"#ff9f80",re:/bowling|10pin|9pin/i,name:/bowling/i},
-  {id:"autres",label:"Escape & golf",short:"Escape",e:"⛳",color:"#b5e07a",re:/escape_game|escape_room|miniature_golf|minigolf|laser_?game|lasergame/i,name:/escape|mini[- ]?golf|laser ?game/i},
+  {id:"billard",i:"icons/billard.png",label:"Billard",e:"🎱",color:"#30d158",re:/billiard|snooker|carom|pool_table/i,name:/billard|snooker/i},
+  {id:"flechettes",i:"icons/flechettes.png",label:"Fléchettes",e:"🎯",color:"#ff6961",re:/dart/i,name:/fl[ée]chette|\bdarts?\b/i},
+  {id:"babyfoot",i:"icons/babyfoot.png",label:"Baby-foot",e:"⚽",color:"#5ac8fa",re:/table_soccer|table_football|foosball|kicker|babyfoot|baby_foot/i,name:/baby[- ]?foot/i},
+  {id:"flipper",i:"icons/flipper.png",label:"Flipper",e:"🕹️",color:"#c79bff",re:/pinball|flipper/i,name:/flipper|pinball/i},
+  {id:"beerpong",i:"icons/beerpong.png",label:"Beer-pong",e:"🍺",color:"#ffb340",re:/beer_?pong/i,name:/beer[- ]?pong/i},
+  {id:"societe",i:"icons/societe.png",label:"Jeux de société",short:"Société",e:"🎲",color:"#ff8fab",re:/board_?game|boardgame|tabletop|club=board|club=games/i,name:/ludo|ludique|\bjeux\b|board ?game/i},
+  {id:"echecs",i:"icons/echecs.png",label:"Échecs",e:"♟️",color:"#c7c7cc",re:/chess/i,name:/[ée]checs|chess/i},
+  {id:"petanque",i:"icons/petanque.png",label:"Pétanque",e:"🔘",color:"#d9bf94",re:/boules|petanque|pétanque|bocce|sport=bowls/i,name:/p[ée]tanque|boulodrome/i},
+  {id:"pingpong",i:"icons/pingpong.png",label:"Ping-pong",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
+  {id:"karaoke",i:"icons/karaoke.png",label:"Karaoké",e:"🎤",color:"#ffd60a",re:/karaoke/i,name:/karaok/i},
+  {id:"quiz",i:"icons/quiz.png",label:"Quiz",e:"🧠",color:"#a5a3ff",re:/quiz|trivia/i,name:/quiz/i},
+  {id:"arcade",i:"icons/arcade.png",label:"Arcade",e:"👾",color:"#64d2ff",re:/amusement_arcade|arcade|video_?game|retrogaming/i,name:/arcade|retro ?gaming/i},
+  {id:"bowling",i:"icons/bowling.png",label:"Bowling",e:"🎳",color:"#ff9f80",re:/bowling|10pin|9pin/i,name:/bowling/i},
+  {id:"autres",i:"icons/autres.png",label:"Escape & golf",short:"Escape",e:"⛳",color:"#b5e07a",re:/escape_game|escape_room|miniature_golf|minigolf|laser_?game|lasergame/i,name:/escape|mini[- ]?golf|laser ?game/i},
 ];
 const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
+// icône 3D (image) avec repli sur l'emoji ; elle prend la taille de la police du conteneur
+const ico = o => o && o.i ? `<img class="i3d" src="${o.i}" alt="" draggable="false">` : (o ? o.e : "");
+const ICO3D = n => `<img class="i3d" src="icons/${n}.png" alt="" draggable="false">`;
 const S = i => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${i}</svg>`;
 const ICON = {
   close:S('<path d="M6 6l12 12M18 6L6 18"/>'),
@@ -731,7 +742,7 @@ function mkIcon(p, sel){
   const os = ohState(p);
   const status = os && os.open ? "#34c759" : p.src === "mine" ? "#ffcc00" : "";
   return L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
-    html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${CAT[g].e}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
+    html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${ico(CAT[g])}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
 }
 // les tables de ping-pong et terrains de pétanque sans nom n'apparaissent que si on filtre ces jeux
 const onMap = p => p.src !== "osm" || p.named || p.games.some(g => state.active.has(g)) || state.selected === p.key;
@@ -767,13 +778,13 @@ function renderBottom(){
   const order = [...CATS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
   const cats = $("cats");
   cats.classList.toggle("filtering", state.active.size > 0);
-  cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">✨</span><span class="lbl">Tout</span></button>` +
-    order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${c.e}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.short || c.label}</span></button>`).join("");
+  cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">${ICO3D("tout")}</span><span class="lbl">Tout</span></button>` +
+    order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${ico(c)}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.short || c.label}</span></button>`).join("");
   const n = pool.filter(p => onMap(p) && shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).length;
   const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
   $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
     ${canInstall() ? `<button class="pill glass" id="instPill" type="button"><span class="emo">📲</span>Installer l'app</button>` : ""}
-    ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">🎉</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
+    ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">${ICO3D("fete")}</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
   const w = $("where");
   w.innerHTML = state.loading ? `<span class="spin"></span>Recherche…` : esc(state.me && !state.centerLabel ? "Autour de toi" : state.centerLabel ? state.centerLabel : "Paris") + ` · ${n}`;
 }
@@ -892,7 +903,7 @@ function detailHTML(p){
       <div class="pc-title"><h2>${esc(p.name)}</h2><p class="pc-sub">${sub}</p></div>
       <div class="card-acts"><button class="ibtn" id="editBtn" aria-label="Corriger ce lieu">${ICON.edit}</button><button class="ibtn" id="closeCard" aria-label="Fermer">${ICON.close}</button></div>
     </div>
-    <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${CAT[g].e}</span>${CAT[g].label}</span>`).join("")}</div>
+    <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${ico(CAT[g])}</span>${CAT[g].label}</span>`).join("")}</div>
     <div class="acts5">
       <a class="act primary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + (p.address ? ", " + p.address : ""))}" target="_blank" rel="noopener">${ICON.route}<span>${walk ? "Y aller · " + walk + " min" : "Y aller"}</span></a>
       ${p.phone ? `<a class="act" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">${ICON.phone}<span>Appeler</span></a>` : ""}
@@ -901,7 +912,7 @@ function detailHTML(p){
       ${site ? `<a class="act" href="${esc(site)}" target="_blank" rel="noopener">${ICON.web}<span>Site</span></a>` : ""}
     </div>
     ${rows ? `<div class="ilist">${rows}</div>` : ""}
-    ${evs.length ? `<p class="glabel">Soirées ici</p><div class="here-evs">${evs.map(ev => { const T = EVT[ev.type] || EVT.jeux, rel = relDay(nextOcc(ev)); return `<button data-evgo="${ev.id}"><span class="emo">${T.e}</span><span><b>${esc(ev.title)}</b><small>${esc(whenLabel(ev))}${rel ? " · " + rel.toLowerCase() : ""}</small></span></button>`; }).join("")}</div>` : ""}
+    ${evs.length ? `<p class="glabel">Soirées ici</p><div class="here-evs">${evs.map(ev => { const T = EVT[ev.type] || EVT.jeux, rel = relDay(nextOcc(ev)); return `<button data-evgo="${ev.id}"><span class="emo">${ico(T)}</span><span><b>${esc(ev.title)}</b><small>${esc(whenLabel(ev))}${rel ? " · " + rel.toLowerCase() : ""}</small></span></button>`; }).join("")}</div>` : ""}
     ${p.src === "mine" ? `<div class="ilist"><button class="irow danger" id="delBtn"><span class="ik">${ICON.trash}</span><span class="iv">Supprimer ce lieu</span></button></div>` : ""}
     <p class="src">${src}</p>`;
 }
@@ -978,7 +989,7 @@ function deleteMine(key, btn){
 /* ================= Pages ================= */
 function rowHTML(p, d){
   const g = shownGames(p)[0] || p.games[0];
-  return `<li><button class="prow" data-key="${p.key}"><span class="ava emo" style="--c:${CAT[g].color}">${CAT[g].e}${p.src === "mine" ? "<i></i>" : ""}</span>
+  return `<li><button class="prow" data-key="${p.key}"><span class="ava emo" style="--c:${CAT[g].color}">${ico(CAT[g])}${p.src === "mine" ? "<i></i>" : ""}</span>
     <span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(subOf(p))}</span>${statusHTML(p)}</span>
     <span class="ds">${fmtD(d)}</span></button></li>`;
 }
@@ -991,7 +1002,7 @@ function listHTML(vis){
       <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>du plus proche au plus loin</div></div>
     <p class="lead"><span class="dot${state.me ? " on" : ""}"></span>${state.me ? "Position en direct" : "Position non partagée"}${state.loading ? ' · <span class="spin"></span> recherche…' : ""}</p>`;
   if (state.error) h += `<div class="err-line">Les serveurs OpenStreetMap ne répondent pas.<button id="retry">Réessayer</button></div>`;
-  if (cats.length) h += `<div class="fgrid">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="fi emo">${c.e}</span><span class="ft"><b>${c.short || c.label}</b><small>${counts[c.id]}</small></span></button>`).join("")}</div>`;
+  if (cats.length) h += `<div class="fgrid">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="fi emo">${ico(c)}</span><span class="ft"><b>${c.short || c.label}</b><small>${counts[c.id]}</small></span></button>`).join("")}</div>`;
   h += `<div class="sec">${state.active.size ? "Pour tes jeux" : "Les plus proches"}${state.active.size ? `<small><button class="textbtn" id="clearF" style="height:30px">Tout voir</button></small>` : ""}</div>`;
   if (!n) h += `<div class="empty"><span class="emo">🔍</span><b>${state.loading ? "Recherche en cours…" : "Rien par ici"}</b>${state.loading ? "" : "Agrandis le rayon ou ajoute un lieu que tu connais."}</div>`;
   else {
@@ -1060,7 +1071,7 @@ function searchHTML(){
       <input id="ps" type="search" placeholder="Le Bar des Amis, Paris 11e…" autocomplete="off" enterkeyhint="search">
       <button type="button" id="psClear" aria-label="Effacer" hidden>${ICON.close}</button></div>
     <ul class="sugg" id="sugg" aria-live="polite"></ul>
-    <button type="button" class="manual" id="manual"><span class="emo">📍</span><span><b>Placer le lieu à la main</b><small>S'il n'apparaît pas dans les résultats</small></span></button>`;
+    <button type="button" class="manual" id="manual"><span class="emo">${ICO3D("pin")}</span><span><b>Placer le lieu à la main</b><small>S'il n'apparaît pas dans les résultats</small></span></button>`;
 }
 function renderSugg(status){
   const ul = $("sugg"); if (!ul) return;
@@ -1131,7 +1142,7 @@ function goPlace(lat, lon){
 function placeHTML(){
   const d = state.draft || {};
   const known = !!d.picked;
-  return `<div class="card-top"><div class="stack"><span class="emo" style="--c:#ffd60a">📍</span></div>
+  return `<div class="card-top"><div class="stack"><span class="emo" style="--c:#ffd60a">${ICO3D("pin")}</span></div>
       <div class="card-acts"><button class="ibtn" id="${known ? "backSearch" : "cancelAdd"}" aria-label="${known ? "Retour à la recherche" : "Annuler"}">${known ? ICON.back : ICON.close}</button></div></div>
     <h2>${known ? "C'est bien ici ?" : "Où est ce lieu ?"}</h2>
     <div class="kind">${known ? `<b style="color:var(--ink)">${esc(d.name || "Adresse choisie")}</b>${d.address ? "<br>" + esc(d.address) : ""}<br><span style="font-size:14px">Fais glisser la carte si le repère n'est pas pile dessus.</span>` : "Fais glisser la carte pour mettre le repère dessus."}</div>
@@ -1142,7 +1153,7 @@ function formHTML(){
   return `<div class="ph"><h1>Nouveau<br>lieu</h1><button class="textbtn" id="cancelForm">Annuler</button></div>
     <div id="autoLine">${autoLine()}</div>
     <form id="addForm" novalidate>
-      <div class="pos"><span class="emo">📍</span><span style="flex:1;min-width:0"><span id="addrPreview">${d.address ? esc(d.address) : "Position choisie sur la carte"}</span><small>Repère placé sur la carte</small></span><button type="button" class="textbtn" id="movePos">Modifier</button></div>
+      <div class="pos"><span class="emo">${ICO3D("pin")}</span><span style="flex:1;min-width:0"><span id="addrPreview">${d.address ? esc(d.address) : "Position choisie sur la carte"}</span><small>Repère placé sur la carte</small></span><button type="button" class="textbtn" id="movePos">Modifier</button></div>
       <p class="glabel" id="lGames">On y joue à</p>
       <div class="pick" role="group" aria-labelledby="lGames" id="fGames">${pickHTML()}</div>
       <p class="ferr" id="eGames" hidden style="margin-top:4px">Choisis au moins un jeu.</p>
@@ -1161,7 +1172,7 @@ function formHTML(){
 }
 function pickHTML(){
   const d = state.draft, auto = (d.auto && d.auto.games) || [];
-  return CATS.map(c => `<button type="button" class="pk" data-id="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${c.e}</span>${c.label}${auto.includes(c.id) ? '<span class="sp" title="Indiqué sur OpenStreetMap">✨</span>' : ""}</button>`).join("");
+  return CATS.map(c => `<button type="button" class="pk" data-id="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${ico(c)}</span>${c.label}${auto.includes(c.id) ? '<span class="sp" title="Indiqué sur OpenStreetMap">✨</span>' : ""}</button>`).join("");
 }
 function autoLine(){
   const d = state.draft;
@@ -1169,9 +1180,9 @@ function autoLine(){
   if (d.enriching) return `<p class="auto"><span class="spin"></span>Recherche des infos du lieu…</p>`;
   if (d.auto){
     const got = [d.auto.hours && "horaires", d.auto.phone && "téléphone", d.auto.website && "site web", d.auto.games.length && "jeux"].filter(Boolean);
-    return `<p class="auto"><span class="emo">✨</span>${got.length ? `Adresse${got.length ? ", " + got.join(", ") : ""} remplis automatiquement. Vérifie-les, puis coche les jeux.` : "Adresse remplie automatiquement. Ce lieu n'a pas encore d'horaires connus : ajoute-les si tu les as."}</p>`;
+    return `<p class="auto"><span class="emo">${ICO3D("tout")}</span>${got.length ? `Adresse${got.length ? ", " + got.join(", ") : ""} remplis automatiquement. Vérifie-les, puis coche les jeux.` : "Adresse remplie automatiquement. Ce lieu n'a pas encore d'horaires connus : ajoute-les si tu les as."}</p>`;
   }
-  return `<p class="auto"><span class="emo">✨</span>Adresse remplie automatiquement. Ajoute les horaires si tu les connais, puis coche les jeux.</p>`;
+  return `<p class="auto"><span class="emo">${ICO3D("tout")}</span>Adresse remplie automatiquement. Ajoute les horaires si tu les connais, puis coche les jeux.</p>`;
 }
 function fillForm(){
   const d = state.draft; if (!d || !$("addForm")) return;
@@ -1210,7 +1221,7 @@ async function confirmPosition(){
   d.lat = ll.lat; d.lon = ll.lng;
   const moved = !prev || dist(prev, {lat:ll.lat, lon:ll.lng}) > 25;
   $("crosshair").hidden = true; draftLayer.clearLayers();
-  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
+  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14], html:'<div class="mk sel"><div class="b emo"><img class="i3d" src="icons/pin.png" alt=""></div></div>'}), interactive:false}).addTo(draftLayer);
   state.view = "form"; $("page").innerHTML = ""; render();
   setTimeout(() => { const el = d.name ? null : $("fName"); if (el) el.focus(); }, 420);
   if (moved && !(d.picked && dist(d.picked, {lat:ll.lat, lon:ll.lng}) < 25)){
@@ -1402,7 +1413,7 @@ function editHTML(){
     <p class="lead">Les corrections s'appliquent ${DB ? "pour tout le monde" : "sur cet appareil (base pas encore branchée)"}.</p>
     <form id="editForm" novalidate>
       <p class="glabel" id="lEGames">On y joue à</p>
-      <div class="pick" role="group" aria-labelledby="lEGames">${CATS.map(c => `<button type="button" class="pk" data-eg="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${c.e}</span>${c.label}</button>`).join("")}</div>
+      <div class="pick" role="group" aria-labelledby="lEGames">${CATS.map(c => `<button type="button" class="pk" data-eg="${c.id}" style="--c:${c.color}" aria-pressed="${d.games.includes(c.id)}"><span class="emo">${ico(c)}</span>${c.label}</button>`).join("")}</div>
       <div class="group" style="margin-top:16px">
         <label class="f"><span class="k">Nom</span><input type="text" id="xName" maxlength="80" value="${esc(d.name)}"></label>
         <label class="f"><span class="k">Type de lieu</span><input type="text" id="xKind" maxlength="60" value="${esc(d.kind)}" placeholder="Bar, pub, café…"></label>
@@ -1545,7 +1556,7 @@ function renderQ(status){
   const ul = $("qsugg"), r = ref(), v = $("q").value.trim();
   if (!v){ ul.innerHTML = `<li class="sg-info">Cherche une ville, un quartier, une adresse ou un bar.</li>`; return; }
   let h = "";
-  if (qLocal.length) h += `<li class="sg-h">Sur ta carte</li>` + qLocal.map(p => { const g = p.games[0]; return `<li><button type="button" class="sg" data-k="${p.key}"><span class="ava emo" style="background:${CAT[g].color}">${CAT[g].e}</span><span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(p.address || p.kind)}</span></span><span class="ds">${fmtD(dist(r, p))}</span></button></li>`; }).join("");
+  if (qLocal.length) h += `<li class="sg-h">Sur ta carte</li>` + qLocal.map(p => { const g = p.games[0]; return `<li><button type="button" class="sg" data-k="${p.key}"><span class="ava emo" style="background:${CAT[g].color}">${ico(CAT[g])}</span><span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(p.address || p.kind)}</span></span><span class="ds">${fmtD(dist(r, p))}</span></button></li>`; }).join("");
   if (status === "loading" && !qList.length) h += `<li class="sg-info"><span class="spin"></span>Recherche…</li>`;
   else if (status === "error") h += `<li class="sg-info">La recherche ne répond pas pour l'instant.</li>`;
   else if (qList.length){
@@ -1593,10 +1604,10 @@ $("qsugg").addEventListener("click", e => {
 
 /* ================= Soirées ================= */
 const EVT = {
-  quiz:{label:"Quiz", e:"🧠", color:"#a5a3ff"}, blindtest:{label:"Blind test", e:"🎧", color:"#64d2ff"},
-  karaoke:{label:"Karaoké", e:"🎤", color:"#ffd60a"}, jam:{label:"Jam musicale", e:"🎷", color:"#ffb340"},
-  echecs:{label:"Échecs", e:"♟️", color:"#c7c7cc"}, tournoi:{label:"Tournoi", e:"🏆", color:"#7ee08a"},
-  theme:{label:"Soirée à thème", e:"🪩", color:"#ff8fab"}, jeux:{label:"Jeux", e:"🎲", color:"#ff9f80"},
+  quiz:{i:"icons/quiz.png",label:"Quiz", e:"🧠", color:"#a5a3ff"}, blindtest:{i:"icons/ev-blindtest.png",label:"Blind test", e:"🎧", color:"#64d2ff"},
+  karaoke:{i:"icons/karaoke.png",label:"Karaoké", e:"🎤", color:"#ffd60a"}, jam:{i:"icons/ev-jam.png",label:"Jam musicale", e:"🎷", color:"#ffb340"},
+  echecs:{i:"icons/echecs.png",label:"Échecs", e:"♟️", color:"#c7c7cc"}, tournoi:{i:"icons/ev-tournoi.png",label:"Tournoi", e:"🏆", color:"#7ee08a"},
+  theme:{i:"icons/ev-theme.png",label:"Soirée à thème", e:"🪩", color:"#ff8fab"}, jeux:{i:"icons/societe.png",label:"Jeux", e:"🎲", color:"#ff9f80"},
 };
 const DAY_S = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
 const DAY_P = ["dimanches","lundis","mardis","mercredis","jeudis","vendredis","samedis"];
@@ -1624,7 +1635,7 @@ function whenLabel(ev){
   if (ev.date){ const d = new Date(ev.date + "T00:00:00"); return d.toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}) + time; }
   if (ev.freq === "monthly") return "Un " + DAY_FR[ev.days[0]] + " par mois" + time;
   if (ev.freq === "first") return "Le premier " + DAY_FR[ev.days[0]] + " du mois" + time;
-  const ds = ev.days.length === 7 ? "Tous les soirs" : ev.days.length > 3 ? "Du " + DAY_FR[ev.days[0]] + " au " + DAY_FR[ev.days[ev.days.length - 1]] : "Tous les " + ev.days.map(d => DAY_P[d]).join(" et ");
+  const ds = ev.days.length === 7 ? "Tous les soirs" : ev.days.length > 3 ? "Du " + DAY_FR[ev.days[0]] + " au " + DAY_FR[ev.days[ev.days.length - 1]] : "Tous les " + ev.days.map(d => DAY_P[d]).join(", ").replace(/, ([^,]+)$/, " et $1");
   return ds + time;
 }
 function relDay(d){
@@ -1635,7 +1646,7 @@ function relDay(d){
 function evCard(ev){
   const T = EVT[ev.type] || EVT.jeux, occ = nextOcc(ev), rel = relDay(occ);
   return `<article class="ev" style="--c:${T.color}">
-    <div class="ev-top"><span class="ev-emo emo">${T.e}</span><span class="ev-type">${T.label}</span>${rel ? `<span class="ev-when${rel === "Ce soir" ? " now" : ""}">${rel}</span>` : ""}</div>
+    <div class="ev-top"><span class="ev-emo emo">${ico(T)}</span><span class="ev-type">${T.label}</span>${rel ? `<span class="ev-when${rel === "Ce soir" ? " now" : ""}">${rel}</span>` : ""}</div>
     <h3>${esc(ev.title)}</h3>
     <p class="ev-venue">${esc(ev.venue)}<span>${esc((ev.address || "").replace(/, \d{5} Paris$/, "").replace(/^(.*), (\d{5}) Paris$/, "$1"))}</span></p>
     <div class="tiles">${`<span class="tile">${ICON.clock}${esc(whenLabel(ev))}</span>`}${ev.price ? `<span class="tile">${esc(ev.price)}</span>` : ""}</div>
@@ -1656,7 +1667,7 @@ function eventsHTML(){
   let h = `<div class="ph"><h1>Soirées</h1><button class="textbtn" id="addEv">+ Ajouter</button></div>
     <p class="lead">Quiz, karaoké, jams et tournois qui reviennent chaque semaine.</p>
     <div class="dchips">${[["all","Tout"]].concat(days.map((d, k) => [k, k === 0 ? "Ce soir" : k === 1 ? "Demain" : DAY_S[d.getDay()] + " " + d.getDate()])).map(([k, l]) => `<button data-day="${k}" aria-pressed="${String(state.evDay) === String(k)}">${l}</button>`).join("")}</div>
-    <div class="tchips">${types.map(t => `<button data-type="${t}" aria-pressed="${state.evTypes.has(t)}" style="--c:${EVT[t].color}"><span class="emo">${EVT[t].e}</span>${EVT[t].label}</button>`).join("")}</div>`;
+    <div class="tchips">${types.map(t => `<button data-type="${t}" aria-pressed="${state.evTypes.has(t)}" style="--c:${EVT[t].color}"><span class="emo">${ico(EVT[t])}</span>${EVT[t].label}</button>`).join("")}</div>`;
   if (!list.length) h += `<div class="empty"><span class="emo">🌙</span><b>Rien de prévu ce jour-là</b>Choisis un autre jour ou ajoute une soirée que tu connais.</div>`;
   else h += `<div class="evs">${list.map(({ev}) => evCard(ev)).join("")}</div>`;
   h += `<p class="note">Soirées relevées dans des guides et sur les sites des bars : elles peuvent changer ou faire une pause l'été. Vérifie avant d'y aller.</p>`;
@@ -1668,7 +1679,7 @@ function evFormHTML(){
     <p class="lead">${DB ? "Elle sera visible par tout le monde." : "Elle s'affichera dans tes soirées, sur cet appareil."}</p>
     <form id="evForm" novalidate>
       <p class="glabel">Type de soirée</p>
-      <div class="pick" id="evTypes">${Object.entries(EVT).map(([k, T]) => `<button type="button" class="pk" data-evt="${k}" style="--c:${T.color}" aria-pressed="${d.type === k}"><span class="emo">${T.e}</span>${T.label}</button>`).join("")}</div>
+      <div class="pick" id="evTypes">${Object.entries(EVT).map(([k, T]) => `<button type="button" class="pk" data-evt="${k}" style="--c:${T.color}" aria-pressed="${d.type === k}"><span class="emo">${ico(T)}</span>${T.label}</button>`).join("")}</div>
       <div class="group" style="margin-top:16px">
         <label class="f"><span class="k">Nom de la soirée</span><input type="text" id="eTitle" maxlength="80" placeholder="Quiz musical du mardi" value="${esc(d.title)}"></label>
         <label class="f"><span class="k">Lieu</span><input type="text" id="eVenue" maxlength="80" placeholder="Le Bar des Amis" value="${esc(d.venue)}"></label>
@@ -1714,7 +1725,7 @@ async function showEventOnMap(id){
   const T = EVT[ev.type] || EVT.jeux;
   evLayer.clearLayers();
   L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
-    html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${T.e}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
+    html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${ico(T)}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
     .on("click", () => { const p = allPlaces().find(q => norm(q.name) === norm(ev.venue) || dist(q, ev) < 40); if (p) openDetail(p.key); }).addTo(evLayer);
   focusOn(ev.lat, ev.lon, 17);
 }
