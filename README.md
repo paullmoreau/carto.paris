@@ -12,6 +12,6 @@ Pour ajouter un lieu à la sélection pour tout le monde : ajoute une entrée da
 
 ## Carte
 
-Fond de carte vectoriel maison « Tournée » (`map-style.json`) sur les tuiles gratuites [OpenFreeMap](https://openfreemap.org), affiché avec MapLibre. Pour changer les couleurs : modifier le dictionnaire `P` dans `tools/genstyle.py` puis régénérer le style. Si le téléphone ne gère pas WebGL, la carte bascule automatiquement sur CARTO Positron.
+Thème sombre jaune et chrome. Fond de carte vectoriel maison « Tournée » (palette sombre) (`map-style.json`) sur les tuiles gratuites [OpenFreeMap](https://openfreemap.org), affiché avec MapLibre. Pour changer les couleurs : modifier le dictionnaire `P` dans `tools/genstyle.py` puis régénérer le style. Si le téléphone ne gère pas WebGL, la carte bascule automatiquement sur CARTO Positron.
 
 Données © OpenStreetMap, © OpenMapTiles, géocodage Géoplateforme IGN.

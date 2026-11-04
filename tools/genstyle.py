@@ -1,7 +1,7 @@
 # Génère map-style.json (style « Tournée ») à partir du style Positron d'OpenFreeMap :
 #   git clone https://github.com/hyperknot/openfreemap-styles
 #   python3 tools/genstyle.py openfreemap-styles/styles/positron/style.json map-style.json
-# Les couleurs se règlent dans le dictionnaire P ci-dessous.
+# Les couleurs se règlent dans PALETTES ci-dessous (3e argument : sombre ou clair, sombre par défaut).
 import json, sys, copy
 src, out = sys.argv[1], sys.argv[2]
 s = json.load(open(src))
@@ -9,11 +9,20 @@ txt = json.dumps(s).replace("__TILEJSON_DOMAIN__", "tiles.openfreemap.org")
 s = json.loads(txt)
 s["name"] = "Tournée Générale"
 s["sources"].pop("ne2_shaded", None)
-P = dict(
+PALETTES = {
+ "clair": dict(
   land="#f5f3ee", park="#dbead3", wood="#d4e6cb", water="#c6dee8", resid="#eeebe4",
   building="#e8e4db", building_line="#ddd7cc", path="#e0dace", road="#ffffff", casing="#e3ded3",
   motor="#fbf1dc", motor_casing="#ead9b8", rail="#d5d0c4", aero="#ebe8e1",
-  label="#3f4843", label_halo="#f5f3ee", street="#737a74", water_label="#4f8aa1", boundary="#c8c2d4")
+  label="#3f4843", label_halo="#f5f3ee", street="#737a74", water_label="#4f8aa1", boundary="#c8c2d4"),
+ # Sombre « chrome » : asphalte presque noir, rues gris acier, grands axes teintés de jaune
+ "sombre": dict(
+  land="#121417", park="#16201a", wood="#17221b", water="#0b1620", resid="#15171a",
+  building="#1c1f23", building_line="#24282d", path="#262a2f", road="#2c3137", casing="#16191c",
+  motor="#5a4a10", motor_casing="#2a230a", rail="#30353b", aero="#1a1d21",
+  label="#d5d9dd", label_halo="#121417", street="#8f959c", water_label="#6d93ab", boundary="#5b6068"),
+}
+P = PALETTES[sys.argv[3] if len(sys.argv) > 3 else "sombre"]
 drop = {"highway-shield-non-us","highway-shield-us-interstate","road_shield_us","boundary_disputed"}
 layers = []
 for l in s["layers"]:
