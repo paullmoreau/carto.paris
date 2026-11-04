@@ -17,7 +17,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <style>
 /* Esprit iOS / Bump / Snap Map : carte claire et colorée plein écran, marqueurs emoji avec nom,
@@ -392,6 +391,17 @@ details.hrs[open] .chev{transform:rotate(90deg)}
 .src{margin:4px 4px 0}
 /* fiche : marqueurs et étiquettes lisibles en sombre */
 .mk .b,.cl{background:var(--card)}
+
+/* Marqueurs : petits points en vue large, bulles emoji en zoomant */
+.mk{width:28px;height:28px}
+.mk .b{width:28px;height:28px;font-size:15px;box-shadow:0 1px 4px rgba(0,0,0,.2),0 0 0 1.5px var(--ring)}
+.mk .st{width:9px;height:9px;right:-1px;top:-1px;border-width:1.5px}
+.mk .lb{left:33px}
+.mk .dotm{left:9px;top:9px;width:10px;height:10px;border-width:1.5px;display:none}
+#map:not(.z15) .mk:not(.sel) .b,#map:not(.z15) .mk:not(.sel) .st{display:none}
+#map:not(.z15) .mk:not(.sel) .dotm{display:block}
+#map:not(.z13) .mk:not(.sel) .dotm{left:10px;top:10px;width:8px;height:8px;border-width:1px}
+.mk.sel .b{transform:scale(1.35)}
 </style>
 </head>
 <body data-view="map">
@@ -431,7 +441,6 @@ details.hrs[open] .chev{transform:rotate(90deg)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script>
 (() => {
 "use strict";
@@ -619,17 +628,13 @@ function initBase(){
 initBase();
 darkMQ.addEventListener && darkMQ.addEventListener("change", initBase);
 
-const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:64, disableClusteringAtZoom:18, spiderfyOnMaxZoom:true, chunkedLoading:true,
-  iconCreateFunction:c => {
-    const seen = []; for (const m of c.getAllChildMarkers()){ const g = m.options.g; if (g && !seen.includes(g)) seen.push(g); if (seen.length === 2) break; }
-    return L.divIcon({className:"", iconSize:[0,0], html:`<div class="cl">${seen.map(g => `<span class="emo" style="--c:${CAT[g].color}">${CAT[g].e}</span>`).join("")}<b>${c.getChildCount()}</b></div>`});
-  }});
-map.addLayer(cluster);
+// chaque lieu à sa position exacte, sans regroupement
+const cluster = L.layerGroup().addTo(map);
 let meMarker = null, meAcc = null;
 const markers = new Map();
 const draftLayer = L.layerGroup().addTo(map);
 // noms à partir du zoom 15 ; les terrains sans nom restent de petites pastilles jusqu'au zoom 16
-const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 16); c.classList.toggle("z16", z >= 16); };
+const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 16); c.classList.toggle("z13", z >= 13); c.classList.toggle("z15", z >= 15); c.classList.toggle("z16", z >= 16); };
 map.on("zoomend", labelsOn); labelsOn();
 
 /* ================= Données ================= */
@@ -663,7 +668,7 @@ function mkIcon(p, sel){
   const labelled = p.src !== "osm" || p.named;
   const os = ohState(p);
   const status = os && os.open ? "#34c759" : p.src === "mine" ? "#ffcc00" : "";
-  return L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
+  return L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
     html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${CAT[g].e}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
 }
 // les tables de ping-pong et terrains de pétanque sans nom n'apparaissent que si on filtre ces jeux
@@ -673,7 +678,7 @@ function renderMarkers(vis){
   for (const {p} of vis) if (onMap(p)) want.set(p.key, p);
   const rm = [];
   for (const [k, m] of markers) if (!want.has(k)){ rm.push(m); markers.delete(k); }
-  if (rm.length) cluster.removeLayers(rm);
+  rm.forEach(m => cluster.removeLayer(m));
   const add = []; let regroup = false;
   for (const [k, p] of want){
     const sel = state.selected === k, g = shownGames(p)[0] || p.games[0], os = ohState(p);
@@ -690,8 +695,7 @@ function renderMarkers(vis){
     m._sig = sig;
     if (!!m._sel !== sel){ m.setZIndexOffset(sel ? 1500 : 0); m._sel = sel; }
   }
-  if (add.length) cluster.addLayers(add);
-  if (regroup) cluster.refreshClusters();
+  add.forEach(m => cluster.addLayer(m));
 }
 
 /* ================= Bas de l'écran ================= */
@@ -826,7 +830,7 @@ function detailHTML(p){
     </div>
     <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${CAT[g].e}</span>${CAT[g].label}</span>`).join("")}</div>
     <div class="acts5">
-      <a class="act primary" href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}&travelmode=walking" target="_blank" rel="noopener">${ICON.walk}<span>${walk ? walk + " min" : "Y aller"}</span></a>
+      <a class="act primary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + (p.address ? ", " + p.address : ""))}" target="_blank" rel="noopener">${ICON.route}<span>${walk ? "Y aller · " + walk + " min" : "Y aller"}</span></a>
       ${p.phone ? `<a class="act" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">${ICON.phone}<span>Appeler</span></a>` : ""}
       <button class="act${fav ? " on" : ""}" id="favBtn" aria-pressed="${fav}">${fav ? ICON.heartFill : ICON.heart}<span>${fav ? "Favori" : "Garder"}</span></button>
       <button class="act" id="shareBtn">${ICON.share}<span>Partager</span></button>
@@ -867,8 +871,7 @@ function openDetail(key){
   [prev, key].forEach(k => { const m = markers.get(k), q = k && findPlace(k); if (m && q){ m.setIcon(mkIcon(q, k === key)); m.setZIndexOffset(k === key ? 1500 : 0); } });
   const m = markers.get(key);
   const doFocus = () => focusOn(p.lat, p.lon);
-  if (m && !map.hasLayer(m)) cluster.zoomToShowLayer(m, () => requestAnimationFrame(doFocus));
-  else requestAnimationFrame(doFocus);
+  requestAnimationFrame(doFocus);
   syncAttr();
   setTimeout(() => $("closeCard") && $("closeCard").focus({preventScroll:true}), 350);
 }
@@ -1146,7 +1149,7 @@ async function confirmPosition(){
   d.lat = ll.lat; d.lon = ll.lng;
   const moved = !prev || dist(prev, {lat:ll.lat, lon:ll.lng}) > 25;
   $("crosshair").hidden = true; draftLayer.clearLayers();
-  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
+  L.marker(ll, {icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14], html:'<div class="mk sel"><div class="b emo">📍</div></div>'}), interactive:false}).addTo(draftLayer);
   state.view = "form"; $("page").innerHTML = ""; render();
   setTimeout(() => { const el = d.name ? null : $("fName"); if (el) el.focus(); }, 420);
   if (moved && !(d.picked && dist(d.picked, {lat:ll.lat, lon:ll.lng}) < 25)){
@@ -1649,7 +1652,7 @@ async function showEventOnMap(id){
   go("map");
   const T = EVT[ev.type] || EVT.jeux;
   evLayer.clearLayers();
-  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[34,34], iconAnchor:[17,17],
+  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[28,28], iconAnchor:[14,14],
     html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${T.e}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
     .on("click", () => { const p = allPlaces().find(q => norm(q.name) === norm(ev.venue) || dist(q, ev) < 40); if (p) openDetail(p.key); }).addTo(evLayer);
   focusOn(ev.lat, ev.lon, 17);
