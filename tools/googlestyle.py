@@ -75,8 +75,14 @@ def recolor(src, P):
             else: col, halo = P["label"], P["label_halo"]
             if "text-field" in l.get("layout", {}):
                 setc("text-color", col); setc("text-halo-color", halo); p["text-halo-width"] = 1.4; p.pop("text-halo-blur", None)
+        # police Open Sans (servie depuis le dossier fonts/ du site) à la place de Noto Sans
+        tf = l.get("layout", {}).get("text-font")
+        if tf:
+            m = {"Noto Sans Regular":"Open Sans Regular", "Noto Sans Bold":"Open Sans Semibold", "Noto Sans Italic":"Open Sans Italic"}
+            l["layout"]["text-font"] = [m.get(f, "Open Sans Regular") for f in tf] if isinstance(tf, list) else tf
         out.append(l)
     s["layers"] = out
+    s["glyphs"] = "fonts/{fontstack}/{range}.pbf"   # rendue absolue au chargement par l'app
     return s
 
 if __name__ == "__main__":
