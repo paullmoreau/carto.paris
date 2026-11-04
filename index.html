@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<meta name="apple-mobile-web-app-title" content="Tournée">
+<meta name="apple-mobile-web-app-title" content="Carto">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="La carte des bars et lieux où jouer au billard, aux fléchettes, au baby-foot, à la pétanque, au karaoké, aux quiz et plus encore, autour de toi.">
-<title>Tournée Générale</title>
+<title>Carto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -295,8 +295,7 @@ body.searching .top,body.searching .bottom{visibility:hidden}
 #map.labels .mk .lb{display:block}
 .mk.sel .b{transform:scale(1.3);box-shadow:0 0 0 2.5px var(--black),0 6px 16px rgba(0,0,0,.25)}
 .mk .dotm{display:none;position:absolute;left:12px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--c);border:2px solid var(--ring);box-shadow:0 1px 3px rgba(0,0,0,.25)}
-#map:not(.z16) .mk.anon:not(.sel) .dotm{display:block}
-#map:not(.z16) .mk.anon:not(.sel) .b{display:none}
+
 .cl{display:flex;align-items:center;height:32px;padding:0 9px 0 3px;border-radius:999px;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.18);width:max-content;transform:translate(-50%,-50%)}
 .cl span{width:26px;height:26px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:14px;border:1.5px solid var(--ring);margin-right:-8px}
 .cl b{margin-left:13px;font-size:12.5px;font-weight:800}
@@ -398,9 +397,13 @@ details.hrs[open] .chev{transform:rotate(90deg)}
 .mk .st{width:9px;height:9px;right:-1px;top:-1px;border-width:1.5px}
 .mk .lb{left:33px}
 .mk .dotm{left:9px;top:9px;width:10px;height:10px;border-width:1.5px;display:none}
-#map:not(.z15) .mk:not(.sel) .b,#map:not(.z15) .mk:not(.sel) .st{display:none}
-#map:not(.z15) .mk:not(.sel) .dotm{display:block}
-#map:not(.z13) .mk:not(.sel) .dotm{left:10px;top:10px;width:8px;height:8px;border-width:1px}
+/* vue large : mini emoji au lieu de points */
+#map .mk .dotm{display:none!important}
+#map .mk .b{transition:transform .2s var(--ease)}
+#map:not(.z15) .mk:not(.sel) .st{display:none}
+#map:not(.z15) .mk:not(.sel) .b{transform:scale(.74)}
+#map:not(.z13) .mk:not(.sel) .b{background:none;box-shadow:none;transform:scale(.82);filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1.5px var(--halo))}
+#map:not(.z11) .mk:not(.sel) .b{transform:scale(.62)}
 .mk.sel .b{transform:scale(1.35)}
 
 /* Filtres compacts : toutes les catégories sur un écran */
@@ -633,7 +636,7 @@ function initBase(){
     base = mlLayer({style, interactive:false,
       attribution:'<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · ' + OSM_ATTR}).addTo(map);
     base.getMaplibreMap().once("load", () => { baseOK = true; });
-    setTimeout(() => { if (!baseOK) rasterBase(); }, 12000);
+    setTimeout(() => { if (!baseOK) rasterBase(); }, 25000);
   }).catch(rasterBase);
 }
 initBase();
@@ -645,7 +648,7 @@ let meMarker = null, meAcc = null;
 const markers = new Map();
 const draftLayer = L.layerGroup().addTo(map);
 // noms à partir du zoom 15 ; les terrains sans nom restent de petites pastilles jusqu'au zoom 16
-const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 16); c.classList.toggle("z13", z >= 13); c.classList.toggle("z15", z >= 15); c.classList.toggle("z16", z >= 16); };
+const labelsOn = () => { const c = map.getContainer(), z = map.getZoom(); c.classList.toggle("labels", z >= 16); c.classList.toggle("z11", z >= 11); c.classList.toggle("z13", z >= 13); c.classList.toggle("z15", z >= 15); c.classList.toggle("z16", z >= 16); };
 map.on("zoomend", labelsOn); labelsOn();
 
 /* ================= Données ================= */
@@ -819,9 +822,9 @@ function detailHTML(p){
   const fav = state.favs.has(p.key);
   const d = dist(ref(), p), walk = state.me ? Math.max(1, Math.round(dist(state.me, p) / 80)) : 0;
   const src = (p.edited ? "Corrigé par l'admin. " : "") + (p.src === "mine" ? "Ajouté par toi, visible seulement sur cet appareil."
-    : p.src === "shared" ? "Ajouté par la communauté Tournée Générale."
+    : p.src === "shared" ? "Ajouté par la communauté Carto."
     : p.src === "curated" && p.source === "ancienne-liste" ? "Lieu de ta liste d'origine : vérifie les infos avant d'y aller."
-    : p.src === "curated" ? `Sélection Tournée Générale d'après <a href="${esc(p.source)}" target="_blank" rel="noopener">ce guide</a>.`
+    : p.src === "curated" ? `Sélection Carto d'après <a href="${esc(p.source)}" target="_blank" rel="noopener">ce guide</a>.`
     : `Données <a href="${esc(p.url)}" target="_blank" rel="noopener">OpenStreetMap</a>${p.srcUrl ? `, complétées d'après <a href="${esc(p.srcUrl)}" target="_blank" rel="noopener">ce guide</a>` : ""}.`);
   // le statut d'ouverture n'apparaît qu'une fois, dans la ligne Horaires
   const sub = [norm(p.kind) !== norm(p.name) ? esc(p.kind) : "", fmtD(d)].filter(Boolean).join(" · ");

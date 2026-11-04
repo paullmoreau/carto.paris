@@ -1,6 +1,6 @@
 {
- "name": "Tournée Générale",
- "short_name": "Tournée",
+ "name": "Carto",
+ "short_name": "Carto",
  "description": "Les bars et lieux où jouer au billard, aux fléchettes, au baby-foot, au karaoké et plus encore.",
  "start_url": "./",
  "scope": "./",

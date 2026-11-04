@@ -1,4 +1,4 @@
--- Tournée Générale : base de données partagée (Supabase)
+-- Carto : base de données partagée (Supabase)
 -- À coller une seule fois dans Supabase > SQL Editor > New query, puis « Run ».
 --
 -- Ce que fait ce script :

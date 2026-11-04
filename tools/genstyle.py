@@ -1,4 +1,4 @@
-# Génère map-style.json (style « Tournée ») à partir du style Positron d'OpenFreeMap :
+# Génère map-style.json (style « Carto ») à partir du style Positron d'OpenFreeMap :
 #   git clone https://github.com/hyperknot/openfreemap-styles
 #   python3 tools/genstyle.py openfreemap-styles/styles/positron/style.json map-style.json
 # Les couleurs se règlent dans PALETTES ci-dessous (3e argument : bump, clair ou sombre ; bump par défaut).
@@ -7,7 +7,7 @@ src, out = sys.argv[1], sys.argv[2]
 s = json.load(open(src))
 txt = json.dumps(s).replace("__TILEJSON_DOMAIN__", "tiles.openfreemap.org")
 s = json.loads(txt)
-s["name"] = "Tournée Générale"
+s["name"] = "Carto"
 s["sources"].pop("ne2_shaded", None)
 PALETTES = {
  "clair": dict(
