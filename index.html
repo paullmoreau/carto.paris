@@ -82,7 +82,7 @@ svg{display:block}
 /* ---------- Bas : pilules, catégories, recherche, onglets ---------- */
 .bottom{position:fixed;z-index:35;left:0;right:0;bottom:0;padding:0 0 calc(8px + var(--sab));display:flex;flex-direction:column;gap:8px;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.25,1),opacity .25s}
 .bottom > *{pointer-events:auto}
-.bottom::before{content:"";position:absolute;inset:40px 0 0;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--map) 70%,transparent) 40%,color-mix(in srgb,var(--map) 88%,transparent));pointer-events:none;z-index:-1}
+.bottom::before{content:"";position:absolute;inset:-28px 0 0;background:color-mix(in srgb,var(--map) 42%,transparent);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 46px);mask-image:linear-gradient(to bottom,transparent 0,#000 46px);pointer-events:none;z-index:-1}
 .here{align-self:center;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(10,132,255,.4)}
 .here svg{width:18px;height:18px}
 .pills{display:flex;gap:8px;padding:0 var(--gut-r) 0 var(--gut);overflow-x:auto;scrollbar-width:none}
@@ -479,6 +479,35 @@ body{min-height:100%;min-height:100lvh;background:var(--map)}
 #map.z16 .mk.hasmulti .lb{left:calc(50% + var(--n) * 15.5px + 10px)}
 .mk.sel .multi{box-shadow:0 0 0 2.5px var(--black),0 6px 16px rgba(0,0,0,.25)}
 #map.z16 .mk.sel.hasmulti .b{transform:none}
+
+/* ---------- Version ordinateur ---------- */
+.leaflet-control-zoom{display:none}
+@media (min-width:900px){
+  .bottom{left:24px;right:24px;width:auto;bottom:18px;align-items:center;gap:10px;transition:left .35s var(--ease),transform .35s var(--ease),opacity .25s}
+  .bottom::before{display:block;inset:-30px -24px -18px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 54px);mask-image:linear-gradient(to bottom,transparent 0,#000 54px)}
+  body[data-view="detail"] .bottom,body[data-view="list"] .bottom,body[data-view="fav"] .bottom,body[data-view="events"] .bottom{left:480px}
+  body[data-view="detail"] .bottom::before,body[data-view="list"] .bottom::before,body[data-view="fav"] .bottom::before,body[data-view="events"] .bottom::before{display:block}
+  .pills,.cats{justify-content:center;max-width:100%}
+  .cats{flex-wrap:wrap;overflow:visible;row-gap:6px;padding-top:12px;max-width:980px}
+  .tabs{gap:12px}
+  .top{left:24px;right:24px}
+  body[data-view="detail"] .top,body[data-view="list"] .top,body[data-view="fav"] .top,body[data-view="events"] .top{left:480px}
+  .leaflet-control-zoom{display:block;margin:84px 24px 0 0!important;border:0!important;border-radius:14px!important;overflow:hidden;box-shadow:var(--shadow)!important}
+  .leaflet-control-zoom a{width:40px!important;height:40px!important;line-height:40px!important;font-size:20px!important;background:var(--glass)!important;color:var(--ink)!important;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border-color:var(--line)!important}
+  .card{width:440px;max-height:calc(100% - 32px)}
+  .card::before{display:none}
+  .page::-webkit-scrollbar{width:10px}.page::-webkit-scrollbar-thumb{background:var(--fill);border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+  .card::-webkit-scrollbar{width:0}
+  /* survol à la souris */
+  .cat:hover .bub{transform:translateY(-2px)}
+  .prow:hover,.sg:hover,.irow:hover,.fgrid .folder:hover{background:color-mix(in srgb,var(--blue) 6%,var(--card))}
+  .pill:hover,.tab:hover,.round:hover,.ibtn:hover,.act:hover{filter:brightness(.96)}
+  .mk .b{cursor:pointer}
+  .mk:hover .b{transform:scale(1.12)}
+  .sov{width:520px}
+  .fgrid{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:1400px){ .card,.page{width:480px} body[data-view="detail"] .bottom,body[data-view="list"] .bottom,body[data-view="fav"] .bottom,body[data-view="events"] .bottom,body[data-view="detail"] .top,body[data-view="list"] .top,body[data-view="fav"] .top,body[data-view="events"] .top{left:520px} .sov{left:520px} }
 </style>
 </head>
 <body data-view="map">
@@ -690,8 +719,9 @@ const state = {
 const isDesk = () => matchMedia("(min-width:900px)").matches;
 
 /* ================= Carte ================= */
-const map = L.map("map", {zoomControl:false, attributionControl:true, maxZoom:20, minZoom:3}).setView([S0.lat, S0.lon], 14);
+const map = L.map("map", {zoomControl:false, zoomSnap:0.5, attributionControl:true, maxZoom:20, minZoom:3}).setView([S0.lat, S0.lon], 14);
 map.attributionControl.setPrefix(false);
+L.control.zoom({position:"topright", zoomInTitle:"Zoomer", zoomOutTitle:"Dézoomer"}).addTo(map);
 const OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
 let base = null, baseOK = false;
 const darkMQ = matchMedia("(prefers-color-scheme: dark)");
@@ -830,7 +860,9 @@ function freeRect(){
   let x0 = 0, y1 = H;
   const card = $("card"), page = $("page");
   if (isDesk()){
-    if (card.classList.contains("show") || page.classList.contains("show")) x0 = 470;
+    const panel = card.classList.contains("show") ? card : page.classList.contains("show") ? page : null;
+    if (panel) x0 = panel.getBoundingClientRect().right + 10;
+    const b = $("pills").getBoundingClientRect(); if (b.height) y1 = b.top - 8;
   } else if (card.classList.contains("show")){
     y1 = H - card.offsetHeight - 20;
   } else if (state.view === "map"){
@@ -1848,7 +1880,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611041830";
+const APP_VERSION = "202611041834";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
