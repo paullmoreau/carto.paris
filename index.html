@@ -489,7 +489,7 @@ body{min-height:100%;min-height:100lvh;background:var(--map)}
 
 <div class="top" id="top">
   <button class="round glass" id="searchBtn" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></button>
-  <button class="where" id="where" type="button" aria-live="polite">Autour de toi</button>
+  <button class="where" id="where" type="button" aria-live="polite" hidden>Autour de toi</button>
   <button class="round glass on" id="locate" type="button" aria-label="Centrer sur ma position"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 2.6L2.9 10.3c-.9.4-.8 1.6.1 1.9l7.1 2 2 7.1c.3.9 1.5 1 1.9.1l7.7-18.5c.3-.7-.4-1.4-1.3-1.3z"/></svg></button>
 </div>
 
@@ -1020,7 +1020,7 @@ function listHTML(vis){
   const n = vis.length;
   let h = `<div class="ph"><h1>${state.me && !state.centerLabel ? "Autour<br>de toi" : esc(state.centerLabel || "Paris")}</h1>
       <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>du plus proche au plus loin</div></div>
-    <p class="lead"><span class="dot${state.me ? " on" : ""}"></span>${state.me ? "Position en direct" : "Position non partagée"}${state.loading ? ' · <span class="spin"></span> recherche…' : ""}</p>`;
+`;
   if (state.error) h += `<div class="err-line">Les serveurs OpenStreetMap ne répondent pas.<button id="retry">Réessayer</button></div>`;
   if (cats.length) h += `<div class="fgrid">${cats.map(c => `<button class="folder" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="fi emo">${ico(c)}</span><span class="ft"><b>${c.short || c.label}</b><small>${counts[c.id]}</small></span></button>`).join("")}</div>`;
   h += `<div class="sec">${state.active.size ? "Pour tes jeux" : "Les plus proches"}${state.active.size ? `<small><button class="textbtn" id="clearF" style="height:30px">Tout voir</button></small>` : ""}</div>`;
