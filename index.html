@@ -85,7 +85,7 @@ svg{display:block}
 .bottom::before{content:"";position:absolute;inset:-28px 0 0;background:color-mix(in srgb,var(--map) 42%,transparent);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 46px);mask-image:linear-gradient(to bottom,transparent 0,#000 46px);pointer-events:none;z-index:-1}
 .here{align-self:center;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(10,132,255,.4)}
 .here svg{width:18px;height:18px}
-.pills{display:flex;gap:8px;padding:0 var(--gut-r) 0 var(--gut);overflow-x:auto;scrollbar-width:none}
+.pills{display:flex;gap:8px;padding:0 var(--gut-r) 0 var(--gut);overflow-x:auto;scrollbar-width:none;justify-content:safe center}
 .pills::-webkit-scrollbar{display:none}
 .pill{height:34px;border-radius:999px;padding:0 13px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;white-space:nowrap;flex:none;color:var(--ink)}
 .pill svg{width:16px;height:16px}
@@ -508,6 +508,23 @@ body{min-height:100%;min-height:100lvh;background:var(--map)}
   .fgrid{grid-template-columns:repeat(4,1fr)}
 }
 @media (min-width:1400px){ .card,.page{width:480px} body[data-view="detail"] .bottom,body[data-view="list"] .bottom,body[data-view="fav"] .bottom,body[data-view="events"] .bottom,body[data-view="detail"] .top,body[data-view="list"] .top,body[data-view="fav"] .top,body[data-view="events"] .top{left:520px} .sov{left:520px} }
+
+/* Flou progressif derrière les filtres (plus de bord net) */
+.bottom::before{display:none!important}
+.pblur{position:absolute;left:0;right:0;top:-70px;bottom:0;pointer-events:none;z-index:-1}
+.pblur i{position:absolute;inset:0;pointer-events:none}
+.pblur i:nth-child(1){-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 12%,#000 24%,transparent 36%);mask-image:linear-gradient(to bottom,transparent 0%,#000 12%,#000 24%,transparent 36%)}
+.pblur i:nth-child(2){-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);-webkit-mask-image:linear-gradient(to bottom,transparent 12%,#000 24%,#000 36%,transparent 48%);mask-image:linear-gradient(to bottom,transparent 12%,#000 24%,#000 36%,transparent 48%)}
+.pblur i:nth-child(3){-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(to bottom,transparent 24%,#000 36%,#000 48%,transparent 60%);mask-image:linear-gradient(to bottom,transparent 24%,#000 36%,#000 48%,transparent 60%)}
+.pblur i:nth-child(4){-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);-webkit-mask-image:linear-gradient(to bottom,transparent 36%,#000 48%,#000 62%,transparent 76%);mask-image:linear-gradient(to bottom,transparent 36%,#000 48%,#000 62%,transparent 76%)}
+.pblur i:nth-child(5){-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);background:linear-gradient(to bottom,transparent 40%,color-mix(in srgb,var(--map) 45%,transparent) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 48%,#000 64%);mask-image:linear-gradient(to bottom,transparent 48%,#000 64%)}
+body:not([data-view="map"]):not([data-view="detail"]) .pblur{display:none}
+@media (min-width:900px){ .pblur{left:-24px;right:-24px;bottom:-18px} }
+/* distance + temps à pied dans les listes */
+.prow .ds{text-align:right;line-height:1.2}
+.prow .ds small{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+/* mentions de la carte déplacées dans la page Lieux */
+.leaflet-control-attribution{display:none!important}
 </style>
 </head>
 <body data-view="map">
@@ -533,6 +550,7 @@ body{min-height:100%;min-height:100lvh;background:var(--map)}
 <div class="crosshair emo" id="crosshair" hidden aria-hidden="true"><img class="i3d" src="icons/pin.png" alt=""></div>
 
 <div class="bottom" id="bottom">
+  <div class="pblur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="pills" id="pills"></div>
   <div class="cats" id="cats" role="group" aria-label="Filtrer par jeu"></div>
   <nav class="tabs" aria-label="Navigation">
@@ -615,6 +633,9 @@ function dist(a, b){
   const h = Math.sin(t(b.lat-a.lat)/2)**2 + Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(t(b.lon-a.lon)/2)**2;
   return 2*R*Math.asin(Math.sqrt(h));
 }
+// temps de marche estimé depuis la position en direct
+const walkMin = p => state.me ? Math.max(1, Math.round(dist(state.me, p) * 1.3 / 80)) : 0;
+const walkTxt = p => { const m = walkMin(p); return m ? (m < 60 ? m + " min à pied" : Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " à pied") : ""; };
 const fmtD = m => m < 1000 ? Math.max(10, Math.round(m/10)*10)+" m" : (m/1000).toFixed(m < 10000 ? 1 : 0).replace(".",",")+" km";
 const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 async function fetchJSON(url, opts = {}, ms = 15000){
@@ -940,7 +961,7 @@ function detailHTML(p){
     : p.src === "curated" ? `Sélection Carto d'après <a href="${esc(p.source)}" target="_blank" rel="noopener">ce guide</a>.`
     : `Données <a href="${esc(p.url)}" target="_blank" rel="noopener">OpenStreetMap</a>${p.srcUrl ? `, complétées d'après <a href="${esc(p.srcUrl)}" target="_blank" rel="noopener">ce guide</a>` : ""}.`);
   // le statut d'ouverture n'apparaît qu'une fois, dans la ligne Horaires
-  const sub = [norm(p.kind) !== norm(p.name) ? esc(p.kind) : "", fmtD(d)].filter(Boolean).join(" · ");
+  const sub = [norm(p.kind) !== norm(p.name) ? esc(p.kind) : "", fmtD(d), walkTxt(p)].filter(Boolean).join(" · ");
   const evs = eventsAt(p);
   const rows = [
     p.hours ? (week ? `<details class="irow hrs"><summary><span class="ik">${ICON.clock}</span><span class="iv"><small>Horaires</small>${s ? `<b class="ost ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${esc(s.label)}</b><small class="todayh">Aujourd'hui : ${esc(week[today].txt)}</small>` : `<b>Aujourd'hui : ${esc(week[today].txt)}</b>`}</span><span class="chev">${ICON.chevR}</span></summary>
@@ -957,7 +978,7 @@ function detailHTML(p){
     </div>
     <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${ico(CAT[g])}</span>${CAT[g].label}</span>`).join("")}</div>
     <div class="acts5">
-      <a class="act primary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + (p.address ? ", " + p.address : ""))}" target="_blank" rel="noopener">${ICON.route}<span>${walk ? "Y aller · " + walk + " min" : "Y aller"}</span></a>
+      <a class="act primary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + (p.address ? ", " + p.address : ""))}" target="_blank" rel="noopener">${ICON.route}<span>Y aller</span></a>
       ${p.phone ? `<a class="act" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">${ICON.phone}<span>Appeler</span></a>` : ""}
       <button class="act${fav ? " on" : ""}" id="favBtn" aria-pressed="${fav}">${fav ? ICON.heartFill : ICON.heart}<span>${fav ? "Favori" : "Garder"}</span></button>
       <button class="act" id="shareBtn">${ICON.share}<span>Partager</span></button>
@@ -1043,7 +1064,7 @@ function rowHTML(p, d){
   const g = shownGames(p)[0] || p.games[0];
   return `<li><button class="prow" data-key="${p.key}"><span class="ava emo" style="--c:${CAT[g].color}">${ico(CAT[g])}${p.src === "mine" ? "<i></i>" : ""}</span>
     <span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(subOf(p))}</span>${statusHTML(p)}</span>
-    <span class="ds">${fmtD(d)}</span></button></li>`;
+    <span class="ds">${fmtD(d)}${walkMin(p) ? `<small>${walkMin(p) < 60 ? walkMin(p) + " min" : Math.floor(walkMin(p) / 60) + " h"} 🚶</small>` : ""}</span></button></li>`;
 }
 function listHTML(vis){
   const pool = inRadius();
@@ -1061,7 +1082,7 @@ function listHTML(vis){
     h += `<ul class="rows">${vis.slice(0, state.shown).map(({p, d}) => rowHTML(p, d)).join("")}</ul>`;
     if (n > state.shown) h += `<button class="more" id="more">Voir ${Math.min(30, n - state.shown)} de plus</button>`;
   }
-  h += `<p class="note">Lieux issus d'<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, d'une sélection de guides parisiens et de tes ajouts.</p>`;
+  h += `<p class="note">Lieux issus d'<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, d'une sélection de guides parisiens et de tes ajouts. Carte © OpenStreetMap, © OpenMapTiles, OpenFreeMap.</p>`;
   return h;
 }
 function favHTML(){
@@ -1880,7 +1901,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611041834";
+const APP_VERSION = "202611041842";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});

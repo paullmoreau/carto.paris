@@ -1,5 +1,5 @@
 // Carto : ouverture hors ligne et installation comme une app
-const VERSION = "carto-v7";
+const VERSION = "carto-v8";
 const SHELL = ["./", "index.html", "config.js", "places.json", "events.json", "map-style.json", "map-style-dark.json",
   "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "favicon-32.png", "logo-336.jpg"];
 
