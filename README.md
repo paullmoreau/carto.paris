@@ -7,6 +7,8 @@ Site : https://paullmoreau.github.io/carto.paris/
 - Position en temps réel et filtres par jeu
 - Lieux OpenStreetMap (Overpass) + sélection parisienne dans `places.json`
 - Favoris, liste façon dossiers Apple, marqueurs emoji avec nom
+- « Ouvert maintenant » d'après les horaires OpenStreetMap ou ceux de `places.json`
+- Soirées récurrentes (quiz, karaoké, jams, tournois…) dans `events.json`, plus celles que l'utilisateur ajoute
 - Bouton « Ajouter un lieu » (enregistré sur l’ppareil, option de proposition à OpenStreetMap)
 
 Pour ajouter un lieu à la sélection pour tout le monde : ajoute une entrée dans `places.json` (nom, adresse, jeux, source).

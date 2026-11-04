@@ -60,23 +60,23 @@ svg{display:block}
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* ---------- Bas : pilules, catégories, recherche, onglets ---------- */
-.bottom{position:fixed;z-index:35;left:0;right:0;bottom:0;padding:0 0 calc(10px + var(--sab));display:flex;flex-direction:column;gap:10px;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.25,1),opacity .25s}
+.bottom{position:fixed;z-index:35;left:0;right:0;bottom:0;padding:0 0 calc(8px + var(--sab));display:flex;flex-direction:column;gap:8px;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.25,1),opacity .25s}
 .bottom > *{pointer-events:auto}
-.bottom::before{content:"";position:absolute;inset:-40px 0 0;background:linear-gradient(to bottom,rgba(238,241,238,0),rgba(238,241,238,.85) 45%,rgba(238,241,238,.95));pointer-events:none;z-index:-1}
+.bottom::before{content:"";position:absolute;inset:40px 0 0;background:linear-gradient(to bottom,rgba(238,241,238,0),rgba(238,241,238,.7) 40%,rgba(238,241,238,.85));pointer-events:none;z-index:-1}
 .here{align-self:center;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(10,132,255,.4)}
 .here svg{width:18px;height:18px}
 .pills{display:flex;gap:8px;padding:0 var(--gut-r) 0 var(--gut);overflow-x:auto;scrollbar-width:none}
 .pills::-webkit-scrollbar{display:none}
-.pill{height:38px;border-radius:999px;padding:0 15px;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:15px;white-space:nowrap;flex:none;color:var(--ink)}
+.pill{height:34px;border-radius:999px;padding:0 13px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;white-space:nowrap;flex:none;color:var(--ink)}
 .pill svg{width:16px;height:16px}
 .pill .chev{width:12px;height:12px;opacity:.6}
 .cats{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:2px var(--gut-r) 0 var(--gut);scroll-snap-type:x proximity}
 .cats::-webkit-scrollbar{display:none}
-.cat{flex:none;width:74px;display:flex;flex-direction:column;align-items:center;gap:5px;scroll-snap-align:start;transition:opacity .2s}
-.cat .bub{position:relative;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:32px;transition:transform .15s}
+.cat{flex:none;width:62px;display:flex;flex-direction:column;align-items:center;gap:3px;scroll-snap-align:start;transition:opacity .2s}
+.cat .bub{position:relative;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:27px;transition:transform .15s}
 .cat .bub .emo{filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
-.cat .lbl{font-size:12.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:74px;overflow:hidden;text-overflow:ellipsis}
-.cat .cnt{position:absolute;top:-4px;right:-6px;min-width:24px;height:20px;padding:0 6px;border-radius:999px;background:var(--black);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.cat .lbl{font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:62px;overflow:hidden;text-overflow:ellipsis}
+.cat .cnt{position:absolute;top:-4px;right:-8px;min-width:20px;height:18px;padding:0 5px;border-radius:999px;background:var(--black);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .cat[aria-pressed="true"] .bub{background:var(--c);box-shadow:0 0 0 3px #fff,0 6px 16px color-mix(in srgb,var(--c) 55%,transparent)}
 .cat[aria-pressed="true"] .lbl{color:var(--ink);font-weight:700}
 .cats.filtering .cat[aria-pressed="false"]{opacity:.5}
@@ -86,9 +86,9 @@ svg{display:block}
 .search input::placeholder{color:rgba(255,255,255,.75)}
 .search button{width:44px;height:44px;border-radius:50%;background:var(--blue);display:grid;place-items:center;color:#fff;flex:none}
 .search button svg{width:20px;height:20px}
-.tabs{align-self:center;height:64px;border-radius:999px;padding:6px;display:flex;gap:4px}
-.tab{width:60px;height:52px;border-radius:999px;display:grid;place-items:center;color:var(--ink-2)}
-.tab svg{width:24px;height:24px}
+.tabs{align-self:center;height:58px;border-radius:999px;padding:5px;display:flex;gap:2px}
+.tab{width:58px;height:48px;border-radius:999px;display:grid;place-items:center;color:var(--ink-2)}
+.tab svg{width:23px;height:23px}
 .tab[aria-current="page"]{background:var(--black);color:#fff}
 
 /* ---------- Carte de détail (glisse depuis le bas) ---------- */
@@ -205,6 +205,58 @@ svg{display:block}
 .auto .spin{margin-top:2px}
 .pk .sp{font-size:12px;margin-left:2px}
 
+/* Recherche plein écran (loupe) */
+.sov{position:fixed;z-index:70;inset:0;background:rgba(242,242,247,.96);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:calc(10px + var(--sat)) var(--gut-r) 20px var(--gut);overflow-y:auto}
+.sbar{display:flex;align-items:center;gap:10px;height:50px;padding:0 6px 0 16px;border-radius:16px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);margin-bottom:14px}
+.sbar > svg{width:19px;height:19px;color:var(--muted);flex:none}
+.sbar input{flex:1;min-width:0;border:0;outline:none;background:none;font-size:17px;-webkit-appearance:none;appearance:none}
+.sbar input::-webkit-search-cancel-button{display:none}
+.sg-h{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:10px 6px 2px;list-style:none}
+body.searching .top,body.searching .bottom{visibility:hidden}
+
+/* Ouvert / fermé */
+.pill.on{background:#34c759;color:#fff;border-color:#34c759}
+.pill .odot{width:8px;height:8px;border-radius:50%;background:#34c759;box-shadow:0 0 0 3px rgba(52,199,89,.2)}
+.pill.on .odot{background:#fff;box-shadow:none}
+.ost{display:inline-block;font-size:13px;font-weight:700;font-style:normal;margin-top:2px}
+.ost.open{color:#1f9d47}.ost.soon{color:#c77700}.ost.closed{color:#d70015}
+.tile.ohs{font-weight:700}
+.tile.ohs.open{background:#e3f8e8;color:#147a35}.tile.ohs.soon{background:#fff3dc;color:#9a5b00}.tile.ohs.closed{background:#ffe8e6;color:#b3261e}
+.tile.ohs svg{color:currentColor}
+.mk .st.op{background:#34c759}
+
+/* Soirées */
+.dchips,.tchips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gut-r)) 10px calc(-1 * var(--gut));padding:0 var(--gut-r) 0 var(--gut)}
+.dchips::-webkit-scrollbar,.tchips::-webkit-scrollbar{display:none}
+.dchips button{flex:none;height:36px;padding:0 14px;border-radius:999px;background:#fff;font-weight:600;font-size:14.5px;color:var(--ink-2);white-space:nowrap}
+.dchips button[aria-pressed="true"]{background:var(--black);color:#fff}
+.tchips button{flex:none;height:36px;padding:0 13px 0 9px;border-radius:999px;background:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tchips button .emo{font-size:18px}
+.tchips button[aria-pressed="true"]{background:var(--c);box-shadow:inset 0 0 0 2px var(--black)}
+.evs{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.ev{background:#fff;border-radius:26px;padding:16px;position:relative;overflow:hidden}
+.ev::before{content:"";position:absolute;inset:0 0 auto;height:70px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 38%,#fff),#fff);z-index:0}
+.ev > *{position:relative}
+.ev-top{display:flex;align-items:center;gap:8px}
+.ev-emo{width:44px;height:44px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:24px;border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.ev-type{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2)}
+.ev-when{margin-left:auto;height:28px;padding:0 11px;border-radius:999px;background:var(--black);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+.ev-when.now{background:#ff3b30}
+.ev h3{margin:12px 0 2px;font-size:21px;line-height:1.15;font-weight:800;letter-spacing:-.025em;text-wrap:balance}
+.ev-venue{margin:0 0 10px;font-weight:600;font-size:15px}
+.ev-venue span{display:block;color:var(--muted);font-weight:500;font-size:14px}
+.ev-note{margin:-4px 0 12px;font-size:14px;color:var(--ink-2)}
+.cta.small{height:42px;font-size:15px;flex:1}
+.cta.light.small{flex:none;padding:0 16px}
+.days{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.days button{width:52px;height:40px;border-radius:12px;background:#fff;font-weight:600;font-size:14px}
+.days button[aria-pressed="true"]{background:var(--black);color:#fff}
+.here-evs{margin:4px 0 14px;display:flex;flex-direction:column;gap:6px}
+.here-evs button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:var(--grouped);text-align:left;width:100%}
+.here-evs .emo{font-size:22px}
+.here-evs b{display:block;font-size:14.5px}
+.here-evs small{display:block;font-size:13px;color:var(--muted)}
+
 /* Placement */
 .crosshair{position:fixed;z-index:12;left:var(--cross-x,50%);top:var(--cross-y,45%);transform:translate(-50%,-100%);pointer-events:none;font-size:46px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
 .crosshair::after{content:"";position:absolute;left:50%;bottom:-2px;width:12px;height:5px;margin-left:-6px;border-radius:50%;background:rgba(0,0,0,.28)}
@@ -232,11 +284,11 @@ svg{display:block}
 /* États de vue */
 body:not([data-view="map"]) .bottom{transform:translateY(30px);opacity:0;pointer-events:none}
 body:not([data-view="map"]) .bottom *{pointer-events:none}
-body[data-view="list"] .bottom,body[data-view="fav"] .bottom{transform:none;opacity:1}
-body[data-view="list"] .bottom > :not(.tabs),body[data-view="fav"] .bottom > :not(.tabs){visibility:hidden}
-body[data-view="list"] .bottom .tabs,body[data-view="fav"] .bottom .tabs,body[data-view="list"] .bottom .tabs *,body[data-view="fav"] .bottom .tabs *{pointer-events:auto}
-body[data-view="list"] .bottom::before,body[data-view="fav"] .bottom::before{display:none}
-body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
+body[data-view="list"] .bottom,body[data-view="fav"] .bottom,body[data-view="events"] .bottom{transform:none;opacity:1}
+body[data-view="list"] .bottom > :not(.tabs),body[data-view="fav"] .bottom > :not(.tabs),body[data-view="events"] .bottom > :not(.tabs){visibility:hidden}
+body[data-view="list"] .bottom .tabs,body[data-view="fav"] .bottom .tabs,body[data-view="list"] .bottom .tabs *,body[data-view="fav"] .bottom .tabs *,body[data-view="events"] .bottom .tabs,body[data-view="events"] .bottom .tabs *{pointer-events:auto}
+body[data-view="list"] .bottom::before,body[data-view="fav"] .bottom::before,body[data-view="events"] .bottom::before{display:none}
+body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="evform"] .top,body[data-view="events"] .top,body[data-view="list"] .top,body[data-view="fav"] .top{opacity:0;pointer-events:none}
 
 @media (min-width:900px){
   .bottom{left:auto;right:24px;width:460px;bottom:16px}
@@ -247,13 +299,14 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="list"]
   .page.show{transform:none}
   body[data-view="list"] .bottom > *,body[data-view="fav"] .bottom > *{visibility:visible}
   body[data-view="list"] .bottom *,body[data-view="fav"] .bottom *{pointer-events:auto}
-  body[data-view="list"] .top,body[data-view="fav"] .top{opacity:1;pointer-events:auto}
+  body[data-view="list"] .top,body[data-view="fav"] .top,body[data-view="events"] .top{opacity:1;pointer-events:auto}
+  .sov{left:480px;right:auto;width:440px;top:16px;bottom:auto;max-height:calc(100% - 32px);border-radius:28px;box-shadow:var(--shadow-lg);inset:16px auto auto 480px;padding:14px}
   .top{left:480px}
   body[data-view="detail"] .bottom{transform:none;opacity:1}
   body[data-view] .bottom > *{visibility:visible}
   body[data-view] .bottom *{pointer-events:auto}
-  body[data-view="place"] .bottom,body[data-view="form"] .bottom,body[data-view="search"] .bottom{opacity:0;transform:translateY(30px)}
-  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *,body[data-view="search"] .bottom *{pointer-events:none}
+  body[data-view="place"] .bottom,body[data-view="form"] .bottom,body[data-view="search"] .bottom,body[data-view="evform"] .bottom{opacity:0;transform:translateY(30px)}
+  body[data-view="place"] .bottom *,body[data-view="form"] .bottom *,body[data-view="search"] .bottom *,body[data-view="evform"] .bottom *{pointer-events:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -262,9 +315,17 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="list"]
 <div id="map" role="application" aria-label="Carte des lieux de jeux"></div>
 
 <div class="top" id="top">
-  <span></span>
+  <button class="round glass" id="searchBtn" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></button>
   <button class="where" id="where" type="button" aria-live="polite">Autour de toi</button>
   <button class="round glass on" id="locate" type="button" aria-label="Centrer sur ma position"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 2.6L2.9 10.3c-.9.4-.8 1.6.1 1.9l7.1 2 2 7.1c.3.9 1.5 1 1.9.1l7.7-18.5c.3-.7-.4-1.4-1.3-1.3z"/></svg></button>
+</div>
+
+<div class="sov" id="sov" hidden>
+  <div class="sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+    <label class="sr" for="q">Chercher une ville, une adresse ou un bar</label>
+    <input id="q" type="search" placeholder="Ville, adresse, bar…" autocomplete="off" enterkeyhint="search">
+    <button type="button" class="textbtn" id="sovClose">Annuler</button></div>
+  <ul class="sugg" id="qsugg"></ul>
 </div>
 
 <div class="crosshair emo" id="crosshair" hidden aria-hidden="true">📍</div>
@@ -273,14 +334,10 @@ body[data-view="form"] .top,body[data-view="search"] .top,body[data-view="list"]
   <button class="here" id="here" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>Chercher ici</button>
   <div class="pills" id="pills"></div>
   <div class="cats" id="cats" role="group" aria-label="Filtrer par jeu"></div>
-  <form class="search" id="searchForm" role="search">
-    <label class="sr" for="q">Chercher une ville ou une adresse</label>
-    <input id="q" type="search" placeholder="Une ville, une adresse…" autocomplete="off" enterkeyhint="search">
-    <button type="submit" aria-label="Chercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></button>
-  </form>
   <nav class="tabs glass" aria-label="Navigation">
     <button class="tab" data-tab="map" aria-label="Carte" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 4L3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg></button>
     <button class="tab" data-tab="list" aria-label="Liste des lieux"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></svg></button>
+    <button class="tab" data-tab="events" aria-label="Soirées"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M12 12.6l1.1 2.2 2.4.3-1.8 1.6.5 2.4-2.2-1.2-2.2 1.2.5-2.4-1.8-1.6 2.4-.3z" fill="currentColor" stroke="none"/></svg></button>
     <button class="tab" data-tab="fav" aria-label="Favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/></svg></button>
     <button class="tab" data-tab="add" aria-label="Ajouter un lieu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </nav>
@@ -442,7 +499,8 @@ const state = {
   radius: RADII.includes(store.get("radius", 3000)) ? store.get("radius", 3000) : 3000,
   me:null, center:null, centerLabel:"", follow:true,
   osm:[], curated:[], mine: store.get("mine", []), favs: new Set(store.get("favs", [])),
-  view:"map", prevView:"map", selected:null, shown:30, loading:false, error:false, draft:null
+  view:"map", prevView:"map", selected:null, shown:30, loading:false, error:false, draft:null,
+  openOnly: store.get("openOnly", false), events:[], myEvents: store.get("events", []), evDay:"all", evTypes:new Set(), evDraft:null
 };
 const isDesk = () => matchMedia("(min-width:900px)").matches;
 
@@ -503,7 +561,7 @@ function inRadius(){
 }
 function visiblePlaces(){
   const r = ref();
-  return inRadius().filter(p => shownGames(p).length).map(p => ({p, d:dist(r, p)}))
+  return inRadius().filter(p => shownGames(p).length && (!state.openOnly || (ohState(p) || {}).open)).map(p => ({p, d:dist(r, p)}))
     .sort((a, b) => (b.p.src === "mine") - (a.p.src === "mine") || a.d - b.d);
 }
 const subOf = p => p.note && p.src !== "osm" ? p.kind.toLowerCase() : p.games.map(g => CAT[g].label.toLowerCase()).join(" · ");
@@ -512,7 +570,8 @@ const subOf = p => p.note && p.src !== "osm" ? p.kind.toLowerCase() : p.games.ma
 function mkIcon(p, sel){
   const g = shownGames(p)[0] || p.games[0];
   const labelled = p.src !== "osm" || p.named;
-  const status = p.src === "mine" ? "#ffcc00" : p.src === "curated" || p.srcUrl ? "#0a84ff" : "";
+  const os = ohState(p);
+  const status = os && os.open ? "#34c759" : p.src === "mine" ? "#ffcc00" : "";
   return L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23],
     html:`<div class="mk${sel ? " sel" : ""}${labelled ? "" : " anon"}" style="--c:${CAT[g].color}"><i class="dotm"></i><div class="b emo">${CAT[g].e}</div>${status ? `<span class="st" style="--s:${status}"></span>` : ""}${labelled ? `<div class="lb"><b>${esc(p.name)}</b><i>${esc(subOf(p))}</i></div>` : ""}</div>`});
 }
@@ -536,11 +595,12 @@ function renderBottom(){
   cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">✨</span><span class="lbl">Tout</span></button>` +
     order.map(c => `<button class="cat" data-id="${c.id}" aria-pressed="${state.active.has(c.id)}" style="--c:${c.color}"><span class="bub"><span class="emo">${c.e}</span>${counts[c.id] ? `<span class="cnt">${counts[c.id] > 99 ? "99+" : counts[c.id]}</span>` : ""}</span><span class="lbl">${c.label}</span></button>`).join("");
   const n = visiblePlaces().length;
-  $("pills").innerHTML = `<button class="pill glass" id="radiusPill" type="button">${ICON.ruler.replace("<svg", '<svg style="color:#0a84ff"')}${state.radius / 1000} km${ICON.chev}</button>
-    <button class="pill glass" id="countPill" type="button">${state.loading ? '<span class="spin"></span>' : ""}${n} lieu${n > 1 ? "x" : ""} à voir</button>
-    ${state.favs.size ? `<button class="pill glass" id="favPill" type="button"><span class="emo">❤️</span>${state.favs.size} favori${state.favs.size > 1 ? "s" : ""}</button>` : ""}`;
+  const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
+  $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
+    <button class="pill glass" id="radiusPill" type="button">${ICON.ruler.replace("<svg", '<svg style="color:#0a84ff"')}${state.radius / 1000} km${ICON.chev}</button>
+    ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">🎉</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
   const w = $("where");
-  w.innerHTML = state.loading ? `<span class="spin"></span>Recherche…` : esc(state.me && !state.centerLabel ? "Autour de toi" : state.centerLabel ? state.centerLabel : "Paris");
+  w.innerHTML = state.loading ? `<span class="spin"></span>Recherche…` : esc(state.me && !state.centerLabel ? "Autour de toi" : state.centerLabel ? state.centerLabel : "Paris") + ` · ${n}`;
 }
 $("cats").addEventListener("click", e => {
   const b = e.target.closest(".cat"); if (!b) return;
@@ -553,8 +613,8 @@ function toggleFilter(id){
 }
 $("pills").addEventListener("click", e => {
   if (e.target.closest("#radiusPill")) setRadius(RADII[(RADII.indexOf(state.radius) + 1) % RADII.length]);
-  else if (e.target.closest("#countPill")) go("list");
-  else if (e.target.closest("#favPill")) go("fav");
+  else if (e.target.closest("#openPill")){ state.openOnly = !state.openOnly; store.set("openOnly", state.openOnly); render(); if (state.openOnly) toast("Seuls les lieux dont on connaît les horaires et ouverts maintenant s'affichent"); }
+  else if (e.target.closest("#evPill")){ state.evDay = 0; go("events"); }
 });
 function setRadius(r){
   state.radius = r; store.set("radius", r); state.shown = 30; ring.setRadius(r);
@@ -589,6 +649,7 @@ function syncAttr(){ document.documentElement.style.setProperty("--attr-b", (isD
 
 /* ================= Vues ================= */
 function go(view){
+  evLayer.clearLayers();
   if (view === "add"){ startAdd(); return; }
   state.view = view;
   if (view !== "detail") state.selected = null;
@@ -596,7 +657,7 @@ function go(view){
 }
 function render(){
   document.body.dataset.view = state.view;
-  document.querySelectorAll(".tab").forEach(t => t.toggleAttribute("aria-current", t.dataset.tab === (state.view === "detail" ? state.prevView : state.view)));
+  document.querySelectorAll(".tab").forEach(t => t.toggleAttribute("aria-current", t.dataset.tab === (state.view === "detail" ? state.prevView : state.view === "evform" ? "events" : state.view)));
   document.querySelectorAll(".tab[aria-current]").forEach(t => t.setAttribute("aria-current", "page"));
   renderBottom();
   const vis = visiblePlaces();
@@ -611,6 +672,8 @@ function render(){
   } else card.classList.remove("show");
   if (state.view === "list"){ const st = page.scrollTop; page.innerHTML = listHTML(vis); page.classList.add("show"); page.scrollTop = st; }
   else if (state.view === "fav"){ page.innerHTML = favHTML(); page.classList.add("show"); }
+  else if (state.view === "events"){ const st = page.scrollTop; page.innerHTML = eventsHTML(); page.classList.add("show"); page.scrollTop = st; }
+  else if (state.view === "evform"){ if (!page.querySelector("#evForm")) page.innerHTML = evFormHTML(); page.classList.add("show"); }
   else if (state.view === "search"){ if (!page.querySelector("#ps")) page.innerHTML = searchHTML(); page.classList.add("show"); renderSugg(); }
   else if (state.view === "form"){ if (!page.querySelector("#addForm")) page.innerHTML = formHTML(); page.classList.add("show"); }
   else page.classList.remove("show");
@@ -627,7 +690,7 @@ function detailHTML(p){
   const facts = [
     p.address && `<span class="tile">${ICON.pin}${esc(p.address)}</span>`,
     `<span class="tile">${ICON.walk}${fmtD(dist(ref(), p))}${state.me ? " · " + Math.max(1, Math.round(dist(state.me, p) / 80)) + " min à pied" : ""}</span>`,
-    p.hours && `<span class="tile">${ICON.clock}${esc(frHours(p.hours))}</span>`,
+    p.hours && (() => { const s = ohState(p); return s ? `<span class="tile ohs ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${ICON.clock}${esc(s.label)}</span><span class="tile">${esc(frHours(p.hours))}</span>` : `<span class="tile">${ICON.clock}${esc(frHours(p.hours))}</span>`; })(),
     p.phone && `<span class="tile" style="user-select:all">${ICON.phone}${esc(p.phone)}</span>`,
     p.note && `<span class="tile">${ICON.info}${esc(p.note)}</span>`,
   ].filter(Boolean).join("");
@@ -647,6 +710,7 @@ function detailHTML(p){
     ${norm(p.kind) !== norm(p.name) ? `<div class="kind">${esc(p.kind)}</div>` : ""}
     <div class="gchips">${p.games.map(g => `<span class="gchip" style="--c:${CAT[g].color}"><span class="emo">${CAT[g].e}</span>${CAT[g].label}</span>`).join("")}</div>
     <div class="tiles">${facts}</div>
+    ${(() => { const evs = eventsAt(p); return evs.length ? `<p class="glabel" style="margin:0 2px 6px">Soirées ici</p><div class="here-evs">${evs.map(ev => { const T = EVT[ev.type] || EVT.jeux, rel = relDay(nextOcc(ev)); return `<button data-evgo="${ev.id}"><span class="emo">${T.e}</span><span><b>${esc(ev.title)}</b><small>${esc(whenLabel(ev))}${rel ? " · " + rel.toLowerCase() : ""}</small></span></button>`; }).join("")}</div>` : ""; })()}
     <div class="row-btns">
       <a class="cta" href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}" target="_blank" rel="noopener">${ICON.route}Y aller</a>
       ${site ? `<a class="cta light" href="${esc(site)}" target="_blank" rel="noopener" aria-label="Site web">${ICON.web}</a>` : ""}
@@ -681,6 +745,7 @@ $("card").addEventListener("click", e => {
   const t = e.target;
   if (t.closest("#closeCard")){ closeDetail(); return; }
   if (t.closest("#favBtn")){ toggleFav(state.selected); return; }
+  if (t.closest("[data-evgo]")){ closeDetail(false); state.evDay = "all"; go("events"); return; }
   if (t.closest("#delBtn")){ deleteMine(state.selected, t.closest("#delBtn")); return; }
   if (t.closest("#cancelAdd")){ endAdd(); return; }
   if (t.closest("#backSearch")){ $("crosshair").hidden = true; state.view = "search"; render(); setTimeout(() => $("ps") && $("ps").focus(), 380); return; }
@@ -708,7 +773,7 @@ function deleteMine(key, btn){
 function rowHTML(p, d){
   const g = shownGames(p)[0] || p.games[0];
   return `<li><button class="prow" data-key="${p.key}"><span class="ava emo" style="--c:${CAT[g].color}">${CAT[g].e}${p.src === "mine" ? "<i></i>" : ""}</span>
-    <span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(subOf(p))}</span></span>
+    <span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(subOf(p))}</span>${statusHTML(p)}</span>
     <span class="ds">${fmtD(d)}</span></button></li>`;
 }
 function listHTML(vis){
@@ -756,8 +821,8 @@ $("page").addEventListener("click", e => {
   const sg = t.closest(".sg"); if (sg){ pickSugg(+sg.dataset.i); return; }
   if (t.closest("#manual")){ startManual(); return; }
   if (t.closest("#psClear")){ const i = $("ps"); i.value = ""; onSearchInput(""); i.focus(); return; }
-  const pk = t.closest(".pk");
-  if (pk){ const g = state.draft.games, i = g.indexOf(pk.dataset.id); i < 0 ? g.push(pk.dataset.id) : g.splice(i, 1); pk.setAttribute("aria-pressed", i < 0); state.draft.gamesTouched = true; $("eGames").hidden = true; }
+  const pk = t.closest(".pk[data-id]");
+  if (pk && state.draft){ const g = state.draft.games, i = g.indexOf(pk.dataset.id); i < 0 ? g.push(pk.dataset.id) : g.splice(i, 1); pk.setAttribute("aria-pressed", i < 0); state.draft.gamesTouched = true; $("eGames").hidden = true; }
 });
 
 /* ================= Ajouter un lieu ================= */
@@ -845,6 +910,7 @@ async function enrich(d){
   d.enriching = false;
   if (t){
     const games = classify(t).filter(g => !d.games.includes(g));
+    d.autoRaw = t.opening_hours || "";
     d.auto = {hours:frHours(t.opening_hours), phone:t.phone || t["contact:phone"] || "", website:t.website || t["contact:website"] || "", kind:osmKind(t), games:classify(t)};
     if (!d.gamesTouched) d.games.push(...games);
     for (const k of ["hours","phone","website","kind"]) if (!d[k]) d[k] = d.auto[k];
@@ -962,7 +1028,7 @@ $("page").addEventListener("input", e => {
 $("page").addEventListener("keydown", e => {
   if (e.target.id === "ps" && e.key === "Enter"){ e.preventDefault(); if (suggList.length) pickSugg(0); else if (e.target.value.trim().length > 1) fetchSugg(e.target.value.trim()); }
 });
-$("page").addEventListener("submit", e => { e.preventDefault(); saveDraft(); });
+$("page").addEventListener("submit", e => { if (e.target.id !== "addForm") return; e.preventDefault(); saveDraft(); });
 function endAdd(){
   state.draft = null; suggList = []; $("crosshair").hidden = true; draftLayer.clearLayers();
   $("page").innerHTML = ""; state.view = "map"; render();
@@ -975,7 +1041,7 @@ async function saveDraft(){
   if (!ok){ if (!d.games.length) $("lGames").scrollIntoView({block:"center", behavior:"smooth"}); else { $("fName").focus(); $("fName").scrollIntoView({block:"center", behavior:"smooth"}); } return; }
   const web = d.website.trim();
   const p = {key:"m" + Date.now().toString(36), src:"mine", name:d.name, games:CATS.map(c => c.id).filter(id => d.games.includes(id)),
-    lat:d.lat, lon:d.lon, kind:d.kind || "Lieu ajouté", address:d.address.trim(), note:d.note.trim(), hours:d.hours.trim(), phone:d.phone.trim(),
+    lat:d.lat, lon:d.lon, kind:d.kind || "Lieu ajouté", address:d.address.trim(), note:d.note.trim(), hours:d.auto && d.autoRaw && d.hours.trim() === d.auto.hours ? d.autoRaw : d.hours.trim(), phone:d.phone.trim(),
     website:web && !/^https?:\/\//i.test(web) ? "https://" + web : web, osm:d.osm || null};
   state.mine.push(p);
   const saved = store.set("mine", state.mine), share = d.share;
@@ -1042,16 +1108,300 @@ async function loadCurated(){
 
 
 /* ================= Recherche d'adresse ================= */
-$("searchForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const q = $("q").value.trim(); if (!q) return;
-  $("q").blur();
-  const g = await geocode(/france|\d{5}/i.test(q) ? q : q + ", France");
-  if (!g){ toast(`« ${q} » introuvable. Essaie avec la ville ou le code postal.`); return; }
-  state.follow = false; $("locate").classList.remove("on");
-  $("q").value = "";
-  setCenter(g.lat, g.lon, q.charAt(0).toUpperCase() + q.slice(1), true);
+/* ================= Horaires : ouvert maintenant ? ================= */
+/* Lit le format opening_hours d'OpenStreetMap le plus courant :
+   « Mo-Fr 17:00-02:00; Sa,Su 14:00-02:00; Su off », « 24/7 », plages après minuit. */
+const OH_DAYS = ["Mo","Tu","We","Th","Fr","Sa","Su"];
+const ohCache = new Map();
+function parseOH(raw){
+  if (!raw) return null;
+  if (ohCache.has(raw)) return ohCache.get(raw);
+  let res = null;
+  try{
+    const s = raw.trim();
+    if (/^24\/7$/.test(s)) res = {all:true};
+    else {
+      const week = Array(7).fill(null); let any = false;
+      for (let part of s.split(/\s*;\s*/)){
+        if (!part) continue;
+        const m = part.match(/^((?:Mo|Tu|We|Th|Fr|Sa|Su|PH)(?:\s*-\s*(?:Mo|Tu|We|Th|Fr|Sa|Su))?(?:\s*,\s*(?:Mo|Tu|We|Th|Fr|Sa|Su|PH)(?:\s*-\s*(?:Mo|Tu|We|Th|Fr|Sa|Su))?)*)?\s*(.*)$/);
+        if (!m) throw 0;
+        let days = [];
+        if (m[1]){
+          for (const seg of m[1].split(/\s*,\s*/)){
+            if (seg === "PH") continue;
+            const [a, b] = seg.split(/\s*-\s*/).map(d => OH_DAYS.indexOf(d));
+            if (a < 0) throw 0;
+            if (b == null || b < 0) days.push(a); else for (let d = a; ; d = (d + 1) % 7){ days.push(d); if (d === b) break; }
+          }
+          if (!days.length) continue; // règle « PH » seule : ignorée
+        } else days = [0,1,2,3,4,5,6];
+        const t = m[2].trim();
+        let ranges;
+        if (/^(off|closed|fermé)$/i.test(t)) ranges = [];
+        else if (/^24\/7$/.test(t) || t === "00:00-24:00") ranges = [[0, 1440]];
+        else {
+          ranges = [...t.matchAll(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})\+?/g)].map(x => [x[1] * 60 + +x[2], x[3] * 60 + +x[4]]);
+          if (!ranges.length) throw 0;
+        }
+        days.forEach(d => week[d] = ranges); any = true;
+      }
+      res = any ? {week} : null;
+    }
+  }catch{ res = null; }
+  ohCache.set(raw, res);
+  return res;
+}
+const hhmm = m => { m = ((m % 1440) + 1440) % 1440; if (m === 0) return "minuit"; const h = Math.floor(m / 60), mi = m % 60; return h + "h" + (mi ? String(mi).padStart(2, "0") : ""); };
+const DAY_FR = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+function ohState(p, now = new Date()){
+  const oh = parseOH(p.hours); if (!oh) return null;
+  if (oh.all) return {open:true, label:"Ouvert 24h/24"};
+  const d = (now.getDay() + 6) % 7, m = now.getHours() * 60 + now.getMinutes();
+  const today = oh.week[d] || [], yest = oh.week[(d + 6) % 7] || [];
+  for (const [a, b] of yest) if (b <= a && b > 0 && m < b) return {open:true, closes:b, label:"Ouvert · ferme à " + hhmm(b), soon:b - m <= 45};
+  for (const [a, b] of today){
+    const end = b <= a ? b + 1440 : b;
+    if (m >= a && m < end) return {open:true, closes:end, label: end - a >= 1440 ? "Ouvert 24h/24" : "Ouvert · ferme à " + hhmm(end), soon:end - m <= 45};
+  }
+  const later = today.filter(([a]) => a > m).sort((x, y) => x[0] - y[0])[0];
+  if (later) return {open:false, label:"Fermé · ouvre à " + hhmm(later[0])};
+  for (let k = 1; k <= 7; k++){
+    const r = (oh.week[(d + k) % 7] || []).slice().sort((x, y) => x[0] - y[0])[0];
+    if (r) return {open:false, label:"Fermé · ouvre " + (k === 1 ? "demain" : DAY_FR[(now.getDay() + k) % 7]) + " à " + hhmm(r[0])};
+  }
+  return {open:false, label:"Fermé"};
+}
+function statusHTML(p, cls = "ost"){
+  const s = ohState(p); if (!s) return "";
+  return `<span class="${cls} ${s.open ? (s.soon ? "soon" : "open") : "closed"}">${esc(s.open && s.soon ? s.label.replace("Ouvert", "Ferme bientôt").replace(" · ferme", "") : s.label)}</span>`;
+}
+
+/* ================= Recherche (loupe en haut) ================= */
+let qCtrl = null, qT = null, qList = [], qLocal = [];
+function openSearch(){
+  if (state.view === "detail") closeDetail();
+  $("sov").hidden = false; document.body.classList.add("searching");
+  setTimeout(() => $("q").focus(), 60);
+  renderQ();
+}
+function closeSearch(){ $("sov").hidden = true; document.body.classList.remove("searching"); $("q").value = ""; qList = []; qLocal = []; $("qsugg").innerHTML = ""; }
+function renderQ(status){
+  const ul = $("qsugg"), r = ref(), v = $("q").value.trim();
+  if (!v){ ul.innerHTML = `<li class="sg-info">Cherche une ville, un quartier, une adresse ou un bar.</li>`; return; }
+  let h = "";
+  if (qLocal.length) h += `<li class="sg-h">Sur ta carte</li>` + qLocal.map(p => { const g = p.games[0]; return `<li><button type="button" class="sg" data-k="${p.key}"><span class="ava emo" style="background:${CAT[g].color}">${CAT[g].e}</span><span class="tx"><span class="nm">${esc(p.name)}</span><span class="sb">${esc(p.address || p.kind)}</span></span><span class="ds">${fmtD(dist(r, p))}</span></button></li>`; }).join("");
+  if (status === "loading" && !qList.length) h += `<li class="sg-info"><span class="spin"></span>Recherche…</li>`;
+  else if (status === "error") h += `<li class="sg-info">La recherche ne répond pas pour l'instant.</li>`;
+  else if (qList.length){
+    h += `<li class="sg-h">Lieux et adresses</li>` + qList.map((f, i) => { const pr = f.properties, [lon, lat] = f.geometry.coordinates;
+      return `<li><button type="button" class="sg" data-i="${i}"><span class="ava emo">${photonEmoji(pr)}</span><span class="tx"><span class="nm">${esc(pr.name || photonAddr(pr))}</span><span class="sb">${esc(photonAddr(pr) || pr.state || pr.country || "")}</span></span><span class="ds">${fmtD(dist(r, {lat, lon}))}</span></button></li>`; }).join("");
+  } else if (status === "empty" && !qLocal.length) h += `<li class="sg-info">Aucun résultat pour « ${esc(v)} ».</li>`;
+  ul.innerHTML = h;
+}
+function onQ(v){
+  clearTimeout(qT);
+  const n = norm(v);
+  qLocal = n.length > 1 ? allPlaces().filter(p => (p.src !== "osm" || p.named) && norm(p.name).includes(n)).sort((a, b) => dist(ref(), a) - dist(ref(), b)).slice(0, 4) : [];
+  if (n.length < 2){ qList = []; renderQ(); return; }
+  renderQ("loading");
+  qT = setTimeout(async () => {
+    if (qCtrl) qCtrl.abort(); qCtrl = new AbortController();
+    const r = ref();
+    try{
+      const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(v.trim())}&lat=${r.lat.toFixed(4)}&lon=${r.lon.toFixed(4)}&limit=6&lang=fr`, {signal:qCtrl.signal});
+      if (!res.ok) throw 0;
+      qList = ((await res.json()).features || []).filter(f => f.properties.type !== "country");
+      renderQ(qList.length ? "" : "empty");
+    }catch(e){ if (e && e.name === "AbortError") return; qList = []; renderQ("error"); }
+  }, 260);
+}
+$("searchBtn").addEventListener("click", openSearch);
+$("sovClose").addEventListener("click", closeSearch);
+$("q").addEventListener("input", e => onQ(e.target.value));
+$("q").addEventListener("keydown", e => {
+  if (e.key === "Enter"){ e.preventDefault(); const b = $("qsugg").querySelector(".sg"); if (b) b.click(); }
+  if (e.key === "Escape") closeSearch();
 });
+$("qsugg").addEventListener("click", e => {
+  const b = e.target.closest(".sg"); if (!b) return;
+  if (b.dataset.k){ const k = b.dataset.k; closeSearch(); if (state.view !== "map") go("map"); openDetail(k); return; }
+  const f = qList[+b.dataset.i]; if (!f) return;
+  const pr = f.properties, [lon, lat] = f.geometry.coordinates;
+  const label = pr.name || photonAddr(pr);
+  closeSearch(); state.follow = false; $("locate").classList.remove("on");
+  if (state.view !== "map") go("map");
+  const isArea = ["city","district","locality","county","state"].includes(pr.type) || pr.osm_key === "place";
+  setCenter(lat, lon, label, isArea);
+  if (!isArea) focusOn(lat, lon, 17);
+});
+
+/* ================= Soirées ================= */
+const EVT = {
+  quiz:{label:"Quiz", e:"🧠", color:"#a5a3ff"}, blindtest:{label:"Blind test", e:"🎧", color:"#64d2ff"},
+  karaoke:{label:"Karaoké", e:"🎤", color:"#ffd60a"}, jam:{label:"Jam musicale", e:"🎷", color:"#ffb340"},
+  echecs:{label:"Échecs", e:"♟️", color:"#c7c7cc"}, tournoi:{label:"Tournoi", e:"🏆", color:"#7ee08a"},
+  theme:{label:"Soirée à thème", e:"🪩", color:"#ff8fab"}, jeux:{label:"Jeux", e:"🎲", color:"#ff9f80"},
+};
+const DAY_S = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
+const DAY_P = ["dimanches","lundis","mardis","mercredis","jeudis","vendredis","samedis"];
+const evLayer = L.layerGroup().addTo(map);
+function allEvents(){ return [...state.events, ...state.myEvents]; }
+function dayStart(d){ const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
+function nextOcc(ev, now = new Date()){
+  // prochaine date (minuit) de la soirée, ou null si inconnue
+  const t = ev.time ? ev.time.split(":").map(Number) : null;
+  if (ev.date){ const d = new Date(ev.date + "T00:00:00"); return d >= dayStart(now) ? d : null; }
+  if (ev.freq === "monthly") return null;
+  for (let k = 0; k < 15; k++){
+    const d = dayStart(now); d.setDate(d.getDate() + k);
+    if (!ev.days.includes(d.getDay())) continue;
+    if (ev.freq === "first" && d.getDate() > 7) continue;
+    if (k === 0 && t){ const endM = ev.end ? ev.end.split(":").map(Number) : null; const startM = t[0] * 60 + t[1];
+      let endMin = endM ? endM[0] * 60 + endM[1] : startM + 180; if (endMin <= startM) endMin += 1440;
+      if (now.getHours() * 60 + now.getMinutes() > endMin) continue; }
+    return d;
+  }
+  return null;
+}
+function whenLabel(ev){
+  const time = ev.time ? " · " + hhmm(ev.time.split(":").reduce((h, m) => h * 60 + +m)) : "";
+  if (ev.date){ const d = new Date(ev.date + "T00:00:00"); return d.toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}) + time; }
+  if (ev.freq === "monthly") return "Un " + DAY_FR[ev.days[0]] + " par mois" + time;
+  if (ev.freq === "first") return "Le premier " + DAY_FR[ev.days[0]] + " du mois" + time;
+  const ds = ev.days.length === 7 ? "Tous les soirs" : ev.days.length > 3 ? "Du " + DAY_FR[ev.days[0]] + " au " + DAY_FR[ev.days[ev.days.length - 1]] : "Tous les " + ev.days.map(d => DAY_P[d]).join(" et ");
+  return ds + time;
+}
+function relDay(d){
+  if (!d) return "";
+  const diff = Math.round((d - dayStart(new Date())) / 864e5);
+  return diff === 0 ? "Ce soir" : diff === 1 ? "Demain" : diff < 7 ? DAY_FR[d.getDay()].replace(/^./, c => c.toUpperCase()) : d.toLocaleDateString("fr-FR", {weekday:"short", day:"numeric", month:"short"});
+}
+function evCard(ev){
+  const T = EVT[ev.type] || EVT.jeux, occ = nextOcc(ev), rel = relDay(occ);
+  return `<article class="ev" style="--c:${T.color}">
+    <div class="ev-top"><span class="ev-emo emo">${T.e}</span><span class="ev-type">${T.label}</span>${rel ? `<span class="ev-when${rel === "Ce soir" ? " now" : ""}">${rel}</span>` : ""}</div>
+    <h3>${esc(ev.title)}</h3>
+    <p class="ev-venue">${esc(ev.venue)}<span>${esc((ev.address || "").replace(/, \d{5} Paris$/, "").replace(/^(.*), (\d{5}) Paris$/, "$1"))}</span></p>
+    <div class="tiles">${`<span class="tile">${ICON.clock}${esc(whenLabel(ev))}</span>`}${ev.price ? `<span class="tile">${esc(ev.price)}</span>` : ""}</div>
+    ${ev.note ? `<p class="ev-note">${esc(ev.note)}</p>` : ""}
+    <div class="row-btns"><button class="cta small" data-evmap="${ev.id}">${ICON.pin}Voir sur la carte</button>
+      ${ev.source ? `<a class="cta light small" href="${esc(ev.source)}" target="_blank" rel="noopener">Source</a>` : ""}
+      ${ev.mine ? `<button class="cta light small red" data-evdel="${ev.id}" aria-label="Supprimer cette soirée">${ICON.trash}</button>` : ""}</div>
+  </article>`;
+}
+function eventsHTML(){
+  const today = dayStart(new Date());
+  const days = [...Array(7)].map((_, k) => { const d = new Date(today); d.setDate(d.getDate() + k); return d; });
+  let list = allEvents().map(ev => ({ev, occ:nextOcc(ev)}));
+  if (state.evDay !== "all"){ const target = days[state.evDay]; list = list.filter(({ev, occ}) => occ && occ.getTime() === target.getTime() || (!ev.date && ev.freq !== "monthly" && ev.days.includes(target.getDay()) && (ev.freq !== "first" || target.getDate() <= 7) && state.evDay > 0)); }
+  if (state.evTypes.size) list = list.filter(({ev}) => state.evTypes.has(ev.type));
+  list.sort((a, b) => (a.occ ? a.occ.getTime() : 9e15) - (b.occ ? b.occ.getTime() : 9e15) || (a.ev.time || "99").localeCompare(b.ev.time || "99"));
+  const types = Object.keys(EVT).filter(t => allEvents().some(e => e.type === t));
+  let h = `<div class="ph"><h1>Soirées</h1><button class="textbtn" id="addEv">+ Ajouter</button></div>
+    <p class="lead">Quiz, karaoké, jams et tournois qui reviennent chaque semaine.</p>
+    <div class="dchips">${[["all","Tout"]].concat(days.map((d, k) => [k, k === 0 ? "Ce soir" : k === 1 ? "Demain" : DAY_S[d.getDay()] + " " + d.getDate()])).map(([k, l]) => `<button data-day="${k}" aria-pressed="${String(state.evDay) === String(k)}">${l}</button>`).join("")}</div>
+    <div class="tchips">${types.map(t => `<button data-type="${t}" aria-pressed="${state.evTypes.has(t)}" style="--c:${EVT[t].color}"><span class="emo">${EVT[t].e}</span>${EVT[t].label}</button>`).join("")}</div>`;
+  if (!list.length) h += `<div class="empty"><span class="emo">🌙</span><b>Rien de prévu ce jour-là</b>Choisis un autre jour ou ajoute une soirée que tu connais.</div>`;
+  else h += `<div class="evs">${list.map(({ev}) => evCard(ev)).join("")}</div>`;
+  h += `<p class="note">Soirées relevées dans des guides et sur les sites des bars : elles peuvent changer ou faire une pause l'été. Vérifie avant d'y aller.</p>`;
+  return h;
+}
+function evFormHTML(){
+  const d = state.evDraft;
+  return `<div class="ph"><h1>Nouvelle<br>soirée</h1><button class="textbtn" id="cancelEv">Annuler</button></div>
+    <p class="lead">Elle s'affichera dans tes soirées, sur cet appareil.</p>
+    <form id="evForm" novalidate>
+      <p class="glabel">Type de soirée</p>
+      <div class="pick" id="evTypes">${Object.entries(EVT).map(([k, T]) => `<button type="button" class="pk" data-evt="${k}" style="--c:${T.color}" aria-pressed="${d.type === k}"><span class="emo">${T.e}</span>${T.label}</button>`).join("")}</div>
+      <div class="group" style="margin-top:16px">
+        <label class="f"><span class="k">Nom de la soirée</span><input type="text" id="eTitle" maxlength="80" placeholder="Quiz musical du mardi" value="${esc(d.title)}"></label>
+        <label class="f"><span class="k">Lieu</span><input type="text" id="eVenue" maxlength="80" placeholder="Le Bar des Amis" value="${esc(d.venue)}"></label>
+        <label class="f"><span class="k">Adresse</span><input type="text" id="eAddr" maxlength="140" placeholder="12 rue Oberkampf, Paris" value="${esc(d.address)}"></label>
+      </div>
+      <p class="glabel">Quand</p>
+      <div class="seg" id="evFreq"><button type="button" data-f="weekly" aria-pressed="${!d.once}">Chaque semaine</button><button type="button" data-f="once" aria-pressed="${!!d.once}">Une seule fois</button></div>
+      ${d.once ? `<div class="group"><label class="f"><span class="k">Date</span><input type="date" id="eDate" value="${esc(d.date)}"></label></div>`
+        : `<div class="days" id="evDays">${[1,2,3,4,5,6,0].map(k => `<button type="button" data-d="${k}" aria-pressed="${d.days.includes(k)}">${DAY_S[k]}</button>`).join("")}</div>`}
+      <div class="group"><label class="f"><span class="k">Heure</span><input type="time" id="eTime" value="${esc(d.time)}"></label>
+        <label class="f"><span class="k">Prix</span><input type="text" id="ePrice" maxlength="40" placeholder="Gratuit, 5 €…" value="${esc(d.price)}"></label>
+        <label class="f"><span class="k">Infos</span><textarea id="eNote" maxlength="300" placeholder="Équipes de 6 max, inscription au bar…">${esc(d.note)}</textarea></label></div>
+      <p class="ferr" id="eErr" hidden></p>
+      <button class="cta" type="submit" style="width:100%">Enregistrer la soirée</button>
+    </form>`;
+}
+function startEvForm(){ state.evDraft = {type:"quiz", title:"", venue:"", address:"", once:false, days:[], date:"", time:"", price:"", note:""}; state.view = "evform"; $("page").innerHTML = ""; render(); }
+async function saveEv(){
+  const d = state.evDraft, err = $("eErr");
+  const miss = !d.title.trim() ? "Donne un nom à la soirée." : !d.venue.trim() ? "Indique le lieu." : d.once ? (!d.date ? "Choisis la date." : "") : (!d.days.length ? "Choisis au moins un jour." : "");
+  if (miss){ err.textContent = miss; err.hidden = false; return; }
+  const ev = {id:"me" + Date.now().toString(36), mine:true, type:d.type, title:d.title.trim(), venue:d.venue.trim(), address:d.address.trim(), days:d.once ? [] : d.days.slice().sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)), date:d.once ? d.date : "", time:d.time, price:d.price.trim(), note:d.note.trim()};
+  // si le lieu est déjà sur la carte, on reprend sa position
+  const twin = allPlaces().find(p => norm(p.name) === norm(ev.venue));
+  if (twin){ ev.lat = twin.lat; ev.lon = twin.lon; if (!ev.address) ev.address = twin.address || ""; }
+  state.myEvents.push(ev); store.set("events", state.myEvents);
+  state.evDraft = null; state.view = "events"; $("page").innerHTML = ""; render(); toast("Soirée ajoutée");
+  if (ev.lat == null && ev.address){ const g = await geocode(ev.address); if (g){ ev.lat = g.lat; ev.lon = g.lon; store.set("events", state.myEvents); } }
+}
+async function showEventOnMap(id){
+  const ev = allEvents().find(e => e.id === id); if (!ev) return;
+  if (ev.lat == null){ if (!ev.address){ toast("Adresse inconnue pour cette soirée"); return; } toast("Recherche de l'adresse…"); const g = await geocode(ev.address); if (!g){ toast("Adresse introuvable"); return; } ev.lat = g.lat; ev.lon = g.lon; }
+  go("map");
+  const T = EVT[ev.type] || EVT.jeux;
+  evLayer.clearLayers();
+  L.marker([ev.lat, ev.lon], {zIndexOffset:2500, icon:L.divIcon({className:"", iconSize:[46,46], iconAnchor:[23,23],
+    html:`<div class="mk sel evm" style="--c:${T.color}"><div class="b emo">${T.e}</div><div class="lb" style="display:block"><b>${esc(ev.venue)}</b><i>${esc(T.label.toLowerCase())} · ${esc(relDay(nextOcc(ev)).toLowerCase() || whenLabel(ev).toLowerCase())}</i></div></div>`})})
+    .on("click", () => { const p = allPlaces().find(q => norm(q.name) === norm(ev.venue) || dist(q, ev) < 40); if (p) openDetail(p.key); }).addTo(evLayer);
+  focusOn(ev.lat, ev.lon, 17);
+}
+function eventsAt(p){
+  const n = norm(p.name);
+  return allEvents().filter(ev => norm(ev.venue) === n || (n.length > 4 && norm(ev.venue).includes(n)) || (ev.lat != null && dist(ev, p) < 35));
+}
+async function loadEvents(){
+  let list = [];
+  try{ list = await fetchJSON("events.json", {cache:"no-cache"}); }catch{}
+  const geo = store.get("geo", {});
+  state.events = list.map((e, i) => ({...e, id:"e" + i, lat:geo[e.address]?.[0], lon:geo[e.address]?.[1]}));
+  if (state.view === "events") render();
+  geocodeAll(state.events, () => { if (state.view === "events") render(); });
+}
+async function geocodeAll(items, onChange){
+  const geo = store.get("geo", {});
+  const todo = items.filter(p => p.lat == null && p.address);
+  for (let i = 0; i < todo.length; i += 5){
+    let changed = false;
+    await Promise.all(todo.slice(i, i + 5).map(async p => {
+      const g = await geocode(p.address);
+      if (g){ p.lat = g.lat; p.lon = g.lon; geo[p.address] = [g.lat, g.lon]; changed = true; }
+    }));
+    if (changed){ store.set("geo", geo); onChange && onChange(); }
+  }
+}
+$("page").addEventListener("click", e => {
+  const t = e.target;
+  if (state.view === "events"){
+    const dc = t.closest(".dchips button"); if (dc){ state.evDay = dc.dataset.day === "all" ? "all" : +dc.dataset.day; render(); return; }
+    const tc = t.closest(".tchips button"); if (tc){ const k = tc.dataset.type; state.evTypes.has(k) ? state.evTypes.delete(k) : state.evTypes.add(k); render(); return; }
+    if (t.closest("#addEv")){ startEvForm(); return; }
+    const vm = t.closest("[data-evmap]"); if (vm){ showEventOnMap(vm.dataset.evmap); return; }
+    const vd = t.closest("[data-evdel]"); if (vd){ if (vd.dataset.confirm !== "1"){ vd.dataset.confirm = "1"; vd.textContent = "Supprimer ?"; return; } state.myEvents = state.myEvents.filter(x => x.id !== vd.dataset.evdel); store.set("events", state.myEvents); render(); toast("Soirée supprimée"); return; }
+  }
+  if (state.view === "evform"){
+    const d = state.evDraft;
+    if (t.closest("#cancelEv")){ state.evDraft = null; state.view = "events"; $("page").innerHTML = ""; render(); return; }
+    const ty = t.closest("[data-evt]"); if (ty){ d.type = ty.dataset.evt; document.querySelectorAll("[data-evt]").forEach(b => b.setAttribute("aria-pressed", b === ty)); return; }
+    const fq = t.closest("[data-f]"); if (fq){ d.once = fq.dataset.f === "once"; $("page").innerHTML = evFormHTML(); return; }
+    const dd = t.closest("[data-d]"); if (dd){ const k = +dd.dataset.d, i = d.days.indexOf(k); i < 0 ? d.days.push(k) : d.days.splice(i, 1); dd.setAttribute("aria-pressed", i < 0); $("eErr").hidden = true; return; }
+  }
+});
+$("page").addEventListener("input", e => {
+  if (state.view !== "evform" || !state.evDraft) return;
+  const d = state.evDraft, map_ = {eTitle:"title", eVenue:"venue", eAddr:"address", eDate:"date", eTime:"time", ePrice:"price", eNote:"note"};
+  if (map_[e.target.id]){ d[map_[e.target.id]] = e.target.value; $("eErr").hidden = true; }
+});
+$("page").addEventListener("submit", e => { if (e.target.id === "evForm"){ e.preventDefault(); saveEv(); } });
+
 $("where").addEventListener("click", () => go("list"));
 function setCenter(lat, lon, label, fit){
   state.center = {lat, lon}; state.centerLabel = label || "";
@@ -1103,7 +1453,10 @@ addEventListener("resize", () => { syncAttr(); updateHere(); });
 /* ================= Démarrage ================= */
 render();
 loadCurated();
+loadEvents();
 startGPS();
+// les statuts « ouvert » et « ce soir » bougent avec l'heure
+setInterval(() => { if (!map._animatingZoom && ["map","list","fav","events"].includes(state.view)) render(); }, 120000);
 setTimeout(() => { if (!state.center) setCenter(S0.lat, S0.lon, "Paris", true); }, 6000);
 })();
 </script>
