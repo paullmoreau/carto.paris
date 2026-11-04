@@ -21,6 +21,12 @@ PALETTES = {
   building="#e1e4e1", building_line="#d6dad6", path="#dde1dd", road="#ffffff", casing="#dde1dc",
   motor="#fff1b8", motor_casing="#f1dc8a", rail="#d2d6d2", aero="#e6e9e6",
   label="#4b5057", label_halo="#ffffff", street="#8a9097", water_label="#2f87c0", boundary="#c9c9d6"),
+ # Nuit façon Plans d'Apple : gris anthracite, parcs vert profond, eau bleu nuit
+ "nuit": dict(
+  land="#1d1f21", park="#1f3326", wood="#203828", water="#0e2a3f", resid="#202224",
+  building="#26292c", building_line="#2e3135", path="#34383c", road="#3a3e43", casing="#25282b",
+  motor="#5c5340", motor_casing="#3a3427", rail="#3b3f44", aero="#25282b",
+  label="#d9dce0", label_halo="#1d1f21", street="#a1a7ad", water_label="#6fa3c4", boundary="#5b6068"),
  # Sombre « chrome » : asphalte presque noir, rues gris acier, grands axes teintés de jaune
  "sombre": dict(
   land="#121417", park="#16201a", wood="#17221b", water="#0b1620", resid="#15171a",

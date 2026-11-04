@@ -1,19 +1,228 @@
 [
-  {"title":"Pub quiz du dimanche","type":"quiz","venue":"The Frog & Rosbif","address":"116 rue Saint-Denis, 75002 Paris","days":[0],"time":"20:30","note":"Quiz en anglais, en équipe.","source":"https://www.frogpubs.com/pub-rosbif-paris.php"},
-  {"title":"Pub quiz","type":"quiz","venue":"The Bombardier","address":"2 place du Panthéon, 75005 Paris","days":[0],"time":"","note":"Chaque dimanche soir.","source":"https://www.visitparisregion.com/en/the-bombardier-charles-wells"},
-  {"title":"Quiz du mercredi","type":"quiz","venue":"The Pub","address":"4 rue Caron, 75004 Paris","days":[3],"time":"","note":"En français et en anglais.","source":"https://quiz-room.com/blog/9-activities-in-paris-for-english-speaking-people"},
-  {"title":"Blind test, un shot si tu trouves","type":"blindtest","venue":"Hideout Saint-Germain","address":"32 rue Dauphine, 75006 Paris","days":[2,3],"time":"21:00","source":"https://www.paris-friendly.fr/blind-test-et-shots-offerts.html"},
-  {"title":"Blind test","type":"blindtest","venue":"K1ze Bar Opéra","address":"15 rue Gaillon, 75002 Paris","days":[3],"time":"","source":"https://www.sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/guides/333954-bar-blindtest-paris"},
-  {"title":"Blind test du premier jeudi","type":"blindtest","venue":"Bistrot des Cinéastes","address":"7 avenue de Clichy, 75017 Paris","days":[4],"time":"","freq":"first","note":"Le premier jeudi du mois.","source":"https://www.parisbouge.com/events/282602"},
-  {"title":"Karaoké du jeudi","type":"karaoke","venue":"Le Biscornu","address":"87 rue Montmartre, 75002 Paris","days":[4],"time":"21:00","end":"00:30","source":"https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"},
-  {"title":"Karaoké du week-end","type":"karaoke","venue":"Café du Châtelet","address":"8 rue Saint-Denis, 75001 Paris","days":[5,6],"time":"","source":"https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"},
-  {"title":"Karaoké jusqu'à 5h","type":"karaoke","venue":"La Noche","address":"7 rue Pierre Fontaine, 75009 Paris","days":[2,3,4,5,6],"time":"22:30","end":"05:00","price":"15–17 € avec une conso","source":"https://www.parisbouge.com/places/2921"},
-  {"title":"La jam du lundi","type":"jam","venue":"Le Baiser Salé","address":"58 rue des Lombards, 75001 Paris","days":[1],"time":"21:00","note":"Jam jazz animée par François Constantin depuis plus de 30 ans. Réservation au 01 42 33 37 71.","source":"https://www.paris.fr/evenements/la-jam-du-lundi-animee-par-francois-constantin-22168"},
-  {"title":"Mardi Jazz, jam session","type":"jam","venue":"POPUP du Label","address":"14 rue Abel, 75012 Paris","days":[2],"time":"20:00","price":"Entrée libre","source":"https://events.musicofourdesire.com/event/sydz-mardi-jazz-live-paris-france"},
-  {"title":"Concert jazz, jam et échecs","type":"jam","venue":"L'Échiquier","address":"164 rue Saint-Maur, 75011 Paris","days":[3],"time":"21:00","price":"Concert gratuit","note":"Échiquiers à disposition toute la soirée.","source":"https://www.privateaser.com/lieu/62868-l-echiquier"},
-  {"title":"Tournoi de fléchettes","type":"tournoi","venue":"Sputnik","address":"14 rue de la Butte aux Cailles, 75013 Paris","days":[3],"time":"","note":"Tournoi du Sputnik Darts Club, d'après les habitués.","source":"https://www.novacircle.com/spots/europe/france/ile-de-france-region/paris-municipality/paris/sputnik-bar-a-flechettes-306213/about"},
-  {"title":"Tournoi de billard anglais","type":"tournoi","venue":"The Auld Alliance","address":"80 rue François Miron, 75004 Paris","days":[4],"time":"","source":"https://www.france-hotel-guide.com/fr/blog/?p=29132"},
-  {"title":"Chess and Cakes, tournoi d'échecs et tea time","type":"echecs","venue":"Hôtel Monsieur George","address":"17 rue Washington, 75008 Paris","days":[0],"time":"","freq":"monthly","price":"40 €","note":"Un dimanche par mois, avec Blitz Society. Inscription sur Eventbrite.","source":"https://www.sortiraparis.com/en/where-to-eat-in-paris/food-events/articles/324673-chess-and-cake-tea-time-tournament-at-hotel-monsieur-george"},
-  {"title":"Thés ludiques","type":"jeux","venue":"Aux Dés Calés","address":"181 rue Legendre, 75017 Paris","days":[0],"time":"15:00","end":"18:00","source":"https://www.118712.fr/professionnels/WkdZVldTHwU"},
-  {"title":"Bingo drag avec Minima Gesté","type":"theme","venue":"La Felicità","address":"5 parvis Alan Turing, 75013 Paris","days":[0],"time":"17:00","end":"23:00","price":"Entrée libre","source":"https://www.lafelicita.fr/en/bingo-drag-paris"}
+ {
+  "title": "Pub quiz du dimanche",
+  "type": "quiz",
+  "venue": "The Frog & Rosbif",
+  "address": "116 rue Saint-Denis, 75002 Paris",
+  "days": [
+   0
+  ],
+  "time": "20:30",
+  "note": "Quiz en anglais, en équipe.",
+  "source": "https://www.frogpubs.com/pub-rosbif-paris.php"
+ },
+ {
+  "title": "Pub quiz",
+  "type": "quiz",
+  "venue": "The Bombardier",
+  "address": "2 place du Panthéon, 75005 Paris",
+  "days": [
+   0
+  ],
+  "time": "",
+  "note": "Chaque dimanche soir.",
+  "source": "https://www.visitparisregion.com/en/the-bombardier-charles-wells"
+ },
+ {
+  "title": "Quiz du mercredi",
+  "type": "quiz",
+  "venue": "The Pub",
+  "address": "4 rue Caron, 75004 Paris",
+  "days": [
+   3
+  ],
+  "time": "",
+  "note": "En français et en anglais.",
+  "source": "https://quiz-room.com/blog/9-activities-in-paris-for-english-speaking-people"
+ },
+ {
+  "title": "Blind test, un shot si tu trouves",
+  "type": "blindtest",
+  "venue": "Hideout Saint-Germain",
+  "address": "32 rue Dauphine, 75006 Paris",
+  "days": [
+   2,
+   3
+  ],
+  "time": "21:00",
+  "source": "https://www.paris-friendly.fr/blind-test-et-shots-offerts.html"
+ },
+ {
+  "title": "Blind test",
+  "type": "blindtest",
+  "venue": "K1ze Bar Opéra",
+  "address": "15 rue Gaillon, 75002 Paris",
+  "days": [
+   3
+  ],
+  "time": "",
+  "source": "https://www.sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/guides/333954-bar-blindtest-paris"
+ },
+ {
+  "title": "Blind test du premier jeudi",
+  "type": "blindtest",
+  "venue": "Bistrot des Cinéastes",
+  "address": "7 avenue de Clichy, 75017 Paris",
+  "days": [
+   4
+  ],
+  "time": "",
+  "freq": "first",
+  "note": "Le premier jeudi du mois.",
+  "source": "https://www.parisbouge.com/events/282602"
+ },
+ {
+  "title": "Karaoké du jeudi",
+  "type": "karaoke",
+  "venue": "Le Biscornu",
+  "address": "87 rue Montmartre, 75002 Paris",
+  "days": [
+   4
+  ],
+  "time": "21:00",
+  "end": "00:30",
+  "source": "https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"
+ },
+ {
+  "title": "Karaoké du week-end",
+  "type": "karaoke",
+  "venue": "Café du Châtelet",
+  "address": "8 rue Saint-Denis, 75001 Paris",
+  "days": [
+   5,
+   6
+  ],
+  "time": "",
+  "source": "https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"
+ },
+ {
+  "title": "Karaoké jusqu'à 5h",
+  "type": "karaoke",
+  "venue": "La Noche",
+  "address": "7 rue Pierre Fontaine, 75009 Paris",
+  "days": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "time": "22:30",
+  "end": "05:00",
+  "price": "15–17 € avec une conso",
+  "source": "https://www.parisbouge.com/places/2921"
+ },
+ {
+  "title": "La jam du lundi",
+  "type": "jam",
+  "venue": "Le Baiser Salé",
+  "address": "58 rue des Lombards, 75001 Paris",
+  "days": [
+   1
+  ],
+  "time": "21:00",
+  "note": "Jam jazz animée par François Constantin depuis plus de 30 ans. Réservation au 01 42 33 37 71.",
+  "source": "https://www.paris.fr/evenements/la-jam-du-lundi-animee-par-francois-constantin-22168"
+ },
+ {
+  "title": "Mardi Jazz, jam session",
+  "type": "jam",
+  "venue": "POPUP du Label",
+  "address": "14 rue Abel, 75012 Paris",
+  "days": [
+   2
+  ],
+  "time": "20:00",
+  "price": "Entrée libre",
+  "source": "https://events.musicofourdesire.com/event/sydz-mardi-jazz-live-paris-france"
+ },
+ {
+  "title": "Concert jazz, jam et échecs",
+  "type": "jam",
+  "venue": "L'Échiquier",
+  "address": "164 rue Saint-Maur, 75011 Paris",
+  "days": [
+   3
+  ],
+  "time": "21:00",
+  "price": "Concert gratuit",
+  "note": "Échiquiers à disposition toute la soirée.",
+  "source": "https://www.privateaser.com/lieu/62868-l-echiquier"
+ },
+ {
+  "title": "Tournoi de fléchettes",
+  "type": "tournoi",
+  "venue": "Sputnik",
+  "address": "14 rue de la Butte aux Cailles, 75013 Paris",
+  "days": [
+   3
+  ],
+  "time": "",
+  "note": "Tournoi du Sputnik Darts Club, d'après les habitués.",
+  "source": "https://www.novacircle.com/spots/europe/france/ile-de-france-region/paris-municipality/paris/sputnik-bar-a-flechettes-306213/about"
+ },
+ {
+  "title": "Tournoi de billard anglais",
+  "type": "tournoi",
+  "venue": "The Auld Alliance",
+  "address": "80 rue François Miron, 75004 Paris",
+  "days": [
+   4
+  ],
+  "time": "",
+  "source": "https://www.france-hotel-guide.com/fr/blog/?p=29132"
+ },
+ {
+  "title": "Chess and Cakes, tournoi d'échecs et tea time",
+  "type": "echecs",
+  "venue": "Hôtel Monsieur George",
+  "address": "17 rue Washington, 75008 Paris",
+  "days": [
+   0
+  ],
+  "time": "",
+  "freq": "monthly",
+  "price": "40 €",
+  "note": "Un dimanche par mois, avec Blitz Society. Inscription sur Eventbrite.",
+  "source": "https://www.sortiraparis.com/en/where-to-eat-in-paris/food-events/articles/324673-chess-and-cake-tea-time-tournament-at-hotel-monsieur-george"
+ },
+ {
+  "title": "Thés ludiques",
+  "type": "jeux",
+  "venue": "Aux Dés Calés",
+  "address": "181 rue Legendre, 75017 Paris",
+  "days": [
+   0
+  ],
+  "time": "15:00",
+  "end": "18:00",
+  "source": "https://www.118712.fr/professionnels/WkdZVldTHwU"
+ },
+ {
+  "title": "Bingo drag avec Minima Gesté",
+  "type": "theme",
+  "venue": "La Felicità",
+  "address": "5 parvis Alan Turing, 75013 Paris",
+  "days": [
+   0
+  ],
+  "time": "17:00",
+  "end": "23:00",
+  "price": "Entrée libre",
+  "source": "https://www.lafelicita.fr/en/bingo-drag-paris"
+ },
+ {
+  "title": "Karaoké du début de semaine",
+  "type": "karaoke",
+  "venue": "Rockstar Café",
+  "address": "46 boulevard Voltaire, 75011 Paris",
+  "days": [
+   1,
+   2,
+   3
+  ],
+  "time": "18:00",
+  "end": "23:00",
+  "source": "https://www.privateaser.com/lieu/2399-le-rock-star-cafe"
+ }
 ]

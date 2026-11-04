@@ -1,62 +1,1049 @@
 [
-  {"name":"Le Dernier Bar avant la Fin du Monde","address":"19 avenue Victoria, 75001 Paris","games":["societe","arcade"],"kind":"Bar geek","hours":"Mo-Th 15:00-24:00; Fr 15:00-02:00; Sa 11:30-02:00; Su 11:30-24:00","source":"https://www.paris-friendly.fr/Dernier-Bar-avant-la-Fin-du-Monde-QG-geeks-reveurs-insolite.html"},
-  {"name":"Les Grands Gamins","address":"19 rue de Cléry, 75002 Paris","games":["societe"],"kind":"Bar à jeux","note":"Plus de 450 jeux, boutique sur place.","hours":"Mo off; Tu-Th 17:30-23:30; Fr 17:30-01:00; Sa 14:00-01:00; Su 14:00-22:00","source":"https://www.schlouk-map.com/en/places/les-grands-gamins-1"},
-  {"name":"Le Nid – Cocon Ludique","address":"227 rue Saint-Martin, 75003 Paris","games":["societe"],"kind":"Café ludique","note":"Plus de 800 jeux. Réservation conseillée le week-end.","hours":"Mo-Su 12:00-01:00","source":"https://www.paris-friendly.fr/le-nid-bar-insolite-a-paris-avec-jeux-de-societe.html"},
-  {"name":"Aux Dés Calés","address":"181 rue Legendre, 75017 Paris","games":["societe","billard"],"kind":"Brasserie ludique","note":"Thés ludiques le dimanche de 15h à 18h.","source":"https://www.pariszigzag.fr/bar-restaurant/bar/les-meilleurs-bars-a-jeux-de-societe/"},
-  {"name":"Les Mauvais Joueurs – Bastille","address":"46 rue Sedaine, 75011 Paris","games":["societe"],"kind":"Bar à jeux","source":"https://www.schlouk-map.com/fr/places/les-mauvais-joueurs-le-bar-a-jeux"},
-  {"name":"Les Mauvais Joueurs – Austerlitz","address":"12 boulevard Vincent Auriol, 75013 Paris","games":["societe","arcade"],"kind":"Bar à jeux","note":"Jeux à 3 € par personne, Switch pour les tournois.","source":"https://www.privateaser.com/lieu/49406-les-mauvais-joueurs-austerlitz"},
-  {"name":"Oya Café","address":"25 rue de la Reine Blanche, 75013 Paris","games":["societe"],"kind":"Café ludique","note":"Institution depuis 1995, plusieurs centaines de jeux.","hours":"Mo off; Tu-Sa 14:00-24:00; Su 14:00-21:00","source":"https://parisjetaime.com/restaurant/l-oya-cafe-p727"},
-  {"name":"Meisia","address":"84 rue René Boulanger, 75010 Paris","games":["societe"],"kind":"Café ludique","source":"https://leclaireur.fnac.com/article/76313-on-a-teste-on-a-aime-le-bar-a-jeux-de-societe-meisia-a-paris-10e/"},
-  {"name":"Blitz Society – Saint-Germain","address":"4 rue du Sabot, 75006 Paris","games":["echecs"],"kind":"Bar d'échecs","hours":"Mo off; Tu-Su 11:00-23:00","source":"https://www.timeout.fr/paris/bars/blitz-society"},
-  {"name":"Blitz Society – Rousseau","address":"58 rue Jean-Jacques Rousseau, 75001 Paris","games":["echecs"],"kind":"Bar d'échecs caché","note":"À l'étage, au-dessus du restaurant Pizi.","hours":"Mo-Su 18:00-02:00","source":"https://www.sortiraparis.com/en/what-to-do-in-paris/gaming/articles/346925-a-hidden-bar-in-paris-invites-you-to-play-chess-until-2-a-m"},
-  {"name":"L'Échiquier","address":"164 rue Saint-Maur, 75011 Paris","games":["echecs"],"kind":"Bar jazz et échecs","note":"Échiquiers à disposition toute la soirée.","source":"https://www.privateaser.com/lieu/62868-l-echiquier"},
-  {"name":"Shoot Again Billard Nation","address":"9 cité Debergue, 75012 Paris","games":["billard"],"kind":"Salle de billard","hours":"Mo-Fr 12:00-02:00; Sa,Su 12:00-04:00","source":"https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"},
-  {"name":"Club 8&9 Billard Voltaire","address":"9 cour Debille, 75011 Paris","games":["billard"],"kind":"Salle de billard","note":"Une vingtaine de billards américains et 5 billards chinois.","hours":"Mo-Su 13:00-02:00","source":"https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"},
-  {"name":"O'Sullivans Rebel Bar","address":"10 rue des Lombards, 75004 Paris","games":["billard"],"kind":"Pub","note":"Billard à 2 € la partie.","source":"https://www.privateaser.com/lieu/5637-o-sullivans-rebel-bar"},
-  {"name":"Indiana Club Maine","address":"77 avenue du Maine, 75014 Paris","games":["billard"],"kind":"Bar américain","hours":"Mo-Su 08:00-02:00","source":"https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"},
-  {"name":"Blue Billard","address":"111 rue Saint-Maur, 75011 Paris","games":["billard"],"kind":"Salle de billard","source":"https://www.koifaire.com/ile-de-france/blue,billard-15393.html"},
-  {"name":"The Auld Alliance","address":"80 rue François Miron, 75004 Paris","games":["billard"],"kind":"Pub écossais","note":"Billard anglais, tournoi le jeudi.","source":"https://www.france-hotel-guide.com/fr/blog/?p=29132"},
-  {"name":"Bowling Mouffetard","address":"73 rue Mouffetard, 75005 Paris","games":["bowling","billard"],"kind":"Bowling","note":"8 pistes et 4 billards.","hours":"Mo-Fr 15:00-02:00; Sa,Su 10:00-02:00","source":"https://www.familinparis.fr/bowling-paris/"},
-  {"name":"Sputnik","address":"14 rue de la Butte aux Cailles, 75013 Paris","games":["flechettes","babyfoot"],"kind":"Bar","note":"Fléchettes gratuites contre une pièce d'identité, baby-foot à 1 €.","source":"https://www.novacircle.com/spots/europe/france/ile-de-france-region/paris-municipality/paris/sputnik-bar-a-flechettes-306213/about"},
-  {"name":"Shuffled – Boom Boom Villette","address":"30 avenue Corentin Cariou, 75019 Paris","games":["flechettes","autres"],"kind":"Shuffleboard et fléchettes","note":"5 cibles connectées et des pistes de shuffleboard.","source":"https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"},
-  {"name":"Les Petites Flèches – Parmentier","address":"49 rue Jean-Pierre Timbaud, 75011 Paris","games":["flechettes"],"kind":"Bar à fléchettes","note":"Réservation conseillée.","source":"https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"},
-  {"name":"Les Petites Flèches – Strasbourg-Saint-Denis","address":"7 rue d'Enghien, 75010 Paris","games":["flechettes"],"kind":"Bar à fléchettes","source":"https://www.schlouk-map.com/fr/places/les-petites-fleches-strasbourg-saint-denis"},
-  {"name":"Les Petites Flèches – Pigalle","address":"49 boulevard de Clichy, 75009 Paris","games":["flechettes"],"kind":"Bar à fléchettes","source":"https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"},
-  {"name":"La Tête dans les Nuages","address":"5 boulevard des Italiens, 75002 Paris","games":["arcade","bowling","karaoke"],"kind":"Salle de jeux","note":"Entrée libre, jetons sur place.","source":"https://parisjetaime.com/culture/la-tete-dans-les-nuages-p1571"},
-  {"name":"Reset Bar","address":"17 rue du Cygne, 75001 Paris","games":["arcade"],"kind":"Bar arcade","note":"Bornes d'arcade et consoles rétro en accès libre.","source":"https://www.france-hotel-guide.com/fr/blog/?p=21056"},
-  {"name":"Player One Bar","address":"224 rue Saint-Denis, 75002 Paris","games":["arcade"],"kind":"Bar arcade","source":"https://www.france-hotel-guide.com/fr/blog/?p=21056"},
-  {"name":"Extra Life Café","address":"9 passage des Patriarches, 75005 Paris","games":["arcade"],"kind":"Café gaming","note":"Bornes d'arcade, consoles rétro et Dance Dance Revolution au sous-sol.","source":"https://www.privateaser.com/lieu/65019-extra-life-cafe"},
-  {"name":"L'Arsouille","address":"22 rue des Trois Frères, 75018 Paris","games":["flipper"],"kind":"Bar","note":"Flipper James Bond 007.","source":"https://www.kineticist.com/locations/larsouille-paris.md"},
-  {"name":"Le Cornichon","address":"2 rue des Goncourt, 75011 Paris","games":["flipper"],"kind":"Bar","note":"Flipper Attack from Mars.","source":"https://www.kineticist.com/locations/le-cornichon-paris.md"},
-  {"name":"The Jean Bart","address":"12 rue Rossini, 75009 Paris","games":["flipper"],"kind":"Bar","note":"Flipper Medieval Madness.","source":"https://www.kineticist.com/locations/the-jean-bart-paris.md"},
-  {"name":"O'Sullivans By The Mill","address":"92 boulevard de Clichy, 75018 Paris","games":["flipper"],"kind":"Pub","note":"Flipper Monster Bash.","source":"https://www.kineticist.com/locations/osullivans-by-the-mill-paris.md"},
-  {"name":"Le Narval","address":"17 rue des Dames, 75017 Paris","games":["flipper"],"kind":"Bar-tabac","note":"Flipper The Sopranos.","source":"https://www.kineticist.com/locations/bar-tabac-le-narval-paris.md"},
-  {"name":"A Jean Bart","address":"2 rue Jouffroy d'Abbans, 75017 Paris","games":["flipper"],"kind":"Bar","note":"Deux flippers : Medieval Madness et JAWS.","source":"https://www.kineticist.com/locations/a-jean-bart-paris.md"},
-  {"name":"Bar Robert Chez Papy","address":"80 rue Baudricourt, 75013 Paris","games":["flipper"],"kind":"Bar","note":"Flipper Star Wars.","source":"https://www.kineticist.com/locations/bar-robert-chez-papy-paris.md"},
-  {"name":"Nuno's Bar","address":"19 rue des Feuillantines, 75005 Paris","games":["flipper"],"kind":"Bar","note":"Flipper Monster Bash.","source":"https://www.kineticist.com/locations/nunos-bar-paris.md"},
-  {"name":"Gossima Ping Pong Bar","address":"4 rue Victor Gelez, 75011 Paris","games":["pingpong","beerpong"],"kind":"Bar ping-pong","note":"8 tables sur deux niveaux, 6 € la demi-heure (5 € avant 18h).","hours":"Mo 16:00-24:00; Tu-Sa 16:00-02:00; Su off","source":"https://www.timeout.com/paris/en/bars-pubs/gossima-ping-pong-bar"},
-  {"name":"Le Mini-Pong","address":"64 rue Jean-Baptiste Pigalle, 75009 Paris","games":["pingpong"],"kind":"Bar ping-pong","source":"https://www.pariszigzag.fr/?p=45302"},
-  {"name":"BarOurcq","address":"68 quai de la Loire, 75019 Paris","games":["petanque"],"kind":"Bar","note":"Boules prêtées pour jouer au bord du canal.","source":"https://www.pariszigzag.fr/sortir-paris/sorties-exterieur-paris/ou-jouer-a-la-petanque-a-paris/"},
-  {"name":"Les Niçois","address":"7 rue Lacharrière, 75011 Paris","games":["petanque"],"kind":"Bar","note":"Terrain de boules au sous-sol, on joue même l'hiver.","source":"https://www.pariszigzag.fr/sortir-paris/sorties-exterieur-paris/ou-jouer-a-la-petanque-a-paris/"},
-  {"name":"Chez Bouboule – Montorgueil","address":"46 rue d'Argout, 75002 Paris","games":["petanque"],"kind":"Bar à pétanque","note":"Terrain intérieur à côté du bar.","source":"https://www.timeout.fr/paris/bars/chez-bouboule"},
-  {"name":"Chez Bouboule – Oberkampf","address":"26 avenue Jean Aicard, 75011 Paris","games":["petanque"],"kind":"Bar à pétanque","note":"Terrain intérieur à côté du bar.","source":"https://www.timeout.fr/paris/bars/chez-bouboule"},
-  {"name":"Les Mah-Boules","address":"14 rue de Jessaint, 75018 Paris","games":["petanque"],"kind":"Bar à pétanque","source":"https://parisjetaime.com/restaurant/les-mah-boules-p882"},
-  {"name":"Les Apéros de la Pétanque","address":"19 route des Fortifications, 75012 Paris","games":["petanque"],"kind":"Guinguette","note":"Bois de Vincennes, boules prêtées contre une pièce d'identité.","source":"https://mapstr.com/place/CCzBIo6sJWg"},
-  {"name":"La Noche","address":"7 rue Pierre Fontaine, 75009 Paris","games":["karaoke"],"kind":"Bar karaoké","note":"Entrée autour de 15–17 € avec une consommation.","hours":"Tu-Sa 22:30-05:00","source":"https://www.parisbouge.com/places/2921"},
-  {"name":"Chinatown Belleville","address":"27 rue du Buisson Saint-Louis, 75010 Paris","games":["karaoke"],"kind":"Restaurant karaoké","source":"https://www.sortiraparis.com/en/where-to-eat-in-paris/restaurant/articles/343931-chinatown-belleville-paris-s-biggest-karaoke-venue-for-singing-and-carefree-partying"},
-  {"name":"L'Enchanteur","address":"15 rue Michel Le Comte, 75003 Paris","games":["karaoke"],"kind":"Bar karaoké","source":"https://www.schlouk-map.com/fr/places/lenchanteur"},
-  {"name":"Café du Châtelet","address":"8 rue Saint-Denis, 75001 Paris","games":["karaoke"],"kind":"Bar","note":"Karaoké le vendredi et le samedi soir.","source":"https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"},
-  {"name":"Le Biscornu","address":"87 rue Montmartre, 75002 Paris","games":["karaoke","quiz"],"kind":"Bar","note":"Karaoké, blind tests et happy hour de 17h à 21h.","source":"https://www.privateaser.com/lieu/220-le-biscornu"},
-  {"name":"BAM Karaoké Box – Sentier","address":"50 rue d'Aboukir, 75002 Paris","games":["karaoke"],"kind":"Karaoké box","source":"https://sortiraparis.com/en/lieux/56977-bam-karaoke-sentier"},
-  {"name":"BAM Karaoké Box – Richer","address":"30 rue Richer, 75009 Paris","games":["karaoke"],"kind":"Karaoké box","source":"https://www.privateaser.com/lieu/39983-bam-karaoke-box-richer"},
-  {"name":"BAM Karaoké Box – Parmentier","address":"40 avenue de la République, 75011 Paris","games":["karaoke"],"kind":"Karaoké box","source":"https://sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/articles/145125-bam-karaoke-parmentier-large-tropical-bar-and-mega-large-room"},
-  {"name":"BAM Karaoké Box – Madeleine","address":"4 rue de Caumartin, 75009 Paris","games":["karaoke"],"kind":"Karaoké box","source":"https://en.bam-karaokebox.com/city/paris"},
-  {"name":"BAM Karaoké Box – Étoile","address":"69 avenue de Wagram, 75017 Paris","games":["karaoke"],"kind":"Karaoké box","source":"https://en.bam-karaokebox.com/etablissement/etoile"},
-  {"name":"KaraFun Bar","address":"3 impasse Bonne Nouvelle, 75010 Paris","games":["karaoke","quiz"],"kind":"Karaoké et quiz","note":"Salles privées de karaoké et de quiz, de 3 à 25 personnes.","source":"https://www.sortiraparis.com/en/what-to-do-in-paris/unusual/articles/303668-karafun-paris-the-ultimate-karaoke-and-quiz-experience-promo-code"},
-  {"name":"Quiz Room Odéon","address":"9 rue Guénégaud, 75006 Paris","games":["quiz"],"kind":"Salle de quiz","note":"Quiz façon plateau télé, en français ou en anglais.","hours":"Mo-Sa 10:00-23:30; Su 10:00-19:30","source":"https://parisjetaime.com/culture/quiz-room-odeon-p4202"},
-  {"name":"The Frog & Rosbif","address":"116 rue Saint-Denis, 75002 Paris","games":["quiz"],"kind":"Pub","note":"Pub quiz le dimanche soir.","source":"https://www.frogpubs.com/pub-rosbif-paris.php"},
-  {"name":"The Bombardier","address":"2 place du Panthéon, 75005 Paris","games":["quiz"],"kind":"Pub","note":"Pub quiz chaque dimanche.","source":"https://www.visitparisregion.com/en/the-bombardier-charles-wells"},
-  {"name":"Hideout Saint-Germain","address":"32 rue Dauphine, 75006 Paris","games":["quiz"],"kind":"Bar","note":"Blind test les mardis et mercredis à 21h.","source":"https://www.paris-friendly.fr/blind-test-et-shots-offerts.html"},
-  {"name":"K1ze Bar Opéra","address":"15 rue Gaillon, 75002 Paris","games":["quiz"],"kind":"Bar","note":"Blind test le mercredi.","source":"https://www.sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/guides/333954-bar-blindtest-paris"},
-  {"name":"L'Adresse","address":"3 rue Beaurepaire, 75010 Paris","games":["quiz"],"kind":"Bar","note":"Le blind test est la soirée phare du bar.","source":"https://parissecret.com/en/bar-ladresse-10e-2/"}
+ {
+  "name": "Le Dernier Bar avant la Fin du Monde",
+  "address": "19 avenue Victoria, 75001 Paris",
+  "games": [
+   "societe",
+   "arcade"
+  ],
+  "kind": "Bar geek",
+  "hours": "Mo-Th 15:00-24:00; Fr 15:00-02:00; Sa 11:30-02:00; Su 11:30-24:00",
+  "source": "https://www.paris-friendly.fr/Dernier-Bar-avant-la-Fin-du-Monde-QG-geeks-reveurs-insolite.html"
+ },
+ {
+  "name": "Les Grands Gamins",
+  "address": "19 rue de Cléry, 75002 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Bar à jeux",
+  "note": "Plus de 450 jeux, boutique sur place.",
+  "hours": "Mo off; Tu-Th 17:30-23:30; Fr 17:30-01:00; Sa 14:00-01:00; Su 14:00-22:00",
+  "source": "https://www.schlouk-map.com/en/places/les-grands-gamins-1"
+ },
+ {
+  "name": "Le Nid – Cocon Ludique",
+  "address": "227 rue Saint-Martin, 75003 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Café ludique",
+  "note": "Plus de 800 jeux. Réservation conseillée le week-end.",
+  "hours": "Mo-Su 12:00-01:00",
+  "source": "https://www.paris-friendly.fr/le-nid-bar-insolite-a-paris-avec-jeux-de-societe.html"
+ },
+ {
+  "name": "Aux Dés Calés",
+  "address": "181 rue Legendre, 75017 Paris",
+  "games": [
+   "societe",
+   "billard"
+  ],
+  "kind": "Brasserie ludique",
+  "note": "Thés ludiques le dimanche de 15h à 18h.",
+  "source": "https://www.pariszigzag.fr/bar-restaurant/bar/les-meilleurs-bars-a-jeux-de-societe/"
+ },
+ {
+  "name": "Les Mauvais Joueurs – Bastille",
+  "address": "46 rue Sedaine, 75011 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Bar à jeux",
+  "source": "https://www.schlouk-map.com/fr/places/les-mauvais-joueurs-le-bar-a-jeux"
+ },
+ {
+  "name": "Les Mauvais Joueurs – Austerlitz",
+  "address": "12 boulevard Vincent Auriol, 75013 Paris",
+  "games": [
+   "societe",
+   "arcade"
+  ],
+  "kind": "Bar à jeux",
+  "note": "Jeux à 3 € par personne, Switch pour les tournois.",
+  "source": "https://www.privateaser.com/lieu/49406-les-mauvais-joueurs-austerlitz"
+ },
+ {
+  "name": "Oya Café",
+  "address": "25 rue de la Reine Blanche, 75013 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Café ludique",
+  "note": "Institution depuis 1995, plusieurs centaines de jeux.",
+  "hours": "Mo off; Tu-Sa 14:00-24:00; Su 14:00-21:00",
+  "source": "https://parisjetaime.com/restaurant/l-oya-cafe-p727"
+ },
+ {
+  "name": "Meisia",
+  "address": "84 rue René Boulanger, 75010 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Café ludique",
+  "source": "https://leclaireur.fnac.com/article/76313-on-a-teste-on-a-aime-le-bar-a-jeux-de-societe-meisia-a-paris-10e/"
+ },
+ {
+  "name": "Blitz Society – Saint-Germain",
+  "address": "4 rue du Sabot, 75006 Paris",
+  "games": [
+   "echecs"
+  ],
+  "kind": "Bar d'échecs",
+  "hours": "Mo off; Tu-Su 11:00-23:00",
+  "source": "https://www.timeout.fr/paris/bars/blitz-society"
+ },
+ {
+  "name": "Blitz Society – Rousseau",
+  "address": "58 rue Jean-Jacques Rousseau, 75001 Paris",
+  "games": [
+   "echecs"
+  ],
+  "kind": "Bar d'échecs caché",
+  "note": "À l'étage, au-dessus du restaurant Pizi.",
+  "hours": "Mo-Su 18:00-02:00",
+  "source": "https://www.sortiraparis.com/en/what-to-do-in-paris/gaming/articles/346925-a-hidden-bar-in-paris-invites-you-to-play-chess-until-2-a-m"
+ },
+ {
+  "name": "L'Échiquier",
+  "address": "164 rue Saint-Maur, 75011 Paris",
+  "games": [
+   "echecs"
+  ],
+  "kind": "Bar jazz et échecs",
+  "note": "Échiquiers à disposition toute la soirée.",
+  "source": "https://www.privateaser.com/lieu/62868-l-echiquier"
+ },
+ {
+  "name": "Shoot Again Billard Nation",
+  "address": "9 cité Debergue, 75012 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Salle de billard",
+  "hours": "Mo-Fr 12:00-02:00; Sa,Su 12:00-04:00",
+  "source": "https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"
+ },
+ {
+  "name": "Club 8&9 Billard Voltaire",
+  "address": "9 cour Debille, 75011 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Salle de billard",
+  "note": "Une vingtaine de billards américains et 5 billards chinois.",
+  "hours": "Mo-Su 13:00-02:00",
+  "source": "https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"
+ },
+ {
+  "name": "O'Sullivans Rebel Bar",
+  "address": "10 rue des Lombards, 75004 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Pub",
+  "note": "Billard à 2 € la partie.",
+  "source": "https://www.privateaser.com/lieu/5637-o-sullivans-rebel-bar"
+ },
+ {
+  "name": "Indiana Club Maine",
+  "address": "77 avenue du Maine, 75014 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Bar américain",
+  "hours": "Mo-Su 08:00-02:00",
+  "source": "https://www.pariszigzag.fr/paris-au-quotidien/les-meilleurs-billards-de-paris/"
+ },
+ {
+  "name": "Le Bar à Pintes (BAP)",
+  "address": "111 rue Saint-Maur, 75011 Paris",
+  "games": [
+   "billard",
+   "babyfoot",
+   "flechettes"
+  ],
+  "kind": "Bar à jeux",
+  "source": "https://www.schlouk-map.com/fr/places/le-bar-a-pintes",
+  "note": "Billard, baby-foot et fléchettes, DJ sets."
+ },
+ {
+  "name": "The Auld Alliance",
+  "address": "80 rue François Miron, 75004 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Pub écossais",
+  "note": "Billard anglais, tournoi le jeudi.",
+  "source": "https://www.france-hotel-guide.com/fr/blog/?p=29132"
+ },
+ {
+  "name": "Bowling Mouffetard",
+  "address": "73 rue Mouffetard, 75005 Paris",
+  "games": [
+   "bowling",
+   "billard"
+  ],
+  "kind": "Bowling",
+  "note": "8 pistes et 4 billards.",
+  "hours": "Mo-Fr 15:00-02:00; Sa,Su 10:00-02:00",
+  "source": "https://www.familinparis.fr/bowling-paris/"
+ },
+ {
+  "name": "Sputnik",
+  "address": "14 rue de la Butte aux Cailles, 75013 Paris",
+  "games": [
+   "flechettes",
+   "babyfoot"
+  ],
+  "kind": "Bar",
+  "note": "Fléchettes gratuites contre une pièce d'identité, baby-foot à 1 €.",
+  "source": "https://www.novacircle.com/spots/europe/france/ile-de-france-region/paris-municipality/paris/sputnik-bar-a-flechettes-306213/about"
+ },
+ {
+  "name": "Shuffled – Boom Boom Villette",
+  "address": "30 avenue Corentin Cariou, 75019 Paris",
+  "games": [
+   "flechettes",
+   "autres"
+  ],
+  "kind": "Shuffleboard et fléchettes",
+  "note": "5 cibles connectées et des pistes de shuffleboard.",
+  "source": "https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"
+ },
+ {
+  "name": "Les Petites Flèches – Parmentier",
+  "address": "49 rue Jean-Pierre Timbaud, 75011 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Bar à fléchettes",
+  "note": "Réservation conseillée.",
+  "source": "https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"
+ },
+ {
+  "name": "Les Petites Flèches – Strasbourg-Saint-Denis",
+  "address": "7 rue d'Enghien, 75010 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Bar à fléchettes",
+  "source": "https://www.schlouk-map.com/fr/places/les-petites-fleches-strasbourg-saint-denis"
+ },
+ {
+  "name": "Les Petites Flèches – Pigalle",
+  "address": "49 boulevard de Clichy, 75009 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Bar à fléchettes",
+  "source": "https://www.paris-friendly.fr/bar-a-flechettes-boom-boom-villette.html"
+ },
+ {
+  "name": "La Tête dans les Nuages",
+  "address": "5 boulevard des Italiens, 75002 Paris",
+  "games": [
+   "arcade",
+   "bowling",
+   "karaoke"
+  ],
+  "kind": "Salle de jeux",
+  "note": "Entrée libre, jetons sur place.",
+  "source": "https://parisjetaime.com/culture/la-tete-dans-les-nuages-p1571"
+ },
+ {
+  "name": "Reset Bar",
+  "address": "17 rue du Cygne, 75001 Paris",
+  "games": [
+   "arcade",
+   "babyfoot",
+   "karaoke"
+  ],
+  "kind": "Bar arcade",
+  "note": "Bornes d'arcade et consoles rétro en accès libre.",
+  "source": "https://www.france-hotel-guide.com/fr/blog/?p=21056"
+ },
+ {
+  "name": "Player One Bar",
+  "address": "224 rue Saint-Denis, 75002 Paris",
+  "games": [
+   "arcade"
+  ],
+  "kind": "Bar arcade",
+  "source": "https://www.france-hotel-guide.com/fr/blog/?p=21056"
+ },
+ {
+  "name": "Extra Life Café",
+  "address": "9 passage des Patriarches, 75005 Paris",
+  "games": [
+   "arcade",
+   "societe"
+  ],
+  "kind": "Café gaming",
+  "note": "Bornes d'arcade, consoles rétro et Dance Dance Revolution au sous-sol.",
+  "source": "https://www.privateaser.com/lieu/65019-extra-life-cafe"
+ },
+ {
+  "name": "L'Arsouille",
+  "address": "22 rue des Trois Frères, 75018 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Flipper James Bond 007.",
+  "source": "https://www.kineticist.com/locations/larsouille-paris.md"
+ },
+ {
+  "name": "Le Cornichon",
+  "address": "2 rue des Goncourt, 75011 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Flipper Attack from Mars.",
+  "source": "https://www.kineticist.com/locations/le-cornichon-paris.md"
+ },
+ {
+  "name": "The Jean Bart",
+  "address": "12 rue Rossini, 75009 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Flipper Medieval Madness.",
+  "source": "https://www.kineticist.com/locations/the-jean-bart-paris.md"
+ },
+ {
+  "name": "O'Sullivans By The Mill",
+  "address": "92 boulevard de Clichy, 75018 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Pub",
+  "note": "Flipper Monster Bash.",
+  "source": "https://www.kineticist.com/locations/osullivans-by-the-mill-paris.md"
+ },
+ {
+  "name": "Le Narval",
+  "address": "17 rue des Dames, 75017 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar-tabac",
+  "note": "Flipper The Sopranos.",
+  "source": "https://www.kineticist.com/locations/bar-tabac-le-narval-paris.md"
+ },
+ {
+  "name": "A Jean Bart",
+  "address": "2 rue Jouffroy d'Abbans, 75017 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Deux flippers : Medieval Madness et JAWS.",
+  "source": "https://www.kineticist.com/locations/a-jean-bart-paris.md"
+ },
+ {
+  "name": "Bar Robert Chez Papy",
+  "address": "80 rue Baudricourt, 75013 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Flipper Star Wars.",
+  "source": "https://www.kineticist.com/locations/bar-robert-chez-papy-paris.md"
+ },
+ {
+  "name": "Nuno's Bar",
+  "address": "19 rue des Feuillantines, 75005 Paris",
+  "games": [
+   "flipper"
+  ],
+  "kind": "Bar",
+  "note": "Flipper Monster Bash.",
+  "source": "https://www.kineticist.com/locations/nunos-bar-paris.md"
+ },
+ {
+  "name": "Gossima Ping Pong Bar",
+  "address": "4 rue Victor Gelez, 75011 Paris",
+  "games": [
+   "pingpong",
+   "beerpong"
+  ],
+  "kind": "Bar ping-pong",
+  "note": "8 tables sur deux niveaux, 6 € la demi-heure (5 € avant 18h).",
+  "hours": "Mo 16:00-24:00; Tu-Sa 16:00-02:00; Su off",
+  "source": "https://www.timeout.com/paris/en/bars-pubs/gossima-ping-pong-bar"
+ },
+ {
+  "name": "Le Mini-Pong",
+  "address": "64 rue Jean-Baptiste Pigalle, 75009 Paris",
+  "games": [
+   "pingpong"
+  ],
+  "kind": "Bar ping-pong",
+  "source": "https://www.pariszigzag.fr/?p=45302"
+ },
+ {
+  "name": "BarOurcq",
+  "address": "68 quai de la Loire, 75019 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Bar",
+  "note": "Boules prêtées pour jouer au bord du canal.",
+  "source": "https://www.pariszigzag.fr/sortir-paris/sorties-exterieur-paris/ou-jouer-a-la-petanque-a-paris/"
+ },
+ {
+  "name": "Les Niçois",
+  "address": "7 rue Lacharrière, 75011 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Bar",
+  "note": "Terrain de boules au sous-sol, on joue même l'hiver.",
+  "source": "https://www.pariszigzag.fr/sortir-paris/sorties-exterieur-paris/ou-jouer-a-la-petanque-a-paris/"
+ },
+ {
+  "name": "Chez Bouboule – Montorgueil",
+  "address": "46 rue d'Argout, 75002 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Bar à pétanque",
+  "note": "Terrain intérieur à côté du bar.",
+  "source": "https://www.timeout.fr/paris/bars/chez-bouboule"
+ },
+ {
+  "name": "Chez Bouboule – Oberkampf",
+  "address": "26 avenue Jean Aicard, 75011 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Bar à pétanque",
+  "note": "Terrain intérieur à côté du bar.",
+  "source": "https://www.timeout.fr/paris/bars/chez-bouboule"
+ },
+ {
+  "name": "Les Mah-Boules",
+  "address": "14 rue de Jessaint, 75018 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Bar à pétanque",
+  "source": "https://parisjetaime.com/restaurant/les-mah-boules-p882"
+ },
+ {
+  "name": "Les Apéros de la Pétanque",
+  "address": "19 route des Fortifications, 75012 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Guinguette",
+  "note": "Bois de Vincennes, boules prêtées contre une pièce d'identité.",
+  "source": "https://mapstr.com/place/CCzBIo6sJWg"
+ },
+ {
+  "name": "La Noche",
+  "address": "7 rue Pierre Fontaine, 75009 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Bar karaoké",
+  "note": "Entrée autour de 15–17 € avec une consommation.",
+  "hours": "Tu-Sa 22:30-05:00",
+  "source": "https://www.parisbouge.com/places/2921"
+ },
+ {
+  "name": "Chinatown Belleville",
+  "address": "27 rue du Buisson Saint-Louis, 75010 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Restaurant karaoké",
+  "source": "https://www.sortiraparis.com/en/where-to-eat-in-paris/restaurant/articles/343931-chinatown-belleville-paris-s-biggest-karaoke-venue-for-singing-and-carefree-partying"
+ },
+ {
+  "name": "L'Enchanteur",
+  "address": "15 rue Michel Le Comte, 75003 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Bar karaoké",
+  "source": "https://www.schlouk-map.com/fr/places/lenchanteur"
+ },
+ {
+  "name": "Café du Châtelet",
+  "address": "8 rue Saint-Denis, 75001 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Bar",
+  "note": "Karaoké le vendredi et le samedi soir.",
+  "source": "https://www.topito.com/top-meilleur-karaoke-restaurant-bar-paris"
+ },
+ {
+  "name": "Le Biscornu",
+  "address": "87 rue Montmartre, 75002 Paris",
+  "games": [
+   "karaoke",
+   "quiz"
+  ],
+  "kind": "Bar",
+  "note": "Karaoké, blind tests et happy hour de 17h à 21h.",
+  "source": "https://www.privateaser.com/lieu/220-le-biscornu"
+ },
+ {
+  "name": "BAM Karaoké Box – Sentier",
+  "address": "50 rue d'Aboukir, 75002 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Karaoké box",
+  "source": "https://sortiraparis.com/en/lieux/56977-bam-karaoke-sentier"
+ },
+ {
+  "name": "BAM Karaoké Box – Richer",
+  "address": "30 rue Richer, 75009 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Karaoké box",
+  "source": "https://www.privateaser.com/lieu/39983-bam-karaoke-box-richer"
+ },
+ {
+  "name": "BAM Karaoké Box – Parmentier",
+  "address": "40 avenue de la République, 75011 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Karaoké box",
+  "source": "https://sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/articles/145125-bam-karaoke-parmentier-large-tropical-bar-and-mega-large-room"
+ },
+ {
+  "name": "BAM Karaoké Box – Madeleine",
+  "address": "4 rue de Caumartin, 75009 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Karaoké box",
+  "source": "https://en.bam-karaokebox.com/city/paris"
+ },
+ {
+  "name": "BAM Karaoké Box – Étoile",
+  "address": "69 avenue de Wagram, 75017 Paris",
+  "games": [
+   "karaoke"
+  ],
+  "kind": "Karaoké box",
+  "source": "https://en.bam-karaokebox.com/etablissement/etoile"
+ },
+ {
+  "name": "KaraFun Bar",
+  "address": "3 impasse Bonne Nouvelle, 75010 Paris",
+  "games": [
+   "karaoke",
+   "quiz"
+  ],
+  "kind": "Karaoké et quiz",
+  "note": "Salles privées de karaoké et de quiz, de 3 à 25 personnes.",
+  "source": "https://www.sortiraparis.com/en/what-to-do-in-paris/unusual/articles/303668-karafun-paris-the-ultimate-karaoke-and-quiz-experience-promo-code"
+ },
+ {
+  "name": "Quiz Room Odéon",
+  "address": "9 rue Guénégaud, 75006 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Salle de quiz",
+  "note": "Quiz façon plateau télé, en français ou en anglais.",
+  "hours": "Mo-Sa 10:00-23:30; Su 10:00-19:30",
+  "source": "https://parisjetaime.com/culture/quiz-room-odeon-p4202"
+ },
+ {
+  "name": "The Frog & Rosbif",
+  "address": "116 rue Saint-Denis, 75002 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Pub",
+  "note": "Pub quiz le dimanche soir.",
+  "source": "https://www.frogpubs.com/pub-rosbif-paris.php"
+ },
+ {
+  "name": "The Bombardier",
+  "address": "2 place du Panthéon, 75005 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Pub",
+  "note": "Pub quiz chaque dimanche.",
+  "source": "https://www.visitparisregion.com/en/the-bombardier-charles-wells"
+ },
+ {
+  "name": "Hideout Saint-Germain",
+  "address": "32 rue Dauphine, 75006 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Bar",
+  "note": "Blind test les mardis et mercredis à 21h.",
+  "source": "https://www.paris-friendly.fr/blind-test-et-shots-offerts.html"
+ },
+ {
+  "name": "K1ze Bar Opéra",
+  "address": "15 rue Gaillon, 75002 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Bar",
+  "note": "Blind test le mercredi.",
+  "source": "https://www.sortiraparis.com/en/where-to-eat-in-paris/bars-cafes/guides/333954-bar-blindtest-paris"
+ },
+ {
+  "name": "L'Adresse",
+  "address": "3 rue Beaurepaire, 75010 Paris",
+  "games": [
+   "quiz"
+  ],
+  "kind": "Bar",
+  "note": "Le blind test est la soirée phare du bar.",
+  "source": "https://parissecret.com/en/bar-ladresse-10e-2/"
+ },
+ {
+  "name": "L'Exode",
+  "address": "39 boulevard de Strasbourg, 75010 Paris",
+  "games": [
+   "flechettes",
+   "billard",
+   "pingpong",
+   "arcade",
+   "flipper",
+   "babyfoot",
+   "karaoke"
+  ],
+  "kind": "Bar à jeux",
+  "note": "300 m² de jeux : billard 2 € la partie, ping-pong 10 € l'heure.",
+  "hours": "Mo-Su 18:00-02:00",
+  "source": "https://www.privateaser.com/lieu/49312-l-exode-paris"
+ },
+ {
+  "name": "Rockstar Café",
+  "address": "46 boulevard Voltaire, 75011 Paris",
+  "games": [
+   "flechettes",
+   "babyfoot",
+   "beerpong",
+   "karaoke"
+  ],
+  "kind": "Bar rock",
+  "note": "Karaoké du lundi au mercredi de 18h à 23h.",
+  "source": "https://www.parisselectbook.com/?p=244896"
+ },
+ {
+  "name": "Gamelle",
+  "address": "29 avenue Daumesnil, 75012 Paris",
+  "games": [
+   "bowling",
+   "babyfoot",
+   "flechettes",
+   "petanque",
+   "flipper"
+  ],
+  "kind": "Bar mini-bowling",
+  "note": "Baby-foot en accès libre, mini-bowling près de la gare de Lyon.",
+  "source": "https://www.sortiraparis.com/it/dove-mangiare-a-paris/bar-caffe/articles/277810-gamelle-le-bar-mini-bowling-e-calcio-balilla-a-due-passi-dalla-stazione-di-lione"
+ },
+ {
+  "name": "Bowling Foch",
+  "address": "2 bis avenue Foch, 75116 Paris",
+  "games": [
+   "bowling",
+   "billard",
+   "babyfoot"
+  ],
+  "kind": "Bowling",
+  "note": "Sous-sol du Duplex, tenue correcte exigée.",
+  "hours": "Mo-Fr 17:00-02:00; Sa,Su 14:00-02:00",
+  "source": "https://sortiraparis.com/en/what-to-do-in-paris/gaming/articles/277795-bowling-foch-the-underground-bowling-and-billiards-complex-a-stone-s-throw-from-the-champs-elysees"
+ },
+ {
+  "name": "Belushi's Gare du Nord",
+  "address": "5 rue de Dunkerque, 75010 Paris",
+  "games": [
+   "beerpong"
+  ],
+  "kind": "Bar sportif",
+  "note": "Tournois de beer-pong.",
+  "hours": "Mo-We 10:00-02:00; Th-Sa 10:00-05:00; Su 10:00-02:00",
+  "source": "https://www.timeout.fr/paris/bars/belushis-gare-du-nord"
+ },
+ {
+  "name": "Billard Club Parisien",
+  "address": "14 Rue du Roule, 75001 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "New Billard",
+  "address": "116 Avenue d'Italie, 75013 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Billard de l'Avenue",
+  "address": "49 Avenue de Fontainebleau, 94270 Le Kremlin-Bicêtre",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "The French Flair",
+  "address": "75 bis Boulevard de Clichy, 75009 Paris",
+  "games": [
+   "billard",
+   "flechettes"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Corcoran's Montmartre",
+  "address": "9 Rue de l'Abreuvoir, 75018 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Nouvel Institut",
+  "address": "1 Boulevard Saint-Germain, 75005 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Café AER Chiquito",
+  "address": "246 Boulevard Voltaire, 75020 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le GOB",
+  "address": "64 Avenue des Gobelins, 75013 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "L’Express de Lyon",
+  "address": "1 Rue de Lyon, 75012 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Duchesse",
+  "address": "22 Rue Saint-Maur, 75011 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Bowling du Stadium",
+  "address": "66 Avenue d'Ivry, 75013 Paris",
+  "games": [
+   "bowling",
+   "billard",
+   "arcade"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Indy Bowling",
+  "address": "14 Rue Philippe de Girard, 75018 Paris",
+  "games": [
+   "bowling",
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "La Quille",
+  "address": "111 Boulevard de Ménilmontant, 75011 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "La Cabane",
+  "address": "76 Rue Notre Dame de Nazareth, 75003 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "The Good Game",
+  "address": "78 Rue de Cléry, 75002 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Chauve qui Rit",
+  "address": "29 Rue de Maubeuge, 75009 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Loufoque Paris 5",
+  "address": "57 Rue Galande, 75005 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Au Bonheur des Jeux",
+  "address": "21 Bd de Charonne, 75011 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Au Dé 12",
+  "address": "126 Av. de la République, 75011 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "L'Ours",
+  "address": "7 Rue de Paradis, 75010 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Kizoku Paris",
+  "address": "13 Rue Grange aux Belles, 75010 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Pili Pili",
+  "address": "299 Rue du Fbg Saint-Antoine, 75011 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Purgatoire",
+  "address": "34 Rue de Châteaudun, 75009 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "La Recyclerie",
+  "address": "83 Bd Ornano, 75018 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Pavillon des Canaux",
+  "address": "39 Quai de la Loire, 75019 Paris",
+  "games": [
+   "societe"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "L'AlbaR bar à fléchettes",
+  "address": "2 Rue Poissonnière, 75002 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Split",
+  "address": "83 Rue de la Roquette, 75011 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Bull's Eye",
+  "address": "15 Rue Lecourbe, 75015 Paris",
+  "games": [
+   "flechettes"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "The Highlander",
+  "address": "8 Rue de Nevers, 75006 Paris",
+  "games": [
+   "flechettes",
+   "billard"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Meltdown",
+  "address": "6 Passage Thiéré, 75011 Paris",
+  "games": [
+   "arcade"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "EP7",
+  "address": "133 Avenue de France, 75013 Paris",
+  "games": [
+   "arcade"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "La Pétanque",
+  "address": "40 Rue Etienne Dolet, 75020 Paris",
+  "games": [
+   "petanque"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Le Perchoir Versailles",
+  "address": "2 Av. de la Porte de Plaisance, 75015 Paris",
+  "games": [
+   "petanque",
+   "babyfoot"
+  ],
+  "kind": "Lieu",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Indiana Club Tolbiac",
+  "address": "74 avenue de France, 75013 Paris",
+  "games": [
+   "billard"
+  ],
+  "kind": "Bar américain",
+  "note": "",
+  "source": "https://bookgame.io/en/club/13885/indiana-club-tolbiac"
+ },
+ {
+  "name": "Belushi's Canal",
+  "address": "159 rue de Crimée, 75019 Paris",
+  "games": [
+   "billard",
+   "babyfoot"
+  ],
+  "kind": "Bar",
+  "note": "",
+  "source": "ancienne-liste"
+ },
+ {
+  "name": "Seven Squares – Boom Boom Villette",
+  "address": "30 avenue Corentin Cariou, 75019 Paris",
+  "games": [
+   "bowling",
+   "arcade"
+  ],
+  "kind": "Espace de jeux",
+  "note": "",
+  "source": "https://www.sortiraparis.com/en/what-to-do-in-paris/gaming/articles/295887-seven-squares-we-tested-the-new-indoor-leisure-space-at-boom-boom-villette"
+ }
 ]
