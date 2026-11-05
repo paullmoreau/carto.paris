@@ -923,7 +923,9 @@ function allPlaces(){
   return out.flatMap(p => { const o = state.ov[p.key]; return !o ? [p] : o.hidden ? [] : [{...p, ...o, edited:true}]; });
 }
 const findPlace = k => allPlaces().find(p => p.key === k);
-const shownGames = p => state.active.size ? p.games.filter(g => state.active.has(g)) : p.games;
+// le filtre « Ping-pong » montre aussi les tables en libre service
+const isOn = g => state.active.has(g) || (g === "pptable" && state.active.has("pingpong"));
+const shownGames = p => state.active.size ? p.games.filter(isOn) : p.games;
 const ref = () => state.me || state.center || S0;
 function inRadius(){ return allPlaces(); }
 function inView(){ const b = map.getBounds(); return allPlaces().filter(p => b.contains([p.lat, p.lon])); }
@@ -949,7 +951,7 @@ function mkIcon(p, sel){
 // état pour le filtre « Ouvert maintenant » : "open", "soon" (ferme ou ouvre dans l'heure) ou ""
 function liveState(p){ const s = ohState(p); if (!s) return ""; if (s.open) return s.soon ? "soon" : "open"; return s.opensSoon ? "soon" : ""; }
 // les tables de ping-pong et terrains de pétanque sans nom n'apparaissent que si on filtre ces jeux
-const onMap = p => p.src !== "osm" || p.named || p.games.some(g => state.active.has(g)) || state.selected === p.key;
+const onMap = p => p.src !== "osm" || p.named || p.games.some(isOn) || state.selected === p.key;
 function renderMarkers(vis){
   const want = new Map();
   for (const {p} of vis) if (onMap(p)) want.set(p.key, p);
@@ -979,6 +981,7 @@ function renderMarkers(vis){
 function renderBottom(){
   const pool = inView();
   const counts = {}; pool.forEach(p => p.games.forEach(g => counts[g] = (counts[g] || 0) + 1));
+  if (counts.pptable) counts.pingpong = (counts.pingpong || 0) + counts.pptable;   // « Ping-pong » compte aussi les tables libres
   const order = [...CATS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
   const cats = $("cats");
   cats.classList.toggle("filtering", state.active.size > 0);
@@ -1208,6 +1211,7 @@ function rowHTML(p, d){
 function listHTML(vis){
   const pool = inRadius();
   const counts = {}; pool.forEach(p => p.games.forEach(g => counts[g] = (counts[g] || 0) + 1));
+  if (counts.pptable) counts.pingpong = (counts.pingpong || 0) + counts.pptable;   // « Ping-pong » compte aussi les tables libres
   const cats = CATS.filter(c => counts[c.id]).sort((a, b) => counts[b.id] - counts[a.id]);
   const n = vis.length;
   let h = `<div class="ph"><h1>${state.me && !state.centerLabel ? "Autour<br>de toi" : esc(state.centerLabel || "Paris")}</h1>
@@ -1511,6 +1515,11 @@ map.on("dragstart", () => { if (state.follow){ state.follow = false; $("locate")
 let reqId = 0, lastBox = null;
 const loadedBoxes = [];
 const osmMap = new Map();
+(() => {
+  if (!store.get("osm3", null)){ const o = store.get("osm2", null);
+    if (o) store.set("osm3", {t:o.t, items:o.items.map(p => p.kind === "Terrain en accès libre" && p.games.includes("pingpong")
+      ? {...p, games:p.games.map(g => g === "pingpong" ? "pptable" : g), kind:"Table publique · gratuit", note:"Table en plein air, en accès libre et gratuit. Pense à prendre ta raquette et ta balle."} : p)}); }
+})();
 (() => { const c = store.get("osm3", null); if (c && Date.now() - c.t < 24 * 3600e3) c.items.forEach(p => osmMap.set(p.key, p)); state.osm = [...osmMap.values()]; })();
 async function loadOSM(box){
   box = box || lastBox; if (!box) return;
@@ -2048,7 +2057,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611051800";
+const APP_VERSION = "202611051815";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
