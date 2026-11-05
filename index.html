@@ -783,9 +783,61 @@ function initBase(){
     if (style.glyphs && !/^https?:/.test(style.glyphs)) style.glyphs = location.href.replace(/[#?].*$/, "").replace(/[^/]*$/, "") + style.glyphs;
     base = mlLayer({style, interactive:false,
       attribution:'<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · ' + OSM_ATTR}).addTo(map);
-    base.getMaplibreMap().once("load", () => { baseOK = true; });
+    const hole = style.sources["paris-mask"]?.data?.geometry?.coordinates?.[1];
+    if (hole) parisRing = hole;
+    base.getMaplibreMap().once("load", () => { baseOK = true; applyZones(); lightZonesSoon(); });
     setTimeout(() => { if (!baseOK) rasterBase(); }, 25000);
   }).catch(rasterBase);
+}
+/* ===== Zones allumées : Paris, plus chaque ville où quelqu'un a ajouté un lieu ===== */
+let parisRing = null, zoneBusy = false, zoneT;
+const zones = store.get("zones", {z:{}, p:{}});   // z : contours par ville, p : lieux déjà traités
+function inRing(lat, lon, ring){
+  let c = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++){
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lon < (xj - xi) * (lat - yi) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+}
+const inLit = p => (parisRing && inRing(p.lat, p.lon, parisRing)) || Object.values(zones.z).some(rs => rs.some(r => inRing(p.lat, p.lon, r)));
+function circleRing(lat, lon, km){
+  const pts = [];
+  for (let i = 0; i <= 40; i++){ const a = i / 40 * 2 * Math.PI; pts.push([lon + km / (111.32 * Math.cos(lat * Math.PI / 180)) * Math.cos(a), lat + km / 110.57 * Math.sin(a)]); }
+  return pts;
+}
+function applyZones(){
+  if (!base || base._raster || !parisRing || !base.getMaplibreMap) return;
+  const src = base.getMaplibreMap().getSource("paris-mask"); if (!src) return;
+  src.setData({type:"Feature", properties:{}, geometry:{type:"Polygon",
+    coordinates:[[[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]], parisRing, ...Object.values(zones.z).flat()]}});
+}
+function lightZonesSoon(){ clearTimeout(zoneT); zoneT = setTimeout(lightZones, 1500); }
+async function lightZones(){
+  if (zoneBusy || !parisRing) return; zoneBusy = true;
+  try{
+    for (const p of [...state.shared, ...state.mine]){
+      if (p.lat == null) continue;
+      const k = p.lat.toFixed(3) + "," + p.lon.toFixed(3);
+      if (zones.p[k]) continue;
+      zones.p[k] = 1;
+      if (inLit(p)){ store.set("zones", zones); continue; }
+      // contour de la commune (OpenStreetMap), sinon un cercle de 1,5 km autour du lieu
+      let rings = null, id = "c:" + k;
+      try{
+        const j = await fetchJSON(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&polygon_geojson=1&polygon_threshold=0.0005&lat=${p.lat}&lon=${p.lon}`, {}, 9000);
+        const g = j && j.geojson;
+        if (g && (g.type === "Polygon" || g.type === "MultiPolygon")){
+          const rs = (g.type === "Polygon" ? [g.coordinates] : g.coordinates).map(pl => pl[0]);
+          const xs = rs.flat().map(c => c[0]), ys = rs.flat().map(c => c[1]);
+          if (Math.max(...xs) - Math.min(...xs) < 0.6 && Math.max(...ys) - Math.min(...ys) < 0.4){ rings = rs; id = (j.osm_type || "") + j.osm_id; }
+        }
+      }catch{}
+      zones.z[id] = rings || [circleRing(p.lat, p.lon, 1.5)];
+      store.set("zones", zones); applyZones();
+      await new Promise(r => setTimeout(r, 1100));   // politesse envers Nominatim
+    }
+  }finally{ zoneBusy = false; }
 }
 initBase();
 darkMQ.addEventListener && darkMQ.addEventListener("change", initBase);
@@ -932,6 +984,7 @@ function go(view){
   render();
 }
 function render(){
+  lightZonesSoon();
   document.body.dataset.view = state.view;
   document.querySelectorAll(".tab").forEach(t => t.toggleAttribute("aria-current", t.dataset.tab === (state.view === "detail" ? state.prevView : state.view === "evform" ? "events" : state.view)));
   document.querySelectorAll(".tab[aria-current]").forEach(t => t.setAttribute("aria-current", "page"));
@@ -1385,7 +1438,8 @@ function autoLoad(){
     renderBottom();
     if (map.getZoom() < 12) return;
     const v = map.getBounds();
-    if (!PARIS_BOX.intersects(v)) return;   // hors de Paris : rien à charger
+    // hors de Paris et des villes allumées : rien à charger
+    if (!PARIS_BOX.intersects(v) && ![...state.shared, ...state.mine].some(p => p.lat != null && v.contains([p.lat, p.lon]))) return;
     if (!loadedBoxes.some(b => b.contains(v))) loadOSM(v.pad(0.35));
   }, 600);
 }
@@ -1931,7 +1985,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611051600";
+const APP_VERSION = "202611051630";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
