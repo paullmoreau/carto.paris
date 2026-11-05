@@ -619,6 +619,8 @@ const CATS = [
   {id:"echecs",i:"icons/echecs.png",label:"Échecs",e:"♟️",color:"#c7c7cc",re:/chess/i,name:/[ée]checs|chess/i},
   {id:"petanque",i:"icons/petanque.png",label:"Pétanque",e:"🔘",color:"#d9bf94",re:/boules|petanque|pétanque|bocce|sport=bowls/i,name:/p[ée]tanque|boulodrome/i},
   {id:"pingpong",i:"icons/pingpong.png",label:"Ping-pong",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
+  // tables publiques en plein air (parcs, squares) : attribuées à part dans fromOSM
+  {id:"pptable",i:"icons/pingpong-libre.png",label:"Ping-pong en libre service",short:"Ping-pong libre",e:"🏓",color:"#9be3a6",re:/(?!)/,name:/(?!)/},
   {id:"karaoke",i:"icons/karaoke.png",label:"Karaoké",e:"🎤",color:"#ffd60a",re:/karaoke/i,name:/karaok/i},
   {id:"quiz",i:"icons/quiz.png",label:"Quiz",e:"🧠",color:"#a5a3ff",re:/quiz|trivia/i,name:/quiz/i},
   {id:"arcade",i:"icons/arcade.png",label:"Arcade",e:"👾",color:"#64d2ff",re:/amusement_arcade|arcade|video_?game|retrogaming/i,name:/arcade|retro ?gaming/i},
@@ -765,10 +767,13 @@ function fromOSM(el){
   const lat = el.lat ?? el.center?.lat, lon = el.lon ?? el.center?.lon; if (lat == null) return null;
   if (t.leisure === "pitch" && t.access === "private") return null;
   const games = classify(t); if (!games.length) return null;
-  const kind = osmKind(t);
+  // une table de ping-pong dans un parc n'est pas un bar à ping-pong : catégorie « libre service »
+  const freeTable = games.includes("pingpong") && t.leisure === "pitch" && !t.amenity && !t.club && !t.shop && !/customers|private/.test(t.access || "");
+  if (freeTable) games.splice(games.indexOf("pingpong"), 1, "pptable");
+  const kind = freeTable ? "Table publique · gratuit" : osmKind(t);
   return {key:"o"+el.type[0]+el.id, src:"osm", lat, lon, games, kind,
-    name: t.name || (t.leisure === "pitch" ? (games.includes("pingpong") ? "Table de ping-pong" : games.includes("petanque") ? "Terrain de pétanque" : games.includes("echecs") ? "Tables d'échecs" : "Terrain") : kind),
-    named: !!t.name, address: osmAddr(t), hours: t.opening_hours || "", phone: t.phone || t["contact:phone"] || "",
+    name: t.name || (t.leisure === "pitch" ? (games.includes("pptable") || games.includes("pingpong") ? "Table de ping-pong" : games.includes("petanque") ? "Terrain de pétanque" : games.includes("echecs") ? "Tables d'échecs" : "Terrain") : kind),
+    named: !!t.name, address: osmAddr(t), note: freeTable ? "Table en plein air, en accès libre et gratuit. Pense à prendre ta raquette et ta balle." : "", hours: t.opening_hours || "", phone: t.phone || t["contact:phone"] || "",
     website: t.website || t["contact:website"] || "", url:`https://www.openstreetmap.org/${el.type}/${el.id}`};
 }
 
@@ -1506,7 +1511,7 @@ map.on("dragstart", () => { if (state.follow){ state.follow = false; $("locate")
 let reqId = 0, lastBox = null;
 const loadedBoxes = [];
 const osmMap = new Map();
-(() => { const c = store.get("osm2", null); if (c && Date.now() - c.t < 24 * 3600e3) c.items.forEach(p => osmMap.set(p.key, p)); state.osm = [...osmMap.values()]; })();
+(() => { const c = store.get("osm3", null); if (c && Date.now() - c.t < 24 * 3600e3) c.items.forEach(p => osmMap.set(p.key, p)); state.osm = [...osmMap.values()]; })();
 async function loadOSM(box){
   box = box || lastBox; if (!box) return;
   lastBox = box;
@@ -1519,7 +1524,7 @@ async function loadOSM(box){
     loadedBoxes.push(box);
     state.osm = [...osmMap.values()];
     const keep = state.osm.slice(-4000);
-    if (!store.set("osm2", {t:Date.now(), items:keep})) store.set("osm2", null);
+    if (!store.set("osm3", {t:Date.now(), items:keep})) store.set("osm3", null);
   }catch{
     if (id === reqId) state.error = true;
   }finally{
@@ -2041,7 +2046,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611051700";
+const APP_VERSION = "202611051730";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
