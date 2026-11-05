@@ -618,9 +618,9 @@ const CATS = [
   {id:"societe",i:"icons/societe.png",label:"Jeux de société",short:"Société",e:"🎲",color:"#ff8fab",re:/board_?game|boardgame|tabletop|club=board|club=games/i,name:/ludo|ludique|\bjeux\b|board ?game/i},
   {id:"echecs",i:"icons/echecs.png",label:"Échecs",e:"♟️",color:"#c7c7cc",re:/chess/i,name:/[ée]checs|chess/i},
   {id:"petanque",i:"icons/petanque.png",label:"Pétanque",e:"🔘",color:"#d9bf94",re:/boules|petanque|pétanque|bocce|sport=bowls/i,name:/p[ée]tanque|boulodrome/i},
-  {id:"pingpong",i:"icons/pingpong.png",label:"Ping-pong",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
+  {id:"pingpong",i:"icons/pingpong.png",label:"Ping-pong (bars et clubs)",short:"Ping-pong bar",e:"🏓",color:"#7ee0c3",re:/table_tennis/i,name:/ping[- ]?pong/i},
   // tables publiques en plein air (parcs, squares) : attribuées à part dans fromOSM
-  {id:"pptable",i:"icons/pingpong-libre.png",label:"Ping-pong en libre service",short:"Ping-pong libre",e:"🏓",color:"#9be3a6",re:/(?!)/,name:/(?!)/},
+  {id:"pptable",i:"icons/pingpong-libre.png",label:"Ping-pong en libre service",short:"Table libre",e:"🏓",color:"#9be3a6",re:/(?!)/,name:/(?!)/},
   {id:"karaoke",i:"icons/karaoke.png",label:"Karaoké",e:"🎤",color:"#ffd60a",re:/karaoke/i,name:/karaok/i},
   {id:"quiz",i:"icons/quiz.png",label:"Quiz",e:"🧠",color:"#a5a3ff",re:/quiz|trivia/i,name:/quiz/i},
   {id:"arcade",i:"icons/arcade.png",label:"Arcade",e:"👾",color:"#64d2ff",re:/amusement_arcade|arcade|video_?game|retrogaming/i,name:/arcade|retro ?gaming/i},
@@ -923,8 +923,8 @@ function allPlaces(){
   return out.flatMap(p => { const o = state.ov[p.key]; return !o ? [p] : o.hidden ? [] : [{...p, ...o, edited:true}]; });
 }
 const findPlace = k => allPlaces().find(p => p.key === k);
-// le filtre « Ping-pong » montre aussi les tables en libre service
-const isOn = g => state.active.has(g) || (g === "pptable" && state.active.has("pingpong"));
+// « Ping-pong » (bars, clubs) et « Ping-pong libre » (tables publiques) restent deux filtres distincts
+const isOn = g => state.active.has(g);
 const shownGames = p => state.active.size ? p.games.filter(isOn) : p.games;
 const ref = () => state.me || state.center || S0;
 function inRadius(){ return allPlaces(); }
@@ -978,11 +978,17 @@ function renderMarkers(vis){
 }
 
 /* ================= Bas de l'écran ================= */
+// les deux ping-pong toujours côte à côte, pour bien voir la différence
+function pairPP(list){
+  const i = list.findIndex(c => c.id === "pingpong"), j = list.findIndex(c => c.id === "pptable");
+  if (i < 0 || j < 0) return list;
+  const [a, b] = [list[i], list[j]], first = Math.min(i, j);
+  const rest = list.filter(c => c !== a && c !== b); rest.splice(first, 0, a, b); return rest;
+}
 function renderBottom(){
   const pool = inView();
   const counts = {}; pool.forEach(p => p.games.forEach(g => counts[g] = (counts[g] || 0) + 1));
-  if (counts.pptable) counts.pingpong = (counts.pingpong || 0) + counts.pptable;   // « Ping-pong » compte aussi les tables libres
-  const order = [...CATS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
+  const order = pairPP([...CATS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0)));
   const cats = $("cats");
   cats.classList.toggle("filtering", state.active.size > 0);
   cats.innerHTML = `<button class="cat" data-id="" aria-pressed="${!state.active.size}" style="--c:#e5e5ea"><span class="bub emo">${ICO3D("tout")}</span><span class="lbl">Tout</span></button>` +
@@ -1211,8 +1217,7 @@ function rowHTML(p, d){
 function listHTML(vis){
   const pool = inRadius();
   const counts = {}; pool.forEach(p => p.games.forEach(g => counts[g] = (counts[g] || 0) + 1));
-  if (counts.pptable) counts.pingpong = (counts.pingpong || 0) + counts.pptable;   // « Ping-pong » compte aussi les tables libres
-  const cats = CATS.filter(c => counts[c.id]).sort((a, b) => counts[b.id] - counts[a.id]);
+  const cats = pairPP(CATS.filter(c => counts[c.id]).sort((a, b) => counts[b.id] - counts[a.id]));
   const n = vis.length;
   let h = `<div class="ph"><h1>${state.me && !state.centerLabel ? "Autour<br>de toi" : esc(state.centerLabel || "Paris")}</h1>
       <div class="meta"><b>${n} lieu${n > 1 ? "x" : ""}</b>du plus proche au plus loin</div></div>
@@ -2057,7 +2062,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611051815";
+const APP_VERSION = "202611051830";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
