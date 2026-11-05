@@ -95,7 +95,7 @@ svg{display:block}
 .cat{flex:none;width:auto;min-width:56px;padding:0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;scroll-snap-align:start;transition:opacity .2s}
 .cat .bub{position:relative;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:27px;transition:transform .15s}
 .cat .bub .emo{filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
-.cat .lbl{font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:none;overflow:hidden;text-overflow:ellipsis}
+.cat .lbl{font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;max-width:none;overflow:visible;text-shadow:0 0 2px var(--halo),0 0 5px var(--halo),0 0 9px var(--halo)}
 .cat .cnt{position:absolute;top:-6px;right:-10px;min-width:20px;height:18px;padding:0 5px;border-radius:999px;background:var(--black);color:var(--on-black);font-size:10.5px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .cat[aria-pressed="true"] .bub{background:var(--c);box-shadow:0 0 0 3px var(--ring),0 6px 16px color-mix(in srgb,var(--c) 55%,transparent)}
 .cat[aria-pressed="true"] .lbl{color:var(--ink);font-weight:700}
@@ -1378,12 +1378,14 @@ async function saveDraft(){
 
 /* ================= Chargement automatique de la zone visible ================= */
 let autoT = null;
+const PARIS_BOX = L.latLngBounds([48.81, 2.215], [48.908, 2.48]);
 function autoLoad(){
   clearTimeout(autoT);
   autoT = setTimeout(() => {
     renderBottom();
     if (map.getZoom() < 12) return;
     const v = map.getBounds();
+    if (!PARIS_BOX.intersects(v)) return;   // hors de Paris : rien à charger
     if (!loadedBoxes.some(b => b.contains(v))) loadOSM(v.pad(0.35));
   }, 600);
 }
@@ -1929,7 +1931,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611051530";
+const APP_VERSION = "202611051600";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});

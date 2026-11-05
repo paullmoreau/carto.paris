@@ -7,15 +7,15 @@ PALETTES = {
   "map-style.json": dict(
     land="#efede6", park="#a6e38f", wood="#95da80", water="#5ec2f7", water_label="#0a7cc4",
     building="#e6e4dc", street="#ffffff", major="#ffffff", trunk="#ffffff", motor="#ffffff",
-    label="#22252b", halo="#ffffff", road_label="#4a4f57"),
+    label="#22252b", halo="#ffffff", road_label="#4a4f57", outside="#2a2d34"),
   "map-style-dark.json": dict(
     land="#16181d", park="#1f6b42", wood="#1d6640", water="#1565a8", water_label="#8fd0ff",
     building="#1d2026", street="#2b2f37", major="#353a44", trunk="#353a44", motor="#353a44",
-    label="#f2f4f7", halo="#16181d", road_label="#b9bec7"),
+    label="#f2f4f7", halo="#16181d", road_label="#b9bec7", outside="#0b0c0f"),
 }
 # couches retirées : contours de routes (aspect plat), motifs, bordures et détails inutiles
 DROP = ("_casing", "park_outline", "landcover_wetland", "landcover_sand", "landcover_ice",
-        "waterway_tunnel", "landuse_hospital", "landuse_school", "landuse_track", "label_country")
+        "waterway_tunnel", "landuse_hospital", "landuse_school", "landuse_track", "label_country", "label_town", "label_city", "outside-paris")
 
 def flat(s, P):
     out = []
@@ -48,6 +48,13 @@ def flat(s, P):
         out.append(l)
     # zones résidentielles juste après le fond, pour ne jamais recouvrir les parcs
     out.sort(key=lambda l: 0 if l["id"] == "background" else 1 if l["id"] == "landuse_residential" else 2)
+    # Hors de Paris : un aplat sombre uni, sans noms ni textures,
+    # et aucune tuile chargée au-delà du rectangle de Paris
+    ring = json.load(open("tools/paris.geojson"))["geometry"]["coordinates"][0]
+    s["sources"]["paris-mask"] = {"type": "geojson", "data": {"type": "Feature", "properties": {}, "geometry": {
+        "type": "Polygon", "coordinates": [[[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]], ring[::-1]]}}}
+    s["sources"]["openmaptiles"]["bounds"] = [2.215, 48.81, 2.48, 48.908]
+    out.append({"id": "outside-paris", "type": "fill", "source": "paris-mask", "paint": {"fill-color": P["outside"], "fill-antialias": False}})
     s["layers"] = out
     s["name"] = "Carto – flat"
     return s
