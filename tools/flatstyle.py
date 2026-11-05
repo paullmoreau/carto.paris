@@ -6,11 +6,11 @@ import json
 PALETTES = {
   "map-style.json": dict(
     land="#efede6", park="#a6e38f", wood="#95da80", water="#5ec2f7", water_label="#0a7cc4",
-    building="#e6e4dc", street="#ffffff", major="#ffffff", trunk="#ffe27a", motor="#ffc94d",
+    building="#e6e4dc", street="#ffffff", major="#ffffff", trunk="#ffffff", motor="#ffffff",
     label="#22252b", halo="#ffffff", road_label="#4a4f57"),
   "map-style-dark.json": dict(
     land="#16181d", park="#1f6b42", wood="#1d6640", water="#1565a8", water_label="#8fd0ff",
-    building="#1d2026", street="#2b2f37", major="#353a44", trunk="#a07a1c", motor="#b8860b",
+    building="#1d2026", street="#2b2f37", major="#353a44", trunk="#353a44", motor="#353a44",
     label="#f2f4f7", halo="#16181d", road_label="#b9bec7"),
 }
 # couches retirées : contours de routes (aspect plat), motifs, bordures et détails inutiles
