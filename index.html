@@ -538,6 +538,9 @@ body:not([data-view="map"]):not([data-view="detail"]) .pblur{display:none}
 .prow .ds small.wk{display:flex;justify-content:flex-end}
 
 .pills .pill{box-shadow:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.08),var(--glass-hi)}
+
+.pill.ig{text-decoration:none}
+.pill.ig svg{width:20px;height:20px;flex:none}
 </style>
 </head>
 <body data-view="map">
@@ -873,6 +876,7 @@ function renderBottom(){
   const n = pool.filter(p => onMap(p) && shownGames(p).length && (!state.openOnly || !!liveState(p))).length;
   const tonight = allEvents().filter(ev => relDay(nextOcc(ev)) === "Ce soir").length;
   $("pills").innerHTML = `<button class="pill glass${state.openOnly ? " on" : ""}" id="openPill" type="button" aria-pressed="${state.openOnly}"><span class="odot"></span>Ouvert maintenant</button>
+    <a class="pill glass ig" href="https://www.instagram.com/carto.app/reels/" target="_blank" rel="noopener" aria-label="Suivre Carto sur Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igg" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/><stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igg)"/><rect x="6.5" y="6.5" width="11" height="11" rx="3.6" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.4" cy="7.6" r="1.05" fill="#fff"/></svg>Suivre</a>
     ${canInstall() ? `<button class="pill glass" id="instPill" type="button"><span class="emo">📲</span>Installer l'app</button>` : ""}
     ${tonight ? `<button class="pill glass" id="evPill" type="button"><span class="emo">${ICO3D("fete")}</span>${tonight} soirée${tonight > 1 ? "s" : ""} ce soir</button>` : ""}`;
   const w = $("where");
@@ -1920,7 +1924,7 @@ addEventListener("resize", () => { syncAttr(); });
 
 /* ================= Mise à jour automatique ================= */
 // version publiée : comparée à version.txt à l'ouverture et à chaque retour dans l'app
-const APP_VERSION = "202611041909";
+const APP_VERSION = "202611051009";
 async function checkUpdate(){
   try{
     const r = await fetch("version.txt?t=" + Date.now(), {cache:"no-store"});
