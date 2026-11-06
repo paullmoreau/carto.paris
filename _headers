@@ -1,0 +1,27 @@
+# Réglages d'en-têtes pour Cloudflare Pages (ignoré par GitHub Pages)
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()
+  X-Frame-Options: SAMEORIGIN
+
+# toujours la dernière version de l'app (les mises à jour arrivent tout de suite)
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/version.txt
+  Cache-Control: no-store
+/*.json
+  Cache-Control: no-cache
+/config.js
+  Cache-Control: no-cache
+
+# polices et icônes : cache long
+/fonts/*
+  Cache-Control: public, max-age=2592000
+/icons/*
+  Cache-Control: public, max-age=604800
