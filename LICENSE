@@ -1,0 +1,17 @@
+Copyright (c) 2026 Carto. Tous droits réservés. All rights reserved.
+
+Ce logiciel, son code source, son design, son logo, ses textes et ses données
+(sélection de lieux et de soirées) sont la propriété exclusive de leur auteur.
+
+Aucune licence n'est accordée. Toute reproduction, modification, distribution,
+publication ou réutilisation, totale ou partielle, sous quelque forme que ce soit,
+est interdite sans autorisation écrite préalable.
+
+Composants tiers inclus, soumis à leurs propres licences :
+- Leaflet (BSD-2-Clause) : lib/leaflet.js, lib/leaflet.css
+- MapLibre GL JS (BSD-3-Clause) : lib/maplibre-gl.js, lib/maplibre-gl.css
+- MapLibre GL Leaflet (ISC) : lib/leaflet-maplibre-gl.js
+- polygon-clipping (MIT) : lib/polygon-clipping.umd.min.js
+- Police Inter (SIL Open Font License 1.1) : fonts/inter/
+- Fluent Emoji (MIT, Microsoft) : icônes de icons/
+- Données © contributeurs OpenStreetMap (ODbL)
