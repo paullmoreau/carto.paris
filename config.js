@@ -1,0 +1,1 @@
+window.TG_CONFIG={supabaseUrl:"https://fakblxkadepnayqkddvx.supabase.co",supabaseKey:"sb_publishable_pJ6-MfUoLnAuMACb2I7Esw_459mPMRv",pendingSince:"2026-11-12T14:00:00Z"};
